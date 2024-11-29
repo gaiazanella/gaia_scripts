@@ -53,9 +53,9 @@ fs=50 #50 Hz
 samples = win*fs
 
 # Initialise dates using datetime
-t_init=UTCDateTime("2021-01-01T00:00:00")
-t_end=UTCDateTime("2022-01-01T00:00:00")
-save_dir = '/home/gaia/Documents/processing_1_sec/2021/rsam/'
+t_init=UTCDateTime("2022-01-01T00:00:00")
+t_end=UTCDateTime("2023-01-01T00:00:00")
+save_dir = '/home/gaia/Documents/processing_1_sec/2022/rsam/'
 db='/mnt/bigmama3/miniseed'
 stz = ['STRA', 'STRE']  # Liste des stations à traiter
 net = ['IT', 'IT']
