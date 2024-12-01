@@ -23,8 +23,8 @@ channel = ['EHE', '*HZ']
 fs = 50  # Fréquence cible
 
 client = Client(db)
-ti = UTCDateTime("2024-02-20T00:00:00.000")
-tf = ti + (60 * 60 * 24 * 1)
+ti = UTCDateTime("2020-10-07T02:30:00.000")
+tf = ti + (60 * 60 * 1 * 1)
 
 #st = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[1], starttime=ti, endtime=tf)
 st = client.get_waveforms(network='*', station=stz[1], location="", channel=channel[1], starttime=ti, endtime=tf)
