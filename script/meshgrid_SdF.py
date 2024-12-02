@@ -34,6 +34,6 @@ ax.plot_surface(LON, LAT, Z, cmap='terrain')
 ax.set_xlabel("Longitude (°E)")
 ax.set_ylabel("Latitude (°N)")
 ax.set_zlabel("Altitude (m)")
-ax.set_title("Grille sur la Sciara del Fuoco (Stromboli)")
+ax.set_title("Meshgrid Sciara del Fuoco (Stromboli)")
 
 plt.show()
