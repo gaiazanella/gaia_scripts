@@ -40,6 +40,9 @@ datae = datae * ((3.2 * 10**(-6)) / 800)
 dataa1 = bandpass(dataa, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
 datae1 = bandpass(datae, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
 
+dataabf = bandpass(dataa, freqmin=1, freqmax=8, df=fs, corners=4, zerophase=True)
+dataahf = bandpass(dataa, freqmin=8, freqmax=15, df=fs, corners=4, zerophase=True)
+
 dataavlp = bandpass(dataa, freqmin=0.03, freqmax=1, df=fs, corners=4, zerophase=True)
 dataevlp = bandpass(datae, freqmin=0.03, freqmax=1, df=fs, corners=4, zerophase=True)
 
@@ -50,7 +53,7 @@ timea = pd.to_datetime(starttimea + pd.to_timedelta(np.arange(0, len(dataa) / fs
 timee = pd.to_datetime(starttimee + pd.to_timedelta(np.arange(0, len(datae) / fs, 1 / fs), unit='s'))
 
 # Création des subplots (4 sous-graphiques)
-fig, axs = plt.subplots(3, 1, figsize=(12, 15), sharex=True)
+fig, axs = plt.subplots(4, 1, figsize=(12, 16), sharex=True)
 
 # 1er subplot pour les stations STRA et STRE
 axs[0].plot(timea, dataavlp, label=f"{stz[0]}", color='r')
@@ -75,7 +78,15 @@ axs[2].grid(True)
 axs[2].set_ylim(-max_val, max_val)  # Uniformiser les limites de y
 
 # 4ème subplot pour le spectrogramme de la station STRA
+axs[3].plot(timea, dataa1, label=f"{stz[0]} 0.03-24Hz", color='orange')
 
+axs[3].plot(timea, dataabf, label=f"{stz[0]} 1-8Hz", color='purple')
+axs[3].plot(timea, dataahf, label=f"{stz[0]} 8-15Hz", color='green')
+#axs[2].set_title('Waveform Data for Two Stations')
+axs[3].set_xlabel('Time')
+axs[3].set_ylabel('RSAM (counts)')
+axs[3].legend()
+axs[3].grid(True)
 
 # Ajuster la disposition des subplots
 plt.tight_layout()
