@@ -14,7 +14,7 @@ fs = 50  # Fréquence cible
 
 # Client pour récupérer les données
 client = Client(db)
-ti = UTCDateTime("2020-10-22T00:00:00.000")
+ti = UTCDateTime("2020-01-01T00:00:00.000")
 tf = ti + (60 * 60 * 24 * 1)  # 1 jour de données
 
 # Récupérer les données pour les deux stations
@@ -46,7 +46,7 @@ time1 = pd.to_datetime(starttime1 + pd.to_timedelta(np.arange(0, len(data1_full)
 time2 = pd.to_datetime(starttime2 + pd.to_timedelta(np.arange(0, len(data2_full) / fs, 1 / fs), unit='s'))
 
 # Lire le fichier CSV contenant les événements
-csv_file = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed/peaks_data_20201022.csv'
+csv_file = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed/peaks_data_20200101.csv'
 df_csv = pd.read_csv(csv_file)
 
 # Convertir les colonnes en format datetime
@@ -57,8 +57,8 @@ df_csv['Initial_Peak_Time_w'] = pd.to_datetime(df_csv['Initial_Peak_Time_w'])
 df_csv['Final_Peak_Time_w'] = pd.to_datetime(df_csv['Final_Peak_Time_w'])
 
 # Charger les fichiers CSV pour RSAM (STRA et STRE)
-rsam_stra_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRA_20201022.csv'
-rsam_stre_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRE_20201022.csv'
+rsam_stra_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRA_20200101.csv'
+rsam_stre_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRE_20200101.csv'
 
 rsam_stra = pd.read_csv(rsam_stra_file)
 rsam_stre = pd.read_csv(rsam_stre_file)
@@ -66,9 +66,6 @@ rsam_stre = pd.read_csv(rsam_stre_file)
 # Convertir 'time_UTC' en datetime
 rsam_stra['time_UTC'] = pd.to_datetime(rsam_stra['time_UTC'])
 rsam_stre['time_UTC'] = pd.to_datetime(rsam_stre['time_UTC'])
-
-# Assurez-vous que les deux séries RSAM ont la même longueur et la même échelle de temps pour pouvoir faire le calcul du rapport.
-# Cela pourrait nécessiter un rééchantillonnage ou une interpolation. Pour l'instant, supposons qu'elles sont déjà alignées.
 
 # Calculer le rapport entre les RSAM de STRE et STRA (STRE / STRA)
 rsam_ratio = rsam_stre['RSAM_env_smooth_8-15Hz'] / rsam_stra['RSAM_env_smooth_8-15Hz']
@@ -99,7 +96,7 @@ axs[3].plot(rsam_stra['time_UTC'], rsam_ratio, color='orange')
 axs[3].set_ylabel('RSAM(STRE) / RSAM(STRA)')
 axs[3].grid(True)
 
-# Ajouter les lignes verticales pour les événements dans les subplots
+# Ajouter des lignes verticales pour tous les subplots
 event_colors = {
     'filtered': 'lime',  # Vert pour les événements filtrés
     'non_filtered': 'darkgreen',  # Vert foncé pour les non filtrés
@@ -109,24 +106,30 @@ event_colors = {
     'Final_Peak_Time_w': 'magenta'
 }
 
+# Dictionnaire pour stocker les handles de légende
+legend_handles = {}
+
 # Filtrer les événements en fonction des conditions
 filtered_events = df_csv[(df_csv['RSAM_E'] > 875) & (df_csv['Ratio'] < 6.5)]
 non_filtered_events = df_csv[~((df_csv['RSAM_E'] > 875) & (df_csv['Ratio'] < 6.5))]
 
-# Ajouter les lignes verticales pour les événements filtrés et non filtrés
+# Ajout des lignes verticales pour tous les subplots
 for event_set, color, label in [(filtered_events, event_colors['filtered'], 'Filtered Landslide'),
                                 (non_filtered_events, event_colors['non_filtered'], 'Landslide')]:
     for peak_time in event_set['Peak_Time_UTC']:
         peak_time_dt = pd.to_datetime(peak_time)
-        # Ajouter des lignes verticales dans les subplots correspondants
+        # Ajouter des lignes verticales dans tous les subplots
         if time1.min() <= peak_time_dt <= time1.max():
             axs[0].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
-            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
-            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[1].axvline(x=peak_time_dt, color=color, linestyle='--')
+            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--')
+            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--')
+
         if time2.min() <= peak_time_dt <= time2.max():
-            axs[1].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
-            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
-            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[0].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[1].axvline(x=peak_time_dt, color=color, linestyle='--')
+            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--')
+            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--')
 
 # Ajouter les lignes verticales pour les autres événements spécifiques
 for event_name, color, label in [('Initial_Peak_Time', 'purple', 'Initial Peak Time'),
@@ -135,15 +138,18 @@ for event_name, color, label in [('Initial_Peak_Time', 'purple', 'Initial Peak T
                                  ('Final_Peak_Time_w', 'magenta', 'Final Peak Time w')]:
     for peak_time in df_csv[event_name]:
         peak_time_dt = pd.to_datetime(peak_time)
-        # Ajouter des lignes verticales dans les subplots correspondants
+        # Ajouter des lignes verticales dans tous les subplots
         if time1.min() <= peak_time_dt <= time1.max():
             axs[0].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
-            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
-            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[1].axvline(x=peak_time_dt, color=color, linestyle='--')
+            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--')
+            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--')
+
         if time2.min() <= peak_time_dt <= time2.max():
-            axs[1].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
-            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
-            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[0].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[1].axvline(x=peak_time_dt, color=color, linestyle='--')
+            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--')
+            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--')
 
 # Ajouter une légende et une étiquette d'axe
 axs[3].set_xlabel('Time (UTC)')
@@ -155,8 +161,10 @@ unique_lines_labels = []
 for line, label in zip(lines, labels):
     if label not in unique_lines_labels:
         unique_lines_labels.append(label)
+        legend_handles[label] = line  # Ajouter le handle pour ce label dans le dictionnaire
 
-axs[0].legend(lines, unique_lines_labels, loc='upper right')
+# Afficher la légende avec les couleurs correctes
+axs[0].legend(legend_handles.values(), legend_handles.keys(), loc='upper right')
 
 # Affichage
 plt.show()
