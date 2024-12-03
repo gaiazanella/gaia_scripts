@@ -15,7 +15,7 @@ fs = 50  # Fréquence cible
 
 # Client pour récupérer les données
 client = Client(db)
-ti = UTCDateTime("2020-01-01T05:00:00.000")
+ti = UTCDateTime("2020-10-07T02:53:00.000")
 tf = ti + (60 * 60 * 1 * 1)  # 1 heure de données
 
 # Récupérer les données pour les deux stations
@@ -50,7 +50,7 @@ timea = pd.to_datetime(starttimea + pd.to_timedelta(np.arange(0, len(dataa) / fs
 timee = pd.to_datetime(starttimee + pd.to_timedelta(np.arange(0, len(datae) / fs, 1 / fs), unit='s'))
 
 # Création des subplots (4 sous-graphiques)
-fig, axs = plt.subplots(4, 1, figsize=(12, 18), sharex=True)
+fig, axs = plt.subplots(3, 1, figsize=(12, 18), sharex=True)
 
 # 1er subplot pour les stations STRA et STRE
 axs[0].plot(timea, dataavlp, label=f"{stz[0]}", color='r')
@@ -60,7 +60,7 @@ axs[0].legend()
 axs[0].grid(True)
 
 # Calcul de la valeur maximale absolue entre les deux datasets
-max_val = max(max(abs(dataa)), max(abs(datae)))
+max_val = max(max(abs(dataa1)), max(abs(datae1)))
 
 # 2ème subplot pour la station STRA
 axs[1].plot(timea, dataa1, color='r')
@@ -75,10 +75,10 @@ axs[2].grid(True)
 axs[2].set_ylim(-max_val, max_val)  # Uniformiser les limites de y
 
 # 4ème subplot pour le spectrogramme de la station STRA
-# Création du spectrogramme
-
-
 
 # Ajuster la disposition des subplots
 plt.tight_layout()
+plt.show()
+
+sta.spectrogram(log=True, title=' ' + str(sta[0].stats.starttime))
 plt.show()
