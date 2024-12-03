@@ -77,33 +77,86 @@ rsam_ratio = rsam_stre['RSAM_env_smooth_8-15Hz'] / rsam_stra['RSAM_env_smooth_8-
 fig, axs = plt.subplots(4, 1, figsize=(12, 22), sharex=True)
 
 # Subplot 1 : Trace filtrée 0.03-24 Hz
-axs[0].plot(time1, data1_full, color='red', label='STRA (0.03-24 Hz)')
-axs[0].plot(time2, data2_full, color='blue', label='STRE (0.03-24 Hz)')
-axs[0].set_ylabel('Amplitude (counts)')
-axs[0].legend()
+axs[0].plot(time1, data1_full, color='red', label='STRA')
+axs[0].plot(time2, data2_full, color='blue', label='STRE')
+axs[0].set_ylabel('RSAM (counts) (0.03-24 Hz)')
 axs[0].grid(True)
 
 # Subplot 2 : Trace filtrée 0.03-1 Hz
-axs[1].plot(time1, data1_low, color='red', label='STRA (0.03-1 Hz)')
-axs[1].plot(time2, data2_low, color='blue', label='STRE (0.03-1 Hz)')
-axs[1].set_ylabel('Amplitude (counts)')
-axs[1].legend()
+axs[1].plot(time1, data1_low, color='red', label='STRA ')
+axs[1].plot(time2, data2_low, color='blue', label='STRE ')
+axs[1].set_ylabel('RSAM (counts) (0.03-1 Hz)')
 axs[1].grid(True)
 
 # Subplot 3 : RSAM de chaque station (STRA et STRE)
 axs[2].plot(rsam_stra['time_UTC'], rsam_stra['RSAM_env_smooth_8-15Hz'], color='red', label='RSAM (STRA)')
 axs[2].plot(rsam_stre['time_UTC'], rsam_stre['RSAM_env_smooth_8-15Hz'], color='blue', label='RSAM (STRE)')
-axs[2].set_ylabel('RSAM')
-axs[2].legend()
+axs[2].set_ylabel('RSAM post processing (8-15 Hz)')
 axs[2].grid(True)
 
 # Subplot 4 : Rapport entre les RSAM de STRE et STRA
-axs[3].plot(rsam_stra['time_UTC'], rsam_ratio, color='purple', label='RSAM Ratio (STRE / STRA)')
-axs[3].set_ylabel('RSAM Ratio')
-axs[3].legend()
+axs[3].plot(rsam_stra['time_UTC'], rsam_ratio, color='orange')
+axs[3].set_ylabel('RSAM(STRE) / RSAM(STRA)')
 axs[3].grid(True)
 
-# Ajustement des subplots
-axs[3].set_xlabel('Time')
-plt.tight_layout()
+# Ajouter les lignes verticales pour les événements dans les subplots
+event_colors = {
+    'filtered': 'lime',  # Vert pour les événements filtrés
+    'non_filtered': 'darkgreen',  # Vert foncé pour les non filtrés
+    'Initial_Peak_Time': 'purple',
+    'Final_Peak_Time': 'orange',
+    'Initial_Peak_Time_w': 'cyan',
+    'Final_Peak_Time_w': 'magenta'
+}
+
+# Filtrer les événements en fonction des conditions
+filtered_events = df_csv[(df_csv['RSAM_E'] > 875) & (df_csv['Ratio'] < 6.5)]
+non_filtered_events = df_csv[~((df_csv['RSAM_E'] > 875) & (df_csv['Ratio'] < 6.5))]
+
+# Ajouter les lignes verticales pour les événements filtrés et non filtrés
+for event_set, color, label in [(filtered_events, event_colors['filtered'], 'Filtered Landslide'),
+                                (non_filtered_events, event_colors['non_filtered'], 'Landslide')]:
+    for peak_time in event_set['Peak_Time_UTC']:
+        peak_time_dt = pd.to_datetime(peak_time)
+        # Ajouter des lignes verticales dans les subplots correspondants
+        if time1.min() <= peak_time_dt <= time1.max():
+            axs[0].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+        if time2.min() <= peak_time_dt <= time2.max():
+            axs[1].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+
+# Ajouter les lignes verticales pour les autres événements spécifiques
+for event_name, color, label in [('Initial_Peak_Time', 'purple', 'Initial Peak Time'),
+                                 ('Final_Peak_Time', 'orange', 'Final Peak Time'),
+                                 ('Initial_Peak_Time_w', 'cyan', 'Initial Peak Time w'),
+                                 ('Final_Peak_Time_w', 'magenta', 'Final Peak Time w')]:
+    for peak_time in df_csv[event_name]:
+        peak_time_dt = pd.to_datetime(peak_time)
+        # Ajouter des lignes verticales dans les subplots correspondants
+        if time1.min() <= peak_time_dt <= time1.max():
+            axs[0].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+        if time2.min() <= peak_time_dt <= time2.max():
+            axs[1].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+
+# Ajouter une légende et une étiquette d'axe
+axs[3].set_xlabel('Time (UTC)')
+fig.tight_layout()
+
+# Afficher la légende avec uniquement les lignes verticales uniques
+lines, labels = axs[0].get_legend_handles_labels()
+unique_lines_labels = []
+for line, label in zip(lines, labels):
+    if label not in unique_lines_labels:
+        unique_lines_labels.append(label)
+
+axs[0].legend(lines, unique_lines_labels, loc='upper right')
+
+# Affichage
 plt.show()
