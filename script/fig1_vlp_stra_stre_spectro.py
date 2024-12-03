@@ -50,7 +50,7 @@ timea = pd.to_datetime(starttimea + pd.to_timedelta(np.arange(0, len(dataa) / fs
 timee = pd.to_datetime(starttimee + pd.to_timedelta(np.arange(0, len(datae) / fs, 1 / fs), unit='s'))
 
 # Création des subplots (4 sous-graphiques)
-fig, axs = plt.subplots(4, 1, figsize=(12, 18), sharex=True)
+fig, axs = plt.subplots(3, 1, figsize=(12, 18), sharex=True)
 
 # 1er subplot pour les stations STRA et STRE
 axs[0].plot(timea, dataavlp, label=f"{stz[0]}", color='r')
@@ -81,5 +81,6 @@ axs[2].set_ylim(-max_val, max_val)  # Uniformiser les limites de y
 plt.tight_layout()
 plt.show()
 
-sta.spectrogram(log=True, title=' ' + str(sta[0].stats.starttime))
-plt.show()
+
+#sta.spectrogram(log=True, title=' ' + str(sta[0].stats.starttime))
+#plt.show()
