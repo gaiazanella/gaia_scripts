@@ -14,7 +14,7 @@ fs = 50  # Fréquence cible
 
 # Client pour récupérer les données
 client = Client(db)
-ti = UTCDateTime("2020-10-07T00:00:00.000")
+ti = UTCDateTime("2020-03-28T00:00:00.000")
 tf = ti + (60 * 60 * 24 * 1)  # 1 heure de données
 
 # Récupérer les données pour les deux stations
@@ -44,7 +44,7 @@ time1 = pd.to_datetime(starttime1 + pd.to_timedelta(np.arange(0, len(data1) / fs
 time2 = pd.to_datetime(starttime2 + pd.to_timedelta(np.arange(0, len(data2) / fs, 1 / fs), unit='s'))
 
 # Lire le fichier CSV contenant les événements de glissement de terrain
-csv_file = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed/peaks_data_20201007.csv'  # Remplacer par votre chemin de fichier CSV
+csv_file = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_stre_stra/peaks_data_20200328.csv'  # Remplacer par votre chemin de fichier CSV
 df_csv = pd.read_csv(csv_file)
 
 # Convertir les valeurs des colonnes en format datetime
