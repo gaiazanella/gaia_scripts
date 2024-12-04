@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from obspy import UTCDateTime
+from obspy.signal.filter import bandpass
 from obspy.clients.filesystem.sds import Client
 
 # Paramètres
@@ -30,9 +31,19 @@ st1.detrend("linear")
 st2.detrend("demean")
 st2.detrend("linear")
 
-# Convertir les temps en datetime en évitant l'erreur de numpy.ndarray
-time1 = pd.to_datetime(st1[0].stats.starttime) + pd.to_timedelta(np.arange(0, len(st1[0].data)) / fs, unit='s')
-time2 = pd.to_datetime(st2[0].stats.starttime) + pd.to_timedelta(np.arange(0, len(st2[0].data)) / fs, unit='s')
+# Appliquer les filtres bandpass sur les données
+data1_full = bandpass(st1[0].data, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
+data1_low = bandpass(st1[0].data, freqmin=0.03, freqmax=1, df=fs, corners=4, zerophase=True)
+
+data2_full = bandpass(st2[0].data, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
+data2_low = bandpass(st2[0].data, freqmin=0.03, freqmax=1, df=fs, corners=4, zerophase=True)
+
+# Convertir les temps en datetime
+starttime1 = UTCDateTime(st1[0].stats.starttime).datetime
+starttime2 = UTCDateTime(st2[0].stats.starttime).datetime
+
+time1 = pd.to_datetime(starttime1 + pd.to_timedelta(np.arange(0, len(data1_full) / fs, 1 / fs), unit='s'))
+time2 = pd.to_datetime(starttime2 + pd.to_timedelta(np.arange(0, len(data2_full) / fs, 1 / fs), unit='s'))
 
 # Lire le fichier CSV contenant les événements
 csv_file = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed/peaks_data_20200101.csv'
@@ -40,6 +51,10 @@ df_csv = pd.read_csv(csv_file)
 
 # Convertir les colonnes en format datetime
 df_csv['Peak_Time_UTC'] = pd.to_datetime(df_csv['Peak_Time_UTC'])
+df_csv['Initial_Peak_Time'] = pd.to_datetime(df_csv['Initial_Peak_Time'])
+df_csv['Final_Peak_Time'] = pd.to_datetime(df_csv['Final_Peak_Time'])
+df_csv['Initial_Peak_Time_w'] = pd.to_datetime(df_csv['Initial_Peak_Time_w'])
+df_csv['Final_Peak_Time_w'] = pd.to_datetime(df_csv['Final_Peak_Time_w'])
 
 # Charger les fichiers CSV pour RSAM (STRA et STRE)
 rsam_stra_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRA_20200101.csv'
@@ -58,22 +73,22 @@ rsam_ratio = rsam_stre['RSAM_env_smooth_8-15Hz'] / rsam_stra['RSAM_env_smooth_8-
 # Création de la figure avec 4 subplots
 fig, axs = plt.subplots(4, 1, figsize=(12, 22), sharex=True)
 
-# Subplot 1 : Trace des données de STRA et STRE
-axs[0].plot(time1, st1[0].data, color='red', label='STRA')
-axs[0].plot(time2, st2[0].data, color='blue', label='STRE')
-axs[0].set_ylabel('Amplitude')
+# Subplot 1 : Trace filtrée 0.03-24 Hz
+axs[0].plot(time1, data1_full, color='red', label='STRA')
+axs[0].plot(time2, data2_full, color='blue', label='STRE')
+axs[0].set_ylabel('RSAM (counts) (0.03-24 Hz)')
 axs[0].grid(True)
 
-# Subplot 2 : Même chose (non filtré)
-axs[1].plot(time1, st1[0].data, color='red', label='STRA')
-axs[1].plot(time2, st2[0].data, color='blue', label='STRE')
-axs[1].set_ylabel('Amplitude')
+# Subplot 2 : Trace filtrée 0.03-1 Hz
+axs[1].plot(time1, data1_low, color='red', label='STRA ')
+axs[1].plot(time2, data2_low, color='blue', label='STRE ')
+axs[1].set_ylabel('RSAM (counts) (0.03-1 Hz)')
 axs[1].grid(True)
 
 # Subplot 3 : RSAM de chaque station (STRA et STRE)
 axs[2].plot(rsam_stra['time_UTC'], rsam_stra['RSAM_env_smooth_8-15Hz'], color='red', label='RSAM (STRA)')
 axs[2].plot(rsam_stre['time_UTC'], rsam_stre['RSAM_env_smooth_8-15Hz'], color='blue', label='RSAM (STRE)')
-axs[2].set_ylabel('RSAM (8-15 Hz)')
+axs[2].set_ylabel('RSAM post processing (8-15 Hz)')
 axs[2].grid(True)
 
 # Subplot 4 : Rapport entre les RSAM de STRE et STRA
@@ -81,33 +96,52 @@ axs[3].plot(rsam_stra['time_UTC'], rsam_ratio, color='orange')
 axs[3].set_ylabel('RSAM(STRE) / RSAM(STRA)')
 axs[3].grid(True)
 
-# Ajouter des lignes verticales uniquement pour les glissements de terrain
+# Ajouter des lignes verticales pour tous les subplots
 event_colors = {
     'filtered': 'lime',  # Vert pour les événements filtrés
     'non_filtered': 'darkgreen',  # Vert foncé pour les non filtrés
 }
 
+# Dictionnaire pour stocker les handles de légende
+legend_handles = {}
+
 # Filtrer les événements en fonction des conditions
 filtered_events = df_csv[(df_csv['RSAM_E'] > 875) & (df_csv['Ratio'] < 6.5)]
 non_filtered_events = df_csv[~((df_csv['RSAM_E'] > 875) & (df_csv['Ratio'] < 6.5))]
 
-# Ajouter des lignes verticales pour les événements de glissement de terrain
+# Ajout des lignes verticales pour tous les subplots
 for event_set, color, label in [(filtered_events, event_colors['filtered'], 'Filtered Landslide'),
                                 (non_filtered_events, event_colors['non_filtered'], 'Landslide')]:
     for peak_time in event_set['Peak_Time_UTC']:
         peak_time_dt = pd.to_datetime(peak_time)
         # Ajouter des lignes verticales dans tous les subplots
-        axs[0].axvline(x=peak_time_dt, color=color, linestyle='--')
-        axs[1].axvline(x=peak_time_dt, color=color, linestyle='--')
-        axs[2].axvline(x=peak_time_dt, color=color, linestyle='--')
-        axs[3].axvline(x=peak_time_dt, color=color, linestyle='--')
+        if time1.min() <= peak_time_dt <= time1.max():
+            axs[0].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[1].axvline(x=peak_time_dt, color=color, linestyle='--')
+            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--')
+            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--')
+
+        if time2.min() <= peak_time_dt <= time2.max():
+            axs[0].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[1].axvline(x=peak_time_dt, color=color, linestyle='--')
+            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--')
+            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--')
+
 
 # Ajouter une légende et une étiquette d'axe
 axs[3].set_xlabel('Time (UTC)')
 fig.tight_layout()
 
-# Afficher la légende
-axs[0].legend(loc='upper right')
+# Afficher la légende avec uniquement les lignes verticales uniques
+lines, labels = axs[0].get_legend_handles_labels()
+unique_lines_labels = []
+for line, label in zip(lines, labels):
+    if label not in unique_lines_labels:
+        unique_lines_labels.append(label)
+        legend_handles[label] = line  # Ajouter le handle pour ce label dans le dictionnaire
+
+# Afficher la légende avec les couleurs correctes
+axs[0].legend(legend_handles.values(), legend_handles.keys(), loc='upper right')
 
 # Affichage
 plt.show()

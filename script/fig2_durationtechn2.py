@@ -1,3 +1,4 @@
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,7 +15,7 @@ fs = 50  # Fréquence cible
 
 # Client pour récupérer les données
 client = Client(db)
-ti = UTCDateTime("2020-10-07T00:00:00.000")
+ti = UTCDateTime("2020-10-07T02:52:00.000")
 tf = ti + (60 * 60 * 24 * 1)  # 1 jour de données
 
 # Récupérer les données pour les deux stations
@@ -51,8 +52,6 @@ df_csv = pd.read_csv(csv_file)
 
 # Convertir les colonnes en format datetime
 df_csv['Peak_Time_UTC'] = pd.to_datetime(df_csv['Peak_Time_UTC'])
-df_csv['Initial_Peak_Time'] = pd.to_datetime(df_csv['Initial_Peak_Time'])
-df_csv['Final_Peak_Time'] = pd.to_datetime(df_csv['Final_Peak_Time'])
 df_csv['Initial_Peak_Time_w'] = pd.to_datetime(df_csv['Initial_Peak_Time_w'])
 df_csv['Final_Peak_Time_w'] = pd.to_datetime(df_csv['Final_Peak_Time_w'])
 
@@ -96,57 +95,30 @@ axs[3].plot(rsam_stra['time_UTC'], rsam_ratio, color='orange')
 axs[3].set_ylabel('RSAM(STRE) / RSAM(STRA)')
 axs[3].grid(True)
 
-# Ajouter des lignes verticales pour tous les subplots
+# Ajouter des lignes verticales pour les 3 colonnes spécifiques (Peak_Time_UTC, Initial_Peak_Time_w, Final_Peak_Time_w)
 event_colors = {
-    'filtered': 'lime',  # Vert pour les événements filtrés
-    'non_filtered': 'darkgreen',  # Vert foncé pour les non filtrés
-    'Initial_Peak_Time': 'purple',
-    'Final_Peak_Time': 'orange',
-    'Initial_Peak_Time_w': 'cyan',
-    'Final_Peak_Time_w': 'magenta'
+    'Peak_Time_UTC': 'green',  # Vert pour Peak_Time_UTC
+    'Initial_Peak_Time_w': 'magenta',  # Bleu pour Initial_Peak_Time_w
+    'Final_Peak_Time_w': 'purple',  # Rouge pour Final_Peak_Time_w
 }
 
 # Dictionnaire pour stocker les handles de légende
 legend_handles = {}
 
-# Filtrer les événements en fonction des conditions
-filtered_events = df_csv[(df_csv['RSAM_E'] > 875) & (df_csv['Ratio'] < 6.5)]
-non_filtered_events = df_csv[~((df_csv['RSAM_E'] > 875) & (df_csv['Ratio'] < 6.5))]
+# Ajouter des lignes verticales dans tous les subplots pour chaque colonne
+for col, color in event_colors.items():
+    filtered_events = df_csv[col].dropna()  # Eliminer les NaN
 
-# Ajout des lignes verticales pour tous les subplots
-for event_set, color, label in [(filtered_events, event_colors['filtered'], 'Filtered Landslide'),
-                                (non_filtered_events, event_colors['non_filtered'], 'Landslide')]:
-    for peak_time in event_set['Peak_Time_UTC']:
+    for peak_time in filtered_events:
         peak_time_dt = pd.to_datetime(peak_time)
-        # Ajouter des lignes verticales dans tous les subplots
         if time1.min() <= peak_time_dt <= time1.max():
-            axs[0].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[0].axvline(x=peak_time_dt, color=color, linestyle='--', label=col)
             axs[1].axvline(x=peak_time_dt, color=color, linestyle='--')
             axs[2].axvline(x=peak_time_dt, color=color, linestyle='--')
             axs[3].axvline(x=peak_time_dt, color=color, linestyle='--')
 
         if time2.min() <= peak_time_dt <= time2.max():
-            axs[0].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
-            axs[1].axvline(x=peak_time_dt, color=color, linestyle='--')
-            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--')
-            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--')
-
-# Ajouter les lignes verticales pour les autres événements spécifiques
-for event_name, color, label in [('Initial_Peak_Time', 'purple', 'Initial Peak Time'),
-                                 ('Final_Peak_Time', 'orange', 'Final Peak Time'),
-                                 ('Initial_Peak_Time_w', 'cyan', 'Initial Peak Time w'),
-                                 ('Final_Peak_Time_w', 'magenta', 'Final Peak Time w')]:
-    for peak_time in df_csv[event_name]:
-        peak_time_dt = pd.to_datetime(peak_time)
-        # Ajouter des lignes verticales dans tous les subplots
-        if time1.min() <= peak_time_dt <= time1.max():
-            axs[0].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
-            axs[1].axvline(x=peak_time_dt, color=color, linestyle='--')
-            axs[2].axvline(x=peak_time_dt, color=color, linestyle='--')
-            axs[3].axvline(x=peak_time_dt, color=color, linestyle='--')
-
-        if time2.min() <= peak_time_dt <= time2.max():
-            axs[0].axvline(x=peak_time_dt, color=color, linestyle='--', label=label)
+            axs[0].axvline(x=peak_time_dt, color=color, linestyle='--', label=col)
             axs[1].axvline(x=peak_time_dt, color=color, linestyle='--')
             axs[2].axvline(x=peak_time_dt, color=color, linestyle='--')
             axs[3].axvline(x=peak_time_dt, color=color, linestyle='--')
