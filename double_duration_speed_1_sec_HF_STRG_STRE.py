@@ -9,7 +9,7 @@ from datetime import datetime
 ## Paramètres de base
 start_date = datetime(2020, 1, 1)  # Date de début
 end_date = datetime(2021, 1, 1)   # Date de fin
-output_dir = '/home/gaia/Documents/processing_1_sec/2021/double_duration_speed'  # Répertoire de sortie
+output_dir = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_strg_stre'  # Répertoire de sortie
 
 # Paramètres pour la détection des pics
 distance_min = 1  # Ajuster cette valeur si nécessaire
@@ -155,12 +155,12 @@ for single_date in pd.date_range(start_date, end_date):
     chemin_vers_les_fichiers_G = f'/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRG_{date_str}*.csv'
 
     # Récupérer tous les fichiers correspondants
-    fichiers_A = glob.glob(chemin_vers_les_fichiers_E)
-    fichiers_E = glob.glob(chemin_vers_les_fichiers_G)
+    fichiers_E = glob.glob(chemin_vers_les_fichiers_E)
+    fichiers_G = glob.glob(chemin_vers_les_fichiers_G)
 
     # Assurez-vous qu'il y a un fichier pour chaque station
     if fichiers_E and fichiers_G:
-        output_file = os.path.join(output_dir, f'peaks_data_{date_str}.csv')
+        output_file = os.path.join(output_dir, f'strg_stre_peaks_data_{date_str}.csv')
         process_data(fichiers_E[0], fichiers_G[0], output_file)
 
 # Combiner tous les fichiers CSV résultants en un seul fichier
@@ -189,7 +189,7 @@ if dataframes:  # Vérifiez si la liste n'est pas vide
     combined_df.reset_index(drop=True, inplace=True)
     
     # Enregistrer le fichier combiné trié
-    combined_output_file = os.path.join(output_dir, 'all_peaks_data.csv')
+    combined_output_file = os.path.join(output_dir, 'strg_stre_all_peaks_data.csv')
     combined_df.to_csv(combined_output_file, index=False)
 else:
     print("Aucun fichier valide à combiner.")
