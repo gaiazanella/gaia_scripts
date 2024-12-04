@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import os
 
 # Charger le fichier 'all_peaks.csv' pour 'auto'
-file_path = '/home/gaia/Documents/processing_1_sec/2021/double_duration_speed/all_peaks_data.csv'
+file_path = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_stre_stra/all_peaks.csv'
 data = pd.read_csv(file_path)
 
 # Filtrer les données en fonction des critères 'RSAM_E > 875' et 'Ratio < 6.5'

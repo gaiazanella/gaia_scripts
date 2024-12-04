@@ -164,7 +164,7 @@ for single_date in pd.date_range(start_date, end_date):
         process_data(fichiers_E[0], fichiers_G[0], output_file)
 
 # Combiner tous les fichiers CSV résultants en un seul fichier
-all_files = glob.glob(os.path.join(output_dir, "peaks_data_*.csv"))
+all_files = glob.glob(os.path.join(output_dir, "strg_stre_peaks_data_*.csv"))
 
 # Créer une liste pour stocker les DataFrames non vides
 dataframes = []
