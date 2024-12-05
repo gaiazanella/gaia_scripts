@@ -17,17 +17,17 @@ import glob
 import os
 
 db = '/mnt/bigmama3/miniseed'
-stz = ['STRA', 'STRE']
+stz = ['STRA', 'STRE','STRG']
 net = ['IT', 'IV']
 channel = ['EHE', '*HZ']
 fs = 50  # Fréquence cible
 
 client = Client(db)
-ti = UTCDateTime("2020-10-07T02:30:00.000")
+ti = UTCDateTime("2020-01-15:30:00.000")
 tf = ti + (60 * 60 * 1 * 1)
 
 #st = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[1], starttime=ti, endtime=tf)
-st = client.get_waveforms(network='*', station=stz[1], location="", channel=channel[1], starttime=ti, endtime=tf)
+st = client.get_waveforms(network='*', station=stz[2], location="", channel=channel[1], starttime=ti, endtime=tf)
 print(st)
 st.merge(fill_value='interpolate')
 st.detrend("demean")
