@@ -14,15 +14,15 @@ fs = 50  # Fréquence cible
 
 # Client pour récupérer les données
 client = Client(db)
-ti = UTCDateTime("2020-01-05T15:30:00.000")
+ti = UTCDateTime("2020-02-26T00:00:00.000")
 tf = ti + (60 * 60 * 24 * 1)  # 1 jour de données
 # Lire le fichier CSV contenant les événements
-csv_file_g_a = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_strg_stra/strg_stra_peaks_data_20200105.csv'
+csv_file_g_a = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_strg_stra/strg_stra_peaks_data_20200226.csv'
 df_csv = pd.read_csv(csv_file_g_a)
 # Charger les fichiers CSV pour RSAM (STRA et STRE)
-rsam_stra_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRA_20200105.csv'
-rsam_stre_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRE_20200105.csv'
-rsam_strg_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRG_20200105.csv'
+rsam_stra_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRA_20200226.csv'
+rsam_stre_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRE_20200226.csv'
+rsam_strg_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRG_20200226.csv'
 
 # Récupérer les données pour les deux stations
 st1 = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[1], starttime=ti, endtime=tf)
@@ -86,30 +86,33 @@ rsam_ratio_g_a = rsam_strg['RSAM_env_smooth_8-15Hz'] / rsam_stra['RSAM_env_smoot
 fig, axs = plt.subplots(4, 1, figsize=(12, 22), sharex=True)
 
 # Subplot 1 : Trace filtrée 0.03-24 Hz
-axs[0].plot(time1, data1_full, color='red', label='STRA')
+#axs[0].plot(time1, data1_full, color='red', label='STRA')
 axs[0].plot(time2, data2_full, color='blue', label='STRE')
-axs[0].plot(time3, data3_full, color='magenta', label='STRG')
+#axs[0].plot(time3, data3_full, color='magenta', label='STRG')
 axs[0].set_ylabel('RSAM (counts) (0.03-24 Hz)')
 axs[0].grid(True)
 
 # Subplot 2 : Trace filtrée 0.03-1 Hz
 axs[1].plot(time1, data1_low, color='red', label='STRA ')
-axs[1].plot(time2, data2_low, color='blue', label='STRE ')
-axs[1].plot(time3, data3_low, color='magenta', label='STRG')
+#axs[1].plot(time2, data2_low, color='blue', label='STRE ')
+#axs[1].plot(time3, data3_low, color='magenta', label='STRG')
 axs[1].set_ylabel('RSAM (counts) (0.03-1 Hz)')
+axs[1].legend(['STRA VLP'], loc='upper right')
 axs[1].grid(True)
 
 # Subplot 3 : RSAM de chaque station (STRA et STRE)
 axs[2].plot(rsam_stra['time_UTC'], rsam_stra['RSAM_env_smooth_8-15Hz'], color='red', label='RSAM (STRA)')
-axs[2].plot(rsam_stre['time_UTC'], rsam_stre['RSAM_env_smooth_8-15Hz'], color='blue', label='RSAM (STRE)')
+#axs[2].plot(rsam_stre['time_UTC'], rsam_stre['RSAM_env_smooth_8-15Hz'], color='blue', label='RSAM (STRE)')
 axs[2].plot(rsam_strg['time_UTC'], rsam_strg['RSAM_env_smooth_8-15Hz'], color='magenta', label='RSAM (STRG)')
 axs[2].set_ylabel('RSAM post processing (8-15 Hz)')
+axs[2].legend(loc='upper right')
 axs[2].grid(True)
 
 # Subplot 4 : Rapport entre les RSAM de STRE et STRA
 #axs[3].plot(rsam_stra['time_UTC'], rsam_ratio_e_a, color='orange', label='RSAM(STRE)/RSAM(STRA)')
 axs[3].plot(rsam_stra['time_UTC'], rsam_ratio_g_a, color='green', label='RSAM(STRG)/RSAM(STRA)')
 axs[3].set_ylabel('RSAM(STRE) / RSAM(STRA)')
+axs[3].legend(loc='upper right')
 axs[3].grid(True)
 
 # Ajouter des lignes verticales pour tous les subplots
