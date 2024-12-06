@@ -6,7 +6,7 @@ from obspy.signal.filter import bandpass
 from obspy.clients.filesystem.sds import Client
 
 # Chemin vers le fichier CSV contenant les ratios
-file_path = '/home/gaia/Documents/processing_1_sec/2020/rsam_ratio/ratio_rsam_stra_stre_strg_20200318.csv'
+file_path = '/home/gaia/Documents/processing_1_sec/2020/rsam_ratio/ratio_rsam_stra_stre_strg_20200319.csv'
 
 # Charger le fichier CSV dans un DataFrame
 data_csv = pd.read_csv(file_path)
@@ -19,7 +19,7 @@ print("Contenu du fichier CSV des ratios :")
 print(data_csv.head())
 
 # Charger le fichier CSV contenant les données des pics (étoiles)
-peaks_file_path = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_stre_stra/peaks_data_20200318.csv'
+peaks_file_path = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_stre_stra/peaks_data_20200319.csv'
 peaks_data = pd.read_csv(peaks_file_path)
 
 # Convertir la colonne 'Peak_Time_UTC' en format datetime
@@ -30,7 +30,7 @@ print("Contenu du fichier CSV des pics :")
 print(peaks_data.head())
 
 # Charger le fichier CSV contenant les données des pics pour STRG/STRA
-strg_stra_peaks_file_path = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_strg_stra/strg_stra_peaks_data_20200318.csv'
+strg_stra_peaks_file_path = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_strg_stra/strg_stra_peaks_data_20200319.csv'
 strg_stra_peaks_data = pd.read_csv(strg_stra_peaks_file_path)
 
 # Convertir la colonne 'Peak_Time_UTC' en format datetime
@@ -50,7 +50,7 @@ fs = 50  # Fréquence d'échantillonnage cible
 client = Client(db)
 
 # Période d'intérêt
-ti = UTCDateTime("2020-03-18T00:00:00.000")
+ti = UTCDateTime("2020-03-19T00:00:00.000")
 tf = ti + 60 * 60 * 24  # Une journée complète
 
 # Récupérer et prétraiter les données pour les deux stations
@@ -83,7 +83,7 @@ ax[0].legend()
 ax[0].grid(True)
 
 # Ajouter des étoiles basées sur les pics du fichier peaks_data.csv
-ax[0].scatter(peaks_data['Peak_Time_UTC'], peaks_data['Ratio'], color='red', marker='*', label='Peak Points')
+ax[0].scatter(peaks_data['Peak_Time_UTC'], peaks_data['Ratio'], color='red', marker='*', label='Detection (E/A)')
 ax[0].legend()
 
 # Deuxième graphique : Ratio_STRG_STRA
@@ -94,13 +94,13 @@ ax[1].legend()
 ax[1].grid(True)
 
 # Ajouter des étoiles basées sur les pics du fichier strg_stra_peaks_data.csv
-ax[1].scatter(strg_stra_peaks_data['Peak_Time_UTC'], strg_stra_peaks_data['Ratio'], color='blue', marker='*', label='Peak Points STRG/STRA')
+ax[1].scatter(strg_stra_peaks_data['Peak_Time_UTC'], strg_stra_peaks_data['Ratio'], color='blue', marker='*', label='Detection (G/A)')
 ax[1].legend()
 
 # Troisième graphique : Données sismiques filtrées pour STRE
 ax[2].plot(data_sismique['STRE_time'], data_sismique['STRE'], color='blue', label='STRE (0.03-24 Hz)')
 #ax[2].set_title('Données filtrées pour STRE (0.03-24 Hz)')
-ax[2].set_ylabel('Amplitude')
+ax[2].set_ylabel('RSAM (counts)')
 ax[2].legend()
 ax[2].grid(True)
 
@@ -108,7 +108,7 @@ ax[2].grid(True)
 ax[3].plot(data_sismique['STRA_time'], data_sismique['STRA'], color='red', label='STRA (0.03-1 Hz)')
 #ax[3].set_title('Données filtrées pour STRA (0.03-1 Hz)')
 ax[3].set_xlabel('Time (UTC)')
-ax[3].set_ylabel('Amplitude')
+ax[3].set_ylabel('RSAM (counts)')
 ax[3].legend()
 ax[3].grid(True)
 
