@@ -81,6 +81,6 @@ axs[2].set_ylim(-max_val, max_val)  # Uniformiser les limites de y
 plt.tight_layout()
 plt.show()
 
-
-#sta.spectrogram(log=True, title=' ' + str(sta[0].stats.starttime))
+from obspy.imaging.spectrogram import spectrogram
+print(spectrogram(log=True,axes=True, title=' ' + str(sta[0].stats.starttime)))
 #plt.show()

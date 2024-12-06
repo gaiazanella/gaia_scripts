@@ -93,5 +93,5 @@ plt.tight_layout()
 plt.show()
 
 
-#sta.spectrogram(log=True, title=' ' + str(sta[0].stats.starttime))
+sta.spectrogram(log=True, title=' ' + str(sta[0].stats.starttime))
 #plt.show()

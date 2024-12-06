@@ -145,3 +145,5 @@ if timeg is not None and datag1 is not None:
 # Ajuster la disposition des subplots
 plt.tight_layout()
 plt.show()
+
+
