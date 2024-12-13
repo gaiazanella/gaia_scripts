@@ -21,45 +21,35 @@ sta = client.get_waveforms(network=net[0], station=stz[0], location="", channel=
 # Fusionner les données si plusieurs fichiers
 sta.merge(fill_value='interpolate')
 
-# Temps de départ et la durée des données
-starttime = sta[0].stats.starttime
-duration = sta[0].stats.npts / sta[0].stats.sampling_rate  # Durée des données en secondes
-
-# Vecteur de temps pour l'axe des X (en UTC)
-time_utc = [starttime + i / fs for i in range(len(sta[0].data))]
-
 # Création du spectrogramme
 plt.figure(figsize=(12, 6))
-Pxx, freqs, bins, im = plt.specgram(sta[0].data, NFFT=128, Fs=sta[0].stats.sampling_rate, noverlap=64, cmap='viridis')
+Pxx, freqs, bins, im = plt.specgram(sta[0].data, NFFT=256, Fs=sta[0].stats.sampling_rate, noverlap=192, cmap='viridis')
+
+# Limiter la plage de fréquences
+plt.ylim(0.03, 24)  # Plage souhaitée de 0.03 Hz à 24 Hz
 
 # Ajouter des labels et un titre
 plt.title(f"Spectrogramme de {sta[0].stats.station}")
-plt.xlabel('Temps (UTC)')
 plt.ylabel('Fréquence [Hz]')
 
 # Ajouter la barre de couleur
 plt.colorbar(label='Amplitude (dB)')
 
-# Ajouter l'axe des x avec des dates UTC
-def update_xticks():
-    # Récupérer les limites de l'axe des x
+# Calculer les étiquettes de temps en format UTC
+time_utc = [ti + i / fs for i in range(len(sta[0].data))]
+
+# Fonction pour ajuster les étiquettes en fonction de la vue actuelle
+def update_xticks(event):
     xlim = plt.gca().get_xlim()
-    
-    # Mettre à jour les dates en fonction des limites de l'axe x
     start_idx = int(xlim[0] * fs)
     end_idx = int(xlim[1] * fs)
     
-    # Créer des labels de temps sur l'axe x, en convertissant les indices en dates UTC
-    labels = [(starttime + i / fs).strftime('%Y-%m-%d %H:%M:%S') for i in range(start_idx, end_idx, int((end_idx - start_idx) / 10))]
-    
-    # Mettre à jour les ticks de l'axe x
+    # Ajuster les indices pour les étiquettes
+    labels = [time_utc[i].strftime('%Y-%m-%d %H:%M:%S') for i in range(start_idx, end_idx, int((end_idx - start_idx) / 10))]
     plt.xticks(np.linspace(xlim[0], xlim[1], num=len(labels)), labels, rotation=45)
 
-# Initialiser l'axe x avec des dates UTC
-update_xticks()
-
-# Connecter le zoom interactif à la mise à jour des ticks
-plt.gcf().canvas.mpl_connect('draw_event', lambda event: update_xticks())
+# Connecter la fonction au zoom
+plt.gcf().canvas.mpl_connect('draw_event', update_xticks)
 
 # Afficher le spectrogramme
 plt.tight_layout()
