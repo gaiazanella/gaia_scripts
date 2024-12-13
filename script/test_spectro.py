@@ -35,22 +35,6 @@ plt.ylabel('Fréquence [Hz]')
 # Ajouter la barre de couleur
 plt.colorbar(label='Amplitude (dB)')
 
-# Calculer les étiquettes de temps en format UTC
-time_utc = [ti + i / fs for i in range(len(sta[0].data))]
-
-# Fonction pour ajuster les étiquettes en fonction de la vue actuelle
-def update_xticks(event):
-    xlim = plt.gca().get_xlim()
-    start_idx = int(xlim[0] * fs)
-    end_idx = int(xlim[1] * fs)
-    
-    # Ajuster les indices pour les étiquettes
-    labels = [time_utc[i].strftime('%Y-%m-%d %H:%M:%S') for i in range(start_idx, end_idx, int((end_idx - start_idx) / 10))]
-    plt.xticks(np.linspace(xlim[0], xlim[1], num=len(labels)), labels, rotation=45)
-
-# Connecter la fonction au zoom
-plt.gcf().canvas.mpl_connect('draw_event', update_xticks)
-
 # Afficher le spectrogramme
 plt.tight_layout()
 plt.show()
