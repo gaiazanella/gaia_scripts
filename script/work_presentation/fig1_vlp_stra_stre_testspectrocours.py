@@ -16,7 +16,7 @@ fs = 50  # Fréquence cible
 # Client pour récupérer les données
 client = Client(db)
 ti = UTCDateTime("2020-10-07T02:53:00.000")
-tf = ti + (60 * 5 * 1 * 1)  # 1 heure de données
+tf = ti + (60 *5 * 1 * 1)  # 5 minutes de données 
 
 # Récupérer les données pour les deux stations
 sta = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[1], starttime=ti, endtime=tf)
@@ -49,49 +49,31 @@ starttimee = UTCDateTime(ste[0].stats.starttime).datetime
 timea = pd.to_datetime(starttimea + pd.to_timedelta(np.arange(0, len(dataa) / fs, 1 / fs), unit='s'))
 timee = pd.to_datetime(starttimee + pd.to_timedelta(np.arange(0, len(datae) / fs, 1 / fs), unit='s'))
 
-# Création des subplots (4 sous-graphiques)
-fig, axs = plt.subplots(4, 1, figsize=(12, 15), sharex=True)
 
-# 1er subplot pour les stations STRA et STRE
-axs[0].plot(timea, dataavlp, label=f"{stz[0]}", color='r')
-axs[0].plot(timee, dataevlp, label=f"{stz[1]}", color='b')
-axs[0].set_ylabel('RSAM (m/s) 0.03-1Hz')
-axs[0].legend()
-axs[0].grid(True)
+NFFT = 256    # length of spectrogram window in sample points (initial: 256)
+# number of sample points that the sliding window overlaps, must be less than NFFT
+noverlap = 50  
+xstart = 0    # x axis limits in the plot
+xend = 300  # max. length of signal: 21627 sec
 
-# Calcul de la valeur maximale absolue entre les deux datasets
-max_val = max(max(abs(dataa1)), max(abs(datae1)))
+# plot
+ax1 = plt.subplot(211)
+plt.plot(timea, dataa1, color='r')
+plt.xlabel('time [sec]')
+plt.ylabel('velocity [m/s]')
 
-# 2ème subplot pour la station STRA
-axs[1].plot(timea, dataa1, color='r')
-axs[1].set_ylabel('RSAM (m/s) 0.03-24Hz')
-axs[1].grid(True)
-axs[1].set_ylim(-max_val, max_val)  # Uniformiser les limites de y
+plt.subplot(212, sharex=ax1)
+plt.title('spectrogram, window length %s pts' % NFFT)
+Pxx, freqs, bins, im = plt.specgram(
+    sta[0].data, NFFT=NFFT, Fs=fs, 
+    noverlap=noverlap,cmap=plt.cm.gist_heat)
 
-# 3ème subplot pour la station STRE
-axs[2].plot(timee, datae1, color='b')
-axs[2].set_ylabel('RSAM (m/s) 0.03-24Hz')
-axs[2].grid(True)
-axs[2].set_ylim(-max_val, max_val)  # Uniformiser les limites de y
+# Pxx is the segments x freqs array of instantaneous power, freqs is
+# the frequency vector, bins are the centers of the time bins in which
+# the power is computed, and im is the matplotlib.image.AxesImage instance
+plt.ylabel('frequency [Hz]')
+plt.xlabel('time [sec]')
+plt.ylim(0,0.2)
 
-
-# 4ème subplot pour le spectrogramme de la station STRA
-sta = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[0], starttime=ti, endtime=tf)
-sta.merge(fill_value='interpolate')
-
-plt.figure(figsize=(12, 5))
-Pxx, freqs, bins, im = plt.specgram(sta[0].data, NFFT=256, Fs=sta[0].stats.sampling_rate, noverlap=192, cmap='viridis')
-
-# Limiter la plage de fréquences
-plt.ylim(0.03, 24)  # Plage souhaitée de 0.03 Hz à 24 Hz
-
-# Ajouter des labels et un titre
-plt.title(f"Spectrogramme de {sta[0].stats.station}")
-plt.ylabel('Fréquence [Hz]')
-
-# Ajouter la barre de couleur
-plt.colorbar(label='Amplitude (dB)')
-
-# Afficher le spectrogramme
-plt.tight_layout()
+plt.xlim(xstart, xend)
 plt.show()

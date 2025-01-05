@@ -16,7 +16,7 @@ fs = 50  # Fréquence cible
 # Client pour récupérer les données
 client = Client(db)
 ti = UTCDateTime("2020-10-07T02:53:00.000")
-tf = ti + (60 * 60 * 1 * 1)  # 1 heure de données
+tf = ti + (60 *5 * 1 * 1)  #  minutes de données 
 
 # Récupérer les données pour les deux stations
 sta = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[1], starttime=ti, endtime=tf)
@@ -54,7 +54,7 @@ fig, axs = plt.subplots(3, 1, figsize=(12, 15), sharex=True)
 
 # 1er subplot pour les stations STRA et STRE
 axs[0].plot(timea, dataavlp, label=f"{stz[0]}", color='r')
-axs[0].plot(timee, dataevlp, label=f"{stz[1]}", color='b')
+#axs[0].plot(timee, dataevlp, label=f"{stz[1]}", color='b')
 axs[0].set_ylabel('RSAM (m/s) 0.03-1Hz')
 axs[0].legend()
 axs[0].grid(True)
@@ -69,10 +69,11 @@ axs[1].grid(True)
 axs[1].set_ylim(-max_val, max_val)  # Uniformiser les limites de y
 
 # 3ème subplot pour la station STRE
-axs[2].plot(timee, datae1, color='b')
+axs[2].plot(timee, datae1, color='b',label=f"{stz[1]}")
 axs[2].set_ylabel('RSAM (m/s) 0.03-24Hz')
 axs[2].grid(True)
 axs[2].set_ylim(-max_val, max_val)  # Uniformiser les limites de y
+axs[2].legend()
 
 # 4ème subplot pour le spectrogramme de la station STRA
 
