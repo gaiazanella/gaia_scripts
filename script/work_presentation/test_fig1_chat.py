@@ -78,8 +78,9 @@ axs[2].set_ylim(-max_val, max_val)  # Uniformiser les limites de y
 sta = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[0], starttime=ti, endtime=tf)
 sta.merge(fill_value='interpolate')
 
-# Récupérer le temps pour les données du spectrogramme
-time_spectrogram = pd.to_datetime(starttimea + pd.to_timedelta(np.arange(0, len(sta[0].data) / fs, 1 / fs), unit='s'))
+# Calcul du spectrogramme
+# Nous allons ici calculer les valeurs de temps en fonction des indices
+time_spectrogram = pd.to_datetime(starttimea + pd.to_timedelta(np.arange(0, len(sta[0].data)) / fs, unit='s'))
 
 # Calcul du spectrogramme
 Pxx, freqs, bins, im = axs[3].specgram(sta[0].data, NFFT=256, Fs=sta[0].stats.sampling_rate, noverlap=192, cmap='viridis')
@@ -91,16 +92,9 @@ axs[3].set_ylim(0.03, 24)  # Plage souhaitée de 0.03 Hz à 24 Hz
 axs[3].set_ylabel('Fréquence [Hz]')
 axs[3].set_xlabel('Temps [s]')
 
-# **Aligner l'axe X du spectrogramme avec les autres subplots**
-# Les axes des X du spectrogramme sont basés sur les indices du signal, donc on convertit les indices en temps
-time_spectrogram_ticks = pd.to_datetime(starttimea + pd.to_timedelta(np.arange(0, len(sta[0].data), len(sta[0].data) // 7), unit='s'))
-
-# Définir les ticks et labels pour l'axe X du spectrogramme
+# Aligner l'axe des X du spectrogramme avec les autres subplots
 axs[3].set_xticks(np.linspace(0, len(sta[0].data), 7))  # Choisir 7 points pour les ticks
-axs[3].set_xticklabels(time_spectrogram_ticks.strftime('%H:%M:%S'), rotation=45)  # Formater les labels
-
-# Supprimer la barre de couleurs
-# fig.colorbar(im, ax=axs[3], label='Amplitude (dB)')
+axs[3].set_xticklabels(time_spectrogram[::len(sta[0].data) // 7].strftime('%H:%M:%S'), rotation=45)  # Formater les labels
 
 # Définir les mêmes limites d'axe X pour tous les subplots
 axs[0].set_xlim(timea.min(), timea.max())
