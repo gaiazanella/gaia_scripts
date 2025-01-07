@@ -73,21 +73,22 @@ rsam_ratio = rsam_stre['RSAM_env_smooth_8-15Hz'] / rsam_stra['RSAM_env_smooth_8-
 fig, axs = plt.subplots(4, 1, figsize=(12, 22), sharex=True)
 
 # Subplot 1 : Trace filtrée 0.03-24 Hz
-axs[0].plot(time1, data1_full, color='red', label='STRA')
-axs[0].plot(time2, data2_full, color='blue', label='STRE')
+axs[0].plot(time1, data1_full, color='red')
+#axs[0].plot(time2, data2_full, color='blue', label='STRE')
 axs[0].set_ylabel('RSAM (counts) (0.03-24 Hz)')
 axs[0].grid(True)
 
 # Subplot 2 : Trace filtrée 0.03-1 Hz
 axs[1].plot(time1, data1_low, color='red', label='STRA ')
-axs[1].plot(time2, data2_low, color='blue', label='STRE ')
+#axs[1].plot(time2, data2_low, color='blue', label='STRE ')
 axs[1].set_ylabel('RSAM (counts) (0.03-1 Hz)')
 axs[1].grid(True)
 
 # Subplot 3 : RSAM de chaque station (STRA et STRE)
-axs[2].plot(rsam_stra['time_UTC'], rsam_stra['RSAM_env_smooth_8-15Hz'], color='red', label='RSAM (STRA)')
-axs[2].plot(rsam_stre['time_UTC'], rsam_stre['RSAM_env_smooth_8-15Hz'], color='blue', label='RSAM (STRE)')
+axs[2].plot(rsam_stra['time_UTC'], rsam_stra['RSAM_env_smooth_8-15Hz'], color='red', label='STRA')
+axs[2].plot(rsam_stre['time_UTC'], rsam_stre['RSAM_env_smooth_8-15Hz'], color='blue', label='STRE')
 axs[2].set_ylabel('RSAM post processing (8-15 Hz)')
+axs[2].legend()
 axs[2].grid(True)
 
 # Subplot 4 : Rapport entre les RSAM de STRE et STRA
