@@ -16,7 +16,7 @@ fs = 50  # Fréquence cible
 # Client pour récupérer les données
 client = Client(db)
 ti = UTCDateTime("2020-10-07T02:53:00.000")
-tf = ti + (60 *5 * 1 * 1)  #  minutes de données 
+tf = ti + (60 *5 * 1 * 1)  # 5  minutes de données 
 
 # Récupérer les données pour les deux stations
 sta = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[1], starttime=ti, endtime=tf)
@@ -49,8 +49,10 @@ starttimee = UTCDateTime(ste[0].stats.starttime).datetime
 timea = pd.to_datetime(starttimea + pd.to_timedelta(np.arange(0, len(dataa) / fs, 1 / fs), unit='s'))
 timee = pd.to_datetime(starttimee + pd.to_timedelta(np.arange(0, len(datae) / fs, 1 / fs), unit='s'))
 
-# Création des subplots (4 sous-graphiques)
-fig, axs = plt.subplots(3, 1, figsize=(12, 15), sharex=True)
+import matplotlib.dates as mdates
+
+# Création des subplots (3 sous-graphiques)
+fig, axs = plt.subplots(3, 1, figsize=(9, 11), sharex=True)
 
 # 1er subplot pour les stations STRA et STRE
 axs[0].plot(timea, dataavlp, label=f"{stz[0]}", color='r')
@@ -75,13 +77,13 @@ axs[2].grid(True)
 axs[2].set_ylim(-max_val, max_val)  # Uniformiser les limites de y
 axs[2].legend()
 
-# 4ème subplot pour le spectrogramme de la station STRA
+# Personnaliser le format des dates sur l'axe des x pour "2020-10-07 T 02:53"
+date_format = mdates.DateFormatter('%Y-%m-%d %H:%M')
+axs[2].xaxis.set_major_formatter(date_format)
 
+# Rotation des dates pour une meilleure lisibilité
+plt.xticks(rotation=25)
 
 # Ajuster la disposition des subplots
 plt.tight_layout()
 plt.show()
-
-#from obspy.imaging.spectrogram import spectrogram
-#print(spectrogram(log=True,axes=True, title=' ' + str(sta[0].stats.starttime)))
-#plt.show()
