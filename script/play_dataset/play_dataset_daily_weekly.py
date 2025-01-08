@@ -91,10 +91,10 @@ plt.show()
 
 # Deuxième figure : distribution statistique des 'Durations'
 plt.figure(figsize=(10, 6))
-plt.hist(filtered_data['Duration'], bins=30, color='skyblue', edgecolor='black', alpha=0.7)
-plt.xlabel('Durations (s)')
+plt.hist(filtered_data['Duration'], bins=50, color='skyblue', edgecolor='black', alpha=0.7)
+plt.xlabel('Landslide Durations (s)')
 plt.ylabel('Count')
-plt.title(f'Duration Distribution\nMean={duration_stats["mean"]:.2f}, Median={median_duration:.2f}, Std={duration_stats["std"]:.2f}')
+plt.title(f'Landslide Duration Distribution\nMean={duration_stats["mean"]:.2f}, Median={median_duration:.2f}, Std={duration_stats["std"]:.2f}')
 plt.grid(axis='y', linestyle='--', alpha=0.7)
 
 # Afficher la deuxième figure
