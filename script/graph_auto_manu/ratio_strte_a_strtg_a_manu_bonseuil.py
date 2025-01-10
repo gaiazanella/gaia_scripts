@@ -38,7 +38,7 @@ strg_data = pd.read_csv(strg_file_path)
 if 'RSAM_G' not in strg_data.columns or 'Ratio' not in strg_data.columns or 'Peak_Time_UTC' not in strg_data.columns:
     raise ValueError("The necessary columns are missing in the strg/stra data.")
 
-strg_filtered = strg_data[(strg_data['RSAM_G'] > 175) & (strg_data['Ratio'] < 6.5)]
+strg_filtered = strg_data[(strg_data['RSAM_G'] > 50) & (strg_data['Ratio'] < 1.5)]
 strg_filtered['Date'] = pd.to_datetime(strg_filtered['Peak_Time_UTC']).dt.date
 strg_daily_counts = strg_filtered['Date'].value_counts().sort_index()
 
