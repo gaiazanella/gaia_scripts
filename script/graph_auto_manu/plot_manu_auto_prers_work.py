@@ -54,26 +54,22 @@ total_manual_frane = manual_data['frane'].sum()
 total_auto_frane = result_auto['frane'].sum()
 
 # Tracer le graphique
-plt.figure(figsize=(12, 8))
+plt.figure(figsize=(14, 10))  # Agrandir la figure
 
 # Tracer uniquement les moyennes hebdomadaires
-plt.plot(result_auto.index, auto_rolling, label='2020 Auto - Weekly Average', color='cyan', linewidth=2)
-plt.plot(manual_data.index, manual_data['frane_rolling'], label='2020 Manual - Weekly Average', color='grey', linewidth=2)
+plt.plot(result_auto.index, auto_rolling, color='cyan', linewidth=3)
+plt.plot(manual_data.index, manual_data['frane_rolling'], color='grey', linewidth=3)
 
-# Ajouter les contraintes dans le titre
-title = 'Comparison of Landslide Detections (Weekly Average)\nRSAM_E > 875, Ratio (E/A) < 6.5'
-
-# Configurer le graphique
-plt.title(title)
-plt.xlabel('Date')
-plt.ylabel('Number of Landslides (Frane)')
-plt.legend()
+# Configurer le graphique sans titre ni légende
+#plt.xlabel('Date', fontsize=20)  # Taille de police pour l'axe X
+plt.ylabel('Daily Landslide Event Rate (Weekly Smoothed)', fontsize=20)  # Taille de police pour l'axe Y
 plt.grid(True)
-plt.xticks(rotation=45)  # Rotate dates for better readability
+plt.xticks(rotation=45, fontsize=16)  # Rotation des dates et taille de police pour les ticks de l'axe X
+plt.yticks(fontsize=16)  # Taille de police pour les ticks de l'axe Y
 plt.tight_layout()
 
 # Définir le chemin d'enregistrement de l'image
-save_path = '/home/gaia/Documents/processing_1_sec/2020/landslide_comparison.jpg'
+save_path = '/home/gaia/Documents/processing_1_sec/2020/landslide_comparison_no_title_no_legend.jpg'
 
 # Vérifier si le répertoire existe, sinon le créer
 save_dir = os.path.dirname(save_path)
