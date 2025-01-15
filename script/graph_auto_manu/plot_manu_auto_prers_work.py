@@ -64,7 +64,7 @@ plt.plot(manual_data.index, manual_data['frane_rolling'], color='grey', linewidt
 #plt.xlabel('Date', fontsize=20)  # Taille de police pour l'axe X
 plt.ylabel('Daily Landslide Event Rate (Weekly Smoothed)', fontsize=20)  # Taille de police pour l'axe Y
 plt.grid(True)
-plt.xticks(rotation=45, fontsize=16)  # Rotation des dates et taille de police pour les ticks de l'axe X
+plt.xticks(rotation=45, fontsize=20)  # Rotation des dates et taille de police pour les ticks de l'axe X
 plt.yticks(fontsize=16)  # Taille de police pour les ticks de l'axe Y
 plt.tight_layout()
 
