@@ -1,5 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns  # Importer seaborn pour KDE
+import numpy as np  # Pour les manipulations de données
 
 # Charger le fichier 'all_peaks.csv' pour 'auto'
 file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed/all_peaks.csv'
@@ -99,9 +101,14 @@ plt.show()
 
 # Deuxième figure : distribution statistique des 'Durations'
 plt.figure(figsize=(12, 8))
-plt.hist(filtered_data['Duration'], bins=50, color='skyblue', edgecolor='black', alpha=0.7)
+
+# Appliquer un lissage KDE (Kernel Density Estimation)
+sns.kdeplot(filtered_data['Duration'], shade=True, color='skyblue', alpha=0.7)
+
+# Afficher un histogramme avec un lissage
+#plt.hist(filtered_data['Duration'], bins=50, color='skyblue', edgecolor='black', alpha=0.7)
 plt.xlabel('Landslide Durations (s)', fontsize=18)  # Taille de la police de l'axe X
-plt.ylabel('Count', fontsize=18)  # Taille de la police de l'axe Y
+plt.ylabel('Density', fontsize=18)  # Taille de la police de l'axe Y
 plt.title(f'Landslide Duration Distribution\nMean={duration_stats["mean"]:.2f}, Median={median_duration:.2f}, Std={duration_stats["std"]:.2f}', fontsize=18)
 plt.grid(axis='y', linestyle='--', alpha=0.7)
 
