@@ -37,8 +37,8 @@ manual_daily_counts_rolling = manual_daily_counts.rolling(window=7).mean()
 # Créer un DataFrame pour les autres informations nécessaires pour 'auto' (durée, RSAM_E)
 daily_duration_mean = filtered_data.groupby('Date')['Duration'].mean()
 daily_duration_max = filtered_data.groupby('Date')['Duration'].max()
-daily_rsam_mean = filtered_data.groupby('Date')['RSAM_E'].mean()
-daily_rsam_max = filtered_data.groupby('Date')['RSAM_E'].max()
+daily_rsam_mean = filtered_data.groupby('Date')['RSAM_A'].mean()
+daily_rsam_max = filtered_data.groupby('Date')['RSAM_A'].max()
 
 # Appliquer la moyenne mobile hebdomadaire (7 jours) sur toutes les données
 daily_duration_mean_rolling = daily_duration_mean.rolling(window=7).mean()
@@ -47,9 +47,9 @@ daily_rsam_mean_rolling = daily_rsam_mean.rolling(window=7).mean()
 daily_rsam_max_rolling = daily_rsam_max.rolling(window=7).mean()
 
 # Distribution statistique des 'Durations'
-duration_stats = filtered_data['Duration'].describe()
-median_duration = filtered_data['Duration'].median()
-quartiles = filtered_data['Duration'].quantile([0.25, 0.5, 0.75])
+duration_stats = filtered_data['RSAM_A'].describe()
+median_duration = filtered_data['RSAM_A'].median()
+quartiles = filtered_data['RSAM_A'].quantile([0.25, 0.5, 0.75])
 
 # Première figure : les 4 premiers plots
 fig, axs = plt.subplots(4, 1, figsize=(12, 16), sharex=True)
@@ -100,17 +100,17 @@ plt.show()
 
 # Deuxième figure : distribution statistique des 'Durations'
 plt.figure(figsize=(12, 8))
-plt.hist(filtered_data['Duration'], bins=50, color='skyblue', edgecolor='black', alpha=0.7)
-plt.xlabel('Landslide Durations (s)', fontsize=18)  # Taille de la police de l'axe X
+plt.hist(filtered_data['RSAM_A'], bins=50, color='skyblue', edgecolor='black', alpha=0.7)
+plt.xlabel('RSAM(STRA) Value', fontsize=18)  # Taille de la police de l'axe X
 plt.ylabel('Count', fontsize=18)  # Taille de la police de l'axe Y
-plt.title(f'Landslide Duration Distribution\nMean={duration_stats["mean"]:.2f}, Median={median_duration:.2f}, Std={duration_stats["std"]:.2f}', fontsize=18)
+plt.title(f'Landslide Ratio Distribution\nMean={duration_stats["mean"]:.2f}, Median={median_duration:.2f}, Std={duration_stats["std"]:.2f}', fontsize=18)
 plt.grid(axis='y', linestyle='--', alpha=0.7)
 
 # Afficher la deuxième figure
 plt.show()
 
 # Impression des statistiques
-print("Statistical Distribution of 'Durations':")
+print("Statistical Distribution of 'RSAM(A)':")
 print(f"Mean: {duration_stats['mean']:.2f}")
 print(f"Median: {median_duration:.2f}")
 print(f"Min: {duration_stats['min']:.2f}")

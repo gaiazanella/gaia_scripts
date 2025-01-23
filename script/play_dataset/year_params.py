@@ -1,5 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns  # Importer seaborn pour KDE
+import numpy as np  # Pour les manipulations de données
 
 # Charger le fichier 'all_peaks.csv' pour 'auto'
 file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed/all_peaks.csv'
@@ -46,74 +48,69 @@ daily_duration_max_rolling = daily_duration_max.rolling(window=7).mean()
 daily_rsam_mean_rolling = daily_rsam_mean.rolling(window=7).mean()
 daily_rsam_max_rolling = daily_rsam_max.rolling(window=7).mean()
 
+# Calcul de la moyenne quotidienne du 'Ratio' (auto)
+daily_ratio_mean = filtered_data.groupby('Date')['Ratio'].mean()
+
+# Appliquer la moyenne mobile hebdomadaire (7 jours) pour 'Ratio'
+daily_ratio_mean_rolling = daily_ratio_mean.rolling(window=7).mean()
+
 # Distribution statistique des 'Durations'
 duration_stats = filtered_data['Duration'].describe()
 median_duration = filtered_data['Duration'].median()
 quartiles = filtered_data['Duration'].quantile([0.25, 0.5, 0.75])
 
-# Première figure : les 4 premiers plots
-fig, axs = plt.subplots(4, 1, figsize=(12, 16), sharex=True)
+# Première figure : les 5 premiers plots
+fig, axs = plt.subplots(5, 1, figsize=(12, 20), sharex=True)
 
 # 1er subplot : nombre de glissements par jour (auto + manual)
-axs[0].plot(result_auto['Date'], result_auto['frane_rolling'], label='Weekly Average (Auto)', color='orange', linewidth=2)
-axs[0].plot(manual_daily_counts_rolling.index, manual_daily_counts_rolling.values, label='Weekly Average (Manual)', color='blue', linewidth=2)
-axs[0].set_ylabel('Number of Landslides', fontsize=18)  # Taille de la police des labels
-axs[0].legend(fontsize=14)  # Taille de la police des légendes
+axs[0].plot(result_auto['Date'], result_auto['frane_rolling'], label='Weekly Average (Auto)', color='cyan', linewidth=2)
+axs[0].plot(manual_daily_counts_rolling.index, manual_daily_counts_rolling.values, label='Weekly Average (Manual)', color='grey', linewidth=2)
+axs[0].set_ylabel('Number of \nLandslides', fontsize=18)
+axs[0].legend(fontsize=14)
 axs[0].grid(True)
-axs[0].tick_params(axis='x', labelsize=14)  # Taille de la police de l'axe X
-axs[0].tick_params(axis='y', labelsize=14)  # Taille de la police de l'axe Y
+axs[0].tick_params(axis='x', labelsize=14)
+axs[0].tick_params(axis='y', labelsize=14)
 
 # 2ème subplot : durée moyenne quotidienne des glissements (auto)
 axs[1].plot(daily_duration_mean.index, daily_duration_mean.values, label='Daily Average Duration (Auto)', color='green', linewidth=2)
 axs[1].plot(daily_duration_mean_rolling.index, daily_duration_mean_rolling.values, label='Weekly Average Duration (Auto)', color='lime', linewidth=2)
-axs[1].set_ylabel('Average Duration (s)', fontsize=18)  # Taille de la police des labels
-axs[1].legend(fontsize=14)  # Taille de la police des légendes
+axs[1].set_ylabel('Average \nDuration (s)', fontsize=18)
+axs[1].legend(fontsize=14)
 axs[1].grid(True)
-axs[1].tick_params(axis='x', labelsize=14)  # Taille de la police de l'axe X
-axs[1].tick_params(axis='y', labelsize=14)  # Taille de la police de l'axe Y
+axs[1].tick_params(axis='x', labelsize=14)
+axs[1].tick_params(axis='y', labelsize=14)
 
 # 3ème subplot : durée maximale quotidienne des glissements (auto)
 axs[2].plot(daily_duration_max.index, daily_duration_max.values, label='Daily Max Duration (Auto)', color='red', linewidth=2)
 axs[2].plot(daily_duration_max_rolling.index, daily_duration_max_rolling.values, label='Weekly Max Duration (Auto)', color='darkred', linewidth=2)
-axs[2].set_ylabel('Max Duration (s)', fontsize=18)  # Taille de la police des labels
-axs[2].legend(fontsize=14)  # Taille de la police des légendes
+axs[2].set_ylabel('Max \nDuration (s)', fontsize=18)
+axs[2].legend(fontsize=14)
 axs[2].grid(True)
-axs[2].tick_params(axis='x', labelsize=14)  # Taille de la police de l'axe X
-axs[2].tick_params(axis='y', labelsize=14)  # Taille de la police de l'axe Y
+axs[2].tick_params(axis='x', labelsize=14)
+axs[2].tick_params(axis='y', labelsize=14)
 
 # 4ème subplot : RSAM_E moyen quotidien (auto)
 axs[3].plot(daily_rsam_mean.index, daily_rsam_mean.values, label='Daily Average RSAM_E (Auto)', color='skyblue', linewidth=2)
 axs[3].plot(daily_rsam_mean_rolling.index, daily_rsam_mean_rolling.values, label='Weekly Average RSAM_E (Auto)', color='darkblue', linewidth=2)
-axs[3].set_ylabel('Average RSAM_E', fontsize=18)  # Taille de la police des labels
-axs[3].set_xlabel('Date', fontsize=18)  # Taille de la police de l'axe X
-axs[3].legend(fontsize=14)  # Taille de la police des légendes
+axs[3].set_ylabel('Average \nRSAM_E', fontsize=18)
+axs[3].legend(fontsize=14)
 axs[3].grid(True)
-axs[3].tick_params(axis='x', labelsize=14)  # Taille de la police de l'axe X   
-axs[3].tick_params(axis='y', labelsize=14)  # Taille de la police de l'axe Y
+axs[3].tick_params(axis='x', labelsize=14)
+axs[3].tick_params(axis='y', labelsize=14)
+
+# 5ème subplot : Ratio moyen quotidien (auto)
+axs[4].plot(daily_ratio_mean.index, daily_ratio_mean.values, label='Daily Average Ratio (Auto)', color='yellow', linewidth=2)
+axs[4].plot(daily_ratio_mean_rolling.index, daily_ratio_mean_rolling.values, label='Weekly Average Ratio (Auto)', color='darkorange', linewidth=2)
+axs[4].set_ylabel('Average \nRatio', fontsize=18)
+axs[4].set_xlabel('Date', fontsize=18)
+axs[4].legend(fontsize=14)
+axs[4].grid(True)
+axs[4].tick_params(axis='x', labelsize=14)
+axs[4].tick_params(axis='y', labelsize=14)
+axs[4].set_xlabel('Date', fontsize=18)
 
 # Ajuster la mise en page
-
 plt.tight_layout()
 
-# Afficher la première figure
+# Afficher la figure avec les 5 subplots
 plt.show()
-
-# Deuxième figure : distribution statistique des 'Durations'
-plt.figure(figsize=(12, 8))
-plt.hist(filtered_data['Duration'], bins=50, color='skyblue', edgecolor='black', alpha=0.7)
-plt.xlabel('Landslide Durations (s)', fontsize=18)  # Taille de la police de l'axe X
-plt.ylabel('Count', fontsize=18)  # Taille de la police de l'axe Y
-plt.title(f'Landslide Duration Distribution\nMean={duration_stats["mean"]:.2f}, Median={median_duration:.2f}, Std={duration_stats["std"]:.2f}', fontsize=18)
-plt.grid(axis='y', linestyle='--', alpha=0.7)
-
-# Afficher la deuxième figure
-plt.show()
-
-# Impression des statistiques
-print("Statistical Distribution of 'Durations':")
-print(f"Mean: {duration_stats['mean']:.2f}")
-print(f"Median: {median_duration:.2f}")
-print(f"Min: {duration_stats['min']:.2f}")
-print(f"Max: {duration_stats['max']:.2f}")
-print(f"1st Quartile: {quartiles[0.25]:.2f}")
-print(f"3rd Quartile: {quartiles[0.75]:.2f}")

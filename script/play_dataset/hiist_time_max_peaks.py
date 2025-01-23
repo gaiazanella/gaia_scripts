@@ -1,15 +1,23 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns  # Importer seaborn pour KDE
 
 # Charger le fichier 'all_peaks.csv' pour 'auto'
 file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed/all_peaks.csv'
 data = pd.read_csv(file_path)
 
+# Assurez-vous que les colonnes de temps sont au format datetime
+data['Peak_Time_UTC'] = pd.to_datetime(data['Peak_Time_UTC'])
+data['Initial_Peak_Time'] = pd.to_datetime(data['Initial_Peak_Time'])
+
+# Calculer la durée en secondes
+data['duration_seconds'] = (data['Peak_Time_UTC'] - data['Initial_Peak_Time']).dt.total_seconds()
+
 # Filtrer les données en fonction des critères 'RSAM_E > 875' et 'Ratio < 6.5'
 filtered_data = data[(data['RSAM_E'] > 875) & (data['Ratio'] < 6.5)]
 
 # Extraire la date sans l'heure de la colonne 'Peak_Time_UTC'
-filtered_data['Date'] = pd.to_datetime(filtered_data['Peak_Time_UTC']).dt.date
+filtered_data['Date'] = filtered_data['Peak_Time_UTC'].dt.date
 
 # Compter les occurrences par jour pour 'auto' dans 'frane'
 daily_counts = filtered_data['Date'].value_counts().sort_index()
@@ -35,8 +43,8 @@ manual_daily_counts = manual_data.groupby('Date')['frane'].sum()
 manual_daily_counts_rolling = manual_daily_counts.rolling(window=7).mean()
 
 # Créer un DataFrame pour les autres informations nécessaires pour 'auto' (durée, RSAM_E)
-daily_duration_mean = filtered_data.groupby('Date')['Duration'].mean()
-daily_duration_max = filtered_data.groupby('Date')['Duration'].max()
+daily_duration_mean = filtered_data.groupby('Date')['duration_seconds'].mean()
+daily_duration_max = filtered_data.groupby('Date')['duration_seconds'].max()
 daily_rsam_mean = filtered_data.groupby('Date')['RSAM_E'].mean()
 daily_rsam_max = filtered_data.groupby('Date')['RSAM_E'].max()
 
@@ -47,9 +55,9 @@ daily_rsam_mean_rolling = daily_rsam_mean.rolling(window=7).mean()
 daily_rsam_max_rolling = daily_rsam_max.rolling(window=7).mean()
 
 # Distribution statistique des 'Durations'
-duration_stats = filtered_data['Duration'].describe()
-median_duration = filtered_data['Duration'].median()
-quartiles = filtered_data['Duration'].quantile([0.25, 0.5, 0.75])
+duration_stats = filtered_data['duration_seconds'].describe()
+median_duration = filtered_data['duration_seconds'].median()
+quartiles = filtered_data['duration_seconds'].quantile([0.25, 0.5, 0.75])
 
 # Première figure : les 4 premiers plots
 fig, axs = plt.subplots(4, 1, figsize=(12, 16), sharex=True)
@@ -92,7 +100,6 @@ axs[3].tick_params(axis='x', labelsize=14)  # Taille de la police de l'axe X
 axs[3].tick_params(axis='y', labelsize=14)  # Taille de la police de l'axe Y
 
 # Ajuster la mise en page
-
 plt.tight_layout()
 
 # Afficher la première figure
@@ -100,17 +107,18 @@ plt.show()
 
 # Deuxième figure : distribution statistique des 'Durations'
 plt.figure(figsize=(12, 8))
-plt.hist(filtered_data['Duration'], bins=50, color='skyblue', edgecolor='black', alpha=0.7)
-plt.xlabel('Landslide Durations (s)', fontsize=18)  # Taille de la police de l'axe X
+sns.kdeplot(filtered_data['duration_seconds'], shade=True, color='skyblue', alpha=0.7)
+#plt.hist(filtered_data['duration_seconds'], bins=80, color='skyblue', edgecolor='black', alpha=0.7)
+plt.xlabel('Duration (seconds)', fontsize=18)  # Taille de la police de l'axe X
 plt.ylabel('Count', fontsize=18)  # Taille de la police de l'axe Y
-plt.title(f'Landslide Duration Distribution\nMean={duration_stats["mean"]:.2f}, Median={median_duration:.2f}, Std={duration_stats["std"]:.2f}', fontsize=18)
+plt.title(f'Duration Distribution\nMean={duration_stats["mean"]:.2f}, Median={median_duration:.2f}, Std={duration_stats["std"]:.2f}', fontsize=18)
 plt.grid(axis='y', linestyle='--', alpha=0.7)
 
 # Afficher la deuxième figure
 plt.show()
 
 # Impression des statistiques
-print("Statistical Distribution of 'Durations':")
+print("Statistical Distribution of 'Duration_seconds':")
 print(f"Mean: {duration_stats['mean']:.2f}")
 print(f"Median: {median_duration:.2f}")
 print(f"Min: {duration_stats['min']:.2f}")
