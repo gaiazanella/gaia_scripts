@@ -57,7 +57,7 @@ total_auto_frane = result_auto['frane'].sum()
 plt.figure(figsize=(14, 10))  # Agrandir la figure
 
 # Tracer uniquement les moyennes hebdomadaires
-plt.plot(result_auto.index, auto_rolling, color='cyan', linewidth=3)
+#plt.plot(result_auto.index, auto_rolling, color='cyan', linewidth=3)
 plt.plot(manual_data.index, manual_data['frane_rolling'], color='grey', linewidth=3)
 
 # Configurer le graphique sans titre ni légende

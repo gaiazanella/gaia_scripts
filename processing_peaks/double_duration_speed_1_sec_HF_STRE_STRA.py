@@ -10,7 +10,6 @@ from datetime import datetime
 start_date = datetime(2021, 1, 1)  # Date de début
 end_date = datetime(2022, 1, 1)   # Date de fin
 output_dir = '/home/gaia/Documents/processing_1_sec/2021/double_duration_speed'  # Répertoire de sortie
-
 # Paramètres pour la détection des pics
 distance_min = 1  # Ajuster cette valeur si nécessaire
 prominence = 1.4
