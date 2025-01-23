@@ -3,11 +3,18 @@ import matplotlib.pyplot as plt
 import os
 
 # Charger le fichier 'all_peaks.csv'
-file_path = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_stre_stra/all_peaks.csv'
+file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed/all_peaks.csv'
 data = pd.read_csv(file_path)
 
 # Filtrer les données en fonction des critères 'RSAM_E > 875' et 'Ratio < 6.5'
 filtered_data = data[(data['RSAM_E'] > 875) & (data['Ratio'] < 6.5)]
+#filtered_data = data[(data['RSAM_E'] > 875) & (data['Ratio'] < 7.5)]
+#filtered_data = data[(data['RSAM_E'] > 650) & (data['RSAM_E'] < 1075) & (data['Ratio'] > 2.5) & (data['Ratio'] < 6.5)]
+print(min(data['RSAM_E']))
+print(max(data['RSAM_E']))
+print(min(data['Ratio']))
+print(max(data['Ratio']))
+
 
 # Vérifiez que la colonne Peak_Time_UTC existe et est correcte
 if 'Peak_Time_UTC' not in data.columns:
@@ -69,7 +76,7 @@ plt.yticks(fontsize=16)  # Taille de police pour les ticks de l'axe Y
 plt.tight_layout()
 
 # Définir le chemin d'enregistrement de l'image
-save_path = '/home/gaia/Documents/processing_1_sec/2020/landslide_comparison_no_title_no_legend.jpg'
+save_path = '/home/gaia/Documents/processing_10_sec/2020/landslide_comparison_no_title_no_legend.jpg'
 
 # Vérifier si le répertoire existe, sinon le créer
 save_dir = os.path.dirname(save_path)
