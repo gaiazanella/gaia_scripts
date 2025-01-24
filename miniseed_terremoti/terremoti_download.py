@@ -12,15 +12,12 @@ stz = ['STR*']
 net = ['I*']
 channel = ['*H*']
 
-
 # Client pour récupérer les données
-client = Client(db) °)))))))))))°°°°°°°
-ti = UTCDateTime("2020-10-21T23:00:00.000")
+client = Client(db)
+ti = UTCDateTime("2020-05-20T23:43:00.000")
 tf = ti + (60 * 6 * 1)  # 1 heure de données
 
 # Récupérer les données pour les deux stations
 st1 = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[0], starttime=ti, endtime=tf)
-st1.write('/home/gaia/Documents/gaia_scripts/script/20201021_M5.2.mseed')
--_-_=(())
-st1.plot()
-===
+st1.write('/home/gaia/Documents/gaia_scripts/script/mseed_terremoti/20200520_M5.8.mseed')
+#st1.plot()
