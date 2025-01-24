@@ -23,11 +23,11 @@ channel = ['EHE', '*HZ']
 fs = 50  # Fréquence cible
 
 client = Client(db)
-ti = UTCDateTime("2020-01-06T19:00:00.000")
+ti = UTCDateTime("2020-10-21T23:00:00.000")
 tf = ti + (60 * 60 * 1 * 1)
 
 #st = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[1], starttime=ti, endtime=tf)
-st = client.get_waveforms(network='*', station=stz[1], location="", channel=channel[1], starttime=ti, endtime=tf)
+st = client.get_waveforms(network='*', station=stz[0], location="", channel=channel[1], starttime=ti, endtime=tf)
 print(st)
 st.merge(fill_value='interpolate')
 st.detrend("demean")
