@@ -7,7 +7,7 @@ from obspy.signal.filter import bandpass
 from obspy.clients.filesystem.sds import Client
 
 # Chemin vers le fichier CSV contenant les ratios
-file_path = '/home/gaia/Documents/processing_1_sec/2020/rsam_ratio/ratio_rsam_stra_stre_strg_20200320.csv'
+file_path = '/home/gaia/Documents/processing_1_sec/2020/rsam_ratio/ratio_rsam_stra_stre_strg_20200323.csv'
 
 # Charger le fichier CSV dans un DataFrame
 data_csv = pd.read_csv(file_path)
@@ -20,7 +20,7 @@ print("Contenu du fichier CSV des ratios :")
 print(data_csv.head())
 
 # Charger le fichier CSV contenant les données des pics (étoiles)
-peaks_file_path = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_stre_stra/peaks_data_20200320.csv'
+peaks_file_path = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_stre_stra/peaks_data_20200323.csv'
 peaks_data = pd.read_csv(peaks_file_path)
 
 # Convertir la colonne 'Peak_Time_UTC' en format datetime
@@ -31,7 +31,7 @@ print("Contenu du fichier CSV des pics :")
 print(peaks_data.head())
 
 # Charger le fichier CSV contenant les données des pics pour STRG/STRA
-strg_stra_peaks_file_path = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_strg_stra_0.5/strg_stra_peaks_data_20200320.csv'
+strg_stra_peaks_file_path = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_strg_stra_0.5/strg_stra_peaks_data_20200323.csv'
 strg_stra_peaks_data = pd.read_csv(strg_stra_peaks_file_path)
 
 # Convertir la colonne 'Peak_Time_UTC' en format datetime
@@ -51,7 +51,7 @@ fs = 50  # Fréquence d'échantillonnage cible
 client = Client(db)
 
 # Période d'intérêt
-ti = UTCDateTime("2020-03-20T00:00:00.000")
+ti = UTCDateTime("2020-03-23T00:00:00.000")
 tf = ti + 60 * 60 * 24  # Une journée complète
 
 # Récupérer et prétraiter les données pour les trois stations
@@ -90,7 +90,7 @@ fig, ax = plt.subplots(5, 1, figsize=(12, 15), sharex=True)  # 5 sous-graphes
 # Premier graphique : Données filtrées pour STRA (0.03-1 Hz)
 ax[0].plot(data_sismique['STRA_time'], data_sismique['STRA'], color='red', label='STRA (0.03-1 Hz)')
 ax[0].set_ylabel('RSAM (counts)')
-ax[0].set_ylim(y_min, y_max)  # Appliquer les mêmes limites pour l'axe y
+#ax[0].set_ylim(y_min, y_max)  # Appliquer les mêmes limites pour l'axe y
 ax[0].legend(loc='upper right')
 ax[0].grid(True)
 
@@ -123,7 +123,7 @@ ax[3].legend()
 # Cinquième graphique : Ratio STRG/STRA (G/A)
 ax[4].plot(data_csv['time_UTC'], data_csv['Ratio_STRG_STRA'], color='green', label='STRG/STRA')
 ax[4].set_ylabel('Ratio')
-ax[4].set_ylim(ratio_min, ratio_max)  # Appliquer les mêmes limites pour l'axe y
+#ax[4].set_ylim(ratio_min, ratio_max)  # Appliquer les mêmes limites pour l'axe y
 ax[4].legend(loc='upper right')
 ax[4].grid(True)
 
