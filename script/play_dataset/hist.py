@@ -4,11 +4,13 @@ import seaborn as sns  # Importer seaborn pour KDE
 import numpy as np  # Pour les manipulations de données
 
 # Charger le fichier 'all_peaks.csv' pour 'auto'
-file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed/all_peaks.csv'
+file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_stre_stra/all_peaks.csv'
+#file_path = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_stre_stra/all_peaks.csv'
 data = pd.read_csv(file_path)
 
 # Filtrer les données en fonction des critères 'RSAM_E > 875' et 'Ratio < 6.5'
 filtered_data = data[(data['RSAM_E'] > 875) & (data['Ratio'] < 6.5)]
+print(len(filtered_data))
 
 # Extraire la date sans l'heure de la colonne 'Peak_Time_UTC'
 filtered_data['Date'] = pd.to_datetime(filtered_data['Peak_Time_UTC']).dt.date
@@ -39,6 +41,8 @@ manual_daily_counts_rolling = manual_daily_counts.rolling(window=7).mean()
 # Créer un DataFrame pour les autres informations nécessaires pour 'auto' (durée, RSAM_E)
 daily_duration_mean = filtered_data.groupby('Date')['Duration'].mean()
 daily_duration_max = filtered_data.groupby('Date')['Duration'].max()
+#daily_duration_mean = filtered_data.groupby('Date')['Duration_w'].mean()
+#daily_duration_max = filtered_data.groupby('Date')['Duration_w'].max()
 daily_rsam_mean = filtered_data.groupby('Date')['RSAM_E'].mean()
 daily_rsam_max = filtered_data.groupby('Date')['RSAM_E'].max()
 
@@ -52,6 +56,9 @@ daily_rsam_max_rolling = daily_rsam_max.rolling(window=7).mean()
 duration_stats = filtered_data['Duration'].describe()
 median_duration = filtered_data['Duration'].median()
 quartiles = filtered_data['Duration'].quantile([0.25, 0.5, 0.75])
+#duration_stats = filtered_data['Duration_w'].describe()
+#median_duration = filtered_data['Duration_w'].median()
+#quartiles = filtered_data['Duration_w'].quantile([0.25, 0.5, 0.75])
 
 # Première figure : les 4 premiers plots
 fig, axs = plt.subplots(4, 1, figsize=(12, 16), sharex=True)
@@ -104,6 +111,7 @@ plt.figure(figsize=(12, 8))
 
 # Appliquer un lissage KDE (Kernel Density Estimation)
 sns.kdeplot(filtered_data['Duration'], shade=True, color='skyblue', alpha=0.7)
+#sns.kdeplot(filtered_data['Duration_w'], shade=True, color='skyblue', alpha=0.7)
 
 # Afficher un histogramme avec un lissage
 #plt.hist(filtered_data['Duration'], bins=50, color='skyblue', edgecolor='black', alpha=0.7)

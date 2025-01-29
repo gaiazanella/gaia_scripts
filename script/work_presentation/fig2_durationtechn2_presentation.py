@@ -36,7 +36,7 @@ st2.detrend("linear")
 data1_full = bandpass(st1[0].data, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
 data1_low = bandpass(st1[0].data, freqmin=0.03, freqmax=1, df=fs, corners=4, zerophase=True)
 
-data2_full = bandpass(st2[0].data, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
+data2_full = bandpass(st2[0].data, freqmin=8, freqmax=15, df=fs, corners=4, zerophase=True)
 data2_low = bandpass(st2[0].data, freqmin=0.03, freqmax=1, df=fs, corners=4, zerophase=True)
 
 # Convertir les temps en datetime
@@ -47,7 +47,8 @@ time1 = pd.to_datetime(starttime1 + pd.to_timedelta(np.arange(0, len(data1_full)
 time2 = pd.to_datetime(starttime2 + pd.to_timedelta(np.arange(0, len(data2_full) / fs, 1 / fs), unit='s'))
 
 # Lire le fichier CSV contenant les événements
-csv_file = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_stre_stra/peaks_data_20200323.csv'
+csv_file = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_stre_stra/peaks_data_20200323.csv' ## 1SEC
+#csv_file = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_stre_stra/peaks_data_20200323.csv' ## 10SEC
 df_csv = pd.read_csv(csv_file)
 
 # Convertir les colonnes en format datetime
@@ -56,8 +57,10 @@ df_csv['Initial_Peak_Time_w'] = pd.to_datetime(df_csv['Initial_Peak_Time_w'])
 df_csv['Final_Peak_Time_w'] = pd.to_datetime(df_csv['Final_Peak_Time_w'])
 
 # Charger les fichiers CSV pour RSAM (STRA et STRE)
-rsam_stra_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRA_20200323.csv'
-rsam_stre_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRE_20200323.csv'
+rsam_stra_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRA_20200323.csv' #1SEC
+rsam_stre_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRE_20200323.csv' #1SEC
+#rsam_stra_file = '/home/gaia/Documents/processing_10_sec/2020/rsam/rsam_STRA_20200323.csv'
+#rsam_stre_file = '/home/gaia/Documents/processing_10_sec/2020/rsam/rsam_STRE_20200323.csv'
 
 rsam_stra = pd.read_csv(rsam_stra_file)
 rsam_stre = pd.read_csv(rsam_stre_file)
@@ -73,9 +76,9 @@ rsam_ratio = rsam_stre['RSAM_env_smooth_8-15Hz'] / rsam_stra['RSAM_env_smooth_8-
 fig, axs = plt.subplots(4, 1, figsize=(12, 22), sharex=True)
 
 # Subplot 1 : Trace filtrée 0.03-24 Hz
-axs[0].plot(time1, data1_full, color='red')
-#axs[0].plot(time2, data2_full, color='blue', label='STRE')
-axs[0].set_ylabel('RSAM (counts) (0.03-24 Hz)')
+#axs[0].plot(time1, data1_full, color='red')
+axs[0].plot(time2, data2_full, color='blue', label='STRE')
+axs[0].set_ylabel('RSAM (counts) (8-15 Hz)')
 axs[0].grid(True)
 
 # Subplot 2 : Trace filtrée 0.03-1 Hz
@@ -180,7 +183,7 @@ st2.detrend("linear")
 data1_full = bandpass(st1[0].data, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
 data1_low = bandpass(st1[0].data, freqmin=0.03, freqmax=1, df=fs, corners=4, zerophase=True)
 
-data2_full = bandpass(st2[0].data, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
+data2_full = bandpass(st2[0].data, freqmin=8, freqmax=15, df=fs, corners=4, zerophase=True)
 data2_low = bandpass(st2[0].data, freqmin=0.03, freqmax=1, df=fs, corners=4, zerophase=True)
 
 # Convertir les temps en datetime
@@ -191,7 +194,8 @@ time1 = pd.to_datetime(starttime1 + pd.to_timedelta(np.arange(0, len(data1_full)
 time2 = pd.to_datetime(starttime2 + pd.to_timedelta(np.arange(0, len(data2_full) / fs, 1 / fs), unit='s'))
 
 # Lire le fichier CSV contenant les événements
-csv_file = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_stre_stra/peaks_data_20200323.csv'
+csv_file = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_stre_stra/peaks_data_20200323.csv' ##1SEC
+#csv_file = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_stre_stra/peaks_data_20200323.csv'
 df_csv = pd.read_csv(csv_file)
 
 # Convertir les colonnes en format datetime
@@ -200,8 +204,10 @@ df_csv['Initial_Peak_Time'] = pd.to_datetime(df_csv['Initial_Peak_Time'])
 df_csv['Final_Peak_Time'] = pd.to_datetime(df_csv['Final_Peak_Time'])
 
 # Charger les fichiers CSV pour RSAM (STRA et STRE)
-rsam_stra_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRA_20200323.csv'
-rsam_stre_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRE_20200323.csv'
+rsam_stra_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRA_20200323.csv' ##1SEC
+rsam_stre_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRE_20200323.csv' ##1SEC
+#rsam_stra_file = '/home/gaia/Documents/processing_10_sec/2020/rsam/rsam_STRA_20200323.csv'
+#rsam_stre_file = '/home/gaia/Documents/processing_10_sec/2020/rsam/rsam_STRE_20200323.csv'
 
 rsam_stra = pd.read_csv(rsam_stra_file)
 rsam_stre = pd.read_csv(rsam_stre_file)
@@ -217,9 +223,9 @@ rsam_ratio = rsam_stre['RSAM_env_smooth_8-15Hz'] / rsam_stra['RSAM_env_smooth_8-
 fig, axs = plt.subplots(4, 1, figsize=(12, 22), sharex=True)
 
 # Subplot 1 : Trace filtrée 0.03-24 Hz
-axs[0].plot(time1, data1_full, color='red')
-#axs[0].plot(time2, data2_full, color='blue', label='STRE')
-axs[0].set_ylabel('RSAM (counts) (0.03-24 Hz)')
+#axs[0].plot(time1, data1_full, color='red')
+axs[0].plot(time2, data2_full, color='blue', label='STRE')
+axs[0].set_ylabel('RSAM (counts) (8-15 Hz)')
 axs[0].grid(True)
 
 # Subplot 2 : Trace filtrée 0.03-1 Hz
