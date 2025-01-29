@@ -9,7 +9,7 @@ from datetime import datetime
 ## Paramètres de base
 start_date = datetime(2020, 1, 1)  # Date de début
 end_date = datetime(2021, 1, 1)   # Date de fin
-output_dir = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strg_stra'  # Répertoire de sortie
+output_dir = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strc_stra'  # Répertoire de sortie
 
 # Paramètres pour la détection des pics
 distance_min = 1  # Ajuster cette valeur si nécessaire
@@ -117,7 +117,7 @@ def process_data(file_A, file_G, output_file):
         'Peak_Time_UTC': df_ratio['time_UTC'].iloc[peaks_8_15Hz],
         'Ratio': ratio,
         'RSAM_A': df_A['RSAM_env_smooth_8-15Hz'].iloc[peaks_8_15Hz].values,
-        'RSAM_G': df_G['RSAM_env_smooth_8-15Hz'].iloc[peaks_8_15Hz].values,
+        'RSAM_C': df_G['RSAM_env_smooth_8-15Hz'].iloc[peaks_8_15Hz].values,
         'Duration': durations,
         'Initial_Peak_Time': initial_peak_times,
         'Final_Peak_Time': final_peak_times,
@@ -152,7 +152,7 @@ for single_date in pd.date_range(start_date, end_date):
 
     # Chemins vers les fichiers pour la date actuelle
     chemin_vers_les_fichiers_A = f'/home/gaia/Documents/processing_10_sec/2020/rsam/rsam_STRA_{date_str}*.csv'
-    chemin_vers_les_fichiers_G = f'/home/gaia/Documents/processing_10_sec/2020/rsam/rsam_STRG_{date_str}*.csv'
+    chemin_vers_les_fichiers_G = f'/home/gaia/Documents/processing_10_sec/2020/rsam/rsam_STRC_{date_str}*.csv'
 
     # Récupérer tous les fichiers correspondants
     fichiers_A = glob.glob(chemin_vers_les_fichiers_A)
@@ -160,11 +160,11 @@ for single_date in pd.date_range(start_date, end_date):
 
     # Assurez-vous qu'il y a un fichier pour chaque station
     if fichiers_A and fichiers_G:
-        output_file = os.path.join(output_dir, f'strg_stra_peaks_data_{date_str}.csv')
+        output_file = os.path.join(output_dir, f'strc_stra_peaks_data_{date_str}.csv')
         process_data(fichiers_A[0], fichiers_G[0], output_file)
 
 # Combiner tous les fichiers CSV résultants en un seul fichier
-all_files = glob.glob(os.path.join(output_dir, "strg_stra_peaks_data_*.csv"))
+all_files = glob.glob(os.path.join(output_dir, "strc_stra_peaks_data_*.csv"))
 
 # Créer une liste pour stocker les DataFrames non vides
 dataframes = []
@@ -189,7 +189,7 @@ if dataframes:  # Vérifiez si la liste n'est pas vide
     combined_df.reset_index(drop=True, inplace=True)
     
     # Enregistrer le fichier combiné trié
-    combined_output_file = os.path.join(output_dir, 'strg_stra_all_peaks_data.csv')
+    combined_output_file = os.path.join(output_dir, 'strc_stra_all_peaks_data.csv')
     combined_df.to_csv(combined_output_file, index=False)
 else:
     print("Aucun fichier valide à combiner.")

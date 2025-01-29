@@ -40,7 +40,7 @@ t_init = UTCDateTime("2020-01-01T00:00:00")
 t_end = UTCDateTime("2021-01-01T00:00:00")
 save_dir = '/home/gaia/Documents/processing_10_sec/2020/rsam/'
 db = '/mnt/bigmama3/miniseed'
-stz = ['STRG']  # Liste des stations à traiter (maintenant seulement STRG)
+stz = ['STRC']  # Liste des stations à traiter (maintenant seulement STRG)
 net = ['I*', 'I*']
 channel = ['*HZ', '*HZ']
 
