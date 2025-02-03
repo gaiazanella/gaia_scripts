@@ -3,8 +3,8 @@ import os
 import numpy as np
 
 # Définir le chemin du dossier contenant les fichiers
-input_dir = '/home/gaia/Documents/processing_1_sec/2020/rsam/'
-output_dir = '/home/gaia/Documents/processing_1_sec/2020/rsam_ratio/'
+input_dir = '/home/gaia/Documents/processing_10_sec/2020/rsam/'
+output_dir = '/home/gaia/Documents/processing_10_sec/2020/rsam_ratio/'
 
 # Créer une liste de tous les jours de 2020 en utilisant pd.date_range pour obtenir des dates valides
 days_2020 = pd.date_range('2020-01-01', '2020-12-31', freq='D').strftime('%Y%m%d').tolist()
