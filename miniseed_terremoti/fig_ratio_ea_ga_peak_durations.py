@@ -20,7 +20,7 @@ print("Contenu du fichier CSV des ratios :")
 print(data_csv.head())
 
 # Charger le fichier CSV contenant les données des pics (étoiles)
-peaks_file_path = '/home/gaia/Documents/processing_19_sec/2020/double_duration_speed_stre_stra/peaks_data_20200323.csv'
+peaks_file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_stre_stra/peaks_data_20200323.csv'
 peaks_data = pd.read_csv(peaks_file_path)
 
 # Convertir la colonne 'Peak_Time_UTC' en format datetime

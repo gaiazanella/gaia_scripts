@@ -38,9 +38,9 @@ samples = win * fs
 # Initialise dates using datetime
 t_init = UTCDateTime("2020-01-01T00:00:00")
 t_end = UTCDateTime("2021-01-01T00:00:00")
-save_dir = '/home/gaia/Documents/processing_10_sec/2020/rsam/'
+save_dir = '/home/gaia/Documents/processing_10_sec/2020/rsam_test/'
 db = '/mnt/bigmama3/miniseed'
-stz = ['STRC']  # Liste des stations à traiter (maintenant seulement STRG)
+stz = ['STRA']  # Liste des stations à traiter (maintenant seulement STRG)
 net = ['I*', 'I*']
 channel = ['*HZ', '*HZ']
 
