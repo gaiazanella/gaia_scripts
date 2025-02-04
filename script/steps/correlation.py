@@ -7,7 +7,8 @@ from scipy.stats import pearsonr
 # Chargement des données
 manual_data = pd.read_csv('/home/gaia/Documents/2020_manual.csv')
 ##automatic_data = pd.read_csv('/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_strg_stre/strg_stre_all_peaks_data.csv')
-automatic_data = pd.read_csv('/home/gaia/Documents/processing_10_sec/2020/double_duration_speed/all_peaks.csv')
+#automatic_data = pd.read_csv('/home/gaia/Documents/processing_10_sec/2020/double_duration_speed/all_peaks.csv')
+automatic_data = pd.read_csv('/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_stre_stra_test/stre_stra_all_peaks_data.csv')
 #automatic_data = pd.read_csv('/home/gaia/Documents/processing_1_sec/2020/double_duration_speed/all_peaks.csv')
 
 # Conversion de Peak_Time_UTC en datetime et extraction de la date
