@@ -19,17 +19,18 @@ client = Client(db)
 #tf = ti + (60 * 2 * 1)  # 20 min de données
 
 # Heure de début précise à 19:02
-ti = UTCDateTime("2020-03-19T03:23:00.000")
+ti = UTCDateTime("2020-03-23T10:08:00.000")
 
 # Heure de fin précise à 19:04
-tf = UTCDateTime("2020-03-19T03:26:00.000")
+tf = UTCDateTime("2020-03-23T10:15:00.000")
 
 # Récupérer les données pour les deux stations
 st1 = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[0], starttime=ti, endtime=tf)
 #print(st1)
 
-st1.write('/home/gaia/Documents/mseed_landslide/20200319_03.23.mseed')
-st1.plot()
+st1.write('/home/gaia/Documents/mseed_landslide/mseed_landslide_test/20200323_10.08.mseed')
+#st1.plot()
+
 # Chemin vers ton fichier MiniSEED
 #mseed_file = '/home/gaia/Documents/mseed_terremoti/20201021_M5.2.mseed'
 

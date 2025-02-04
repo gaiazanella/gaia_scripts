@@ -6,9 +6,10 @@ from scipy.stats import pearsonr
 
 # Chargement des données
 manual_data = pd.read_csv('/home/gaia/Documents/2020_manual.csv')
-automatic_data = pd.read_csv('/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_strg_stra_0.5/strg_stra_all_peaks_data.csv')
+#automatic_data = pd.read_csv('/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_strg_stra_0.5/strg_stra_all_peaks_data.csv')
 #automatic_data = pd.read_csv('/home/gaia/Documents/processing_10_sec/2020/dataset_durations/all_peaks.csv')
 #automatic_data = pd.read_csv('/home/gaia/Documents/processing_1_sec/2020/double_duration_speed/all_peaks.csv')
+automatic_data = pd.read_csv('/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strg_stra_test/strg_stra_all_peaks_data.csv')
 
 # Conversion de Peak_Time_UTC en datetime et extraction de la date
 automatic_data['Peak_Time_UTC'] = pd.to_datetime(automatic_data['Peak_Time_UTC'])
@@ -18,8 +19,8 @@ automatic_data['Date'] = automatic_data['Peak_Time_UTC'].dt.date
 manual_data['Date'] = pd.to_datetime(manual_data['Date']).dt.date
 
 # Définition des seuils
-ratio_thresholds = np.arange(1, 10, 1)  # Seuils de ratio de 3 à 9
-rsam_thresholds = np.arange(100, 1100, 100)  # Seuils RSAM de 700 à 1000
+ratio_thresholds = np.arange(-1, 4, 1)  # Seuils de ratio de 3 à 9
+rsam_thresholds = np.arange(0, 700, 100)  # Seuils RSAM de 700 à 1000
 
 # Création d'un DataFrame pour stocker les corrélations
 correlation_df = pd.DataFrame(index=rsam_thresholds, columns=ratio_thresholds)

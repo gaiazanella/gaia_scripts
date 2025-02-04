@@ -80,7 +80,8 @@ def process_data(file_A, file_G, output_file):
     # Boucle pour chaque pic détecté
     for i_w, peak_w in enumerate(peaks_8_15Hz):
         # Utiliser l'indice i pour accéder à peak_amplitudes
-        threshold_w = 0.5 * ratio[i_w]
+        threshold_w = 0.5 * ratio[i_w] ## on calcule un seuil relatif à la moitié de l'amplitude du pic.
+        ## Ce seuil est utilisé pour définir juusqu'où le pic se prolonge en amplitude. 
 
         # Trouver le début du pic
         start_index_w = peak_w

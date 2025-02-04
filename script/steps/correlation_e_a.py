@@ -19,8 +19,10 @@ automatic_data['Date'] = automatic_data['Peak_Time_UTC'].dt.date
 manual_data['Date'] = pd.to_datetime(manual_data['Date']).dt.date
 
 # Définition des seuils
-ratio_thresholds = np.arange(0, 20, 1)  # Seuils de ratio de 3 à 10
-rsam_thresholds = np.arange(300, 2000, 50)  # Seuils RSAM de 700 à 1100
+#ratio_thresholds = np.arange(0, 20, 1)  # Seuils de ratio de 3 à 10
+#rsam_thresholds = np.arange(300, 2000, 50)  # Seuils RSAM de 700 à 1100
+ratio_thresholds = np.arange(3, 19, 1)  # Seuils de ratio de 3 à 10
+rsam_thresholds = np.arange(700, 1100, 50)  # Seuils RSAM de 700 à 1100
 
 # Création d'un DataFrame pour stocker les corrélations
 correlation_df = pd.DataFrame(index=rsam_thresholds, columns=ratio_thresholds)
