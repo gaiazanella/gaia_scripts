@@ -11,7 +11,7 @@ from obspy import read
 db = '/mnt/bigmama3/miniseed'
 stz = ['STR*']
 net = ['I*']
-channel = ['*H*']
+channel = ['*HZ']
 
 # Client pour récupérer les données
 client = Client(db)
@@ -19,16 +19,32 @@ client = Client(db)
 #tf = ti + (60 * 2 * 1)  # 20 min de données
 
 # Heure de début précise à 19:02
-ti = UTCDateTime("2020-03-23T10:08:00.000")
+ti = UTCDateTime("2024-08-01T19:41:00.000")
 
 # Heure de fin précise à 19:04
-tf = UTCDateTime("2020-03-23T10:15:00.000")
+tf = UTCDateTime("2024-08-01T19:48:00.000")
 
 # Récupérer les données pour les deux stations
 st1 = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[0], starttime=ti, endtime=tf)
+st1.merge()
+
+# Diviser le Stream en traces sans valeurs masquées
+st1 = st1.split()
+
+# Appliquer un detrend sur chaque trace séparée
+for trace in st1:
+    trace.detrend("demean")  # Met le signal autour de zéro
+    trace.detrend("linear")  # Retirer une tendance linéaire
+
+# Afficher le stream prétraité
+st1.plot()
+
+#st1.merge()
+#st1.detrend("demean") #met le signal autour de zéro 
+#st1.detrend("linear") 
 #print(st1)
 
-st1.write('/home/gaia/Documents/mseed_landslide/mseed_landslide_test/20200323_10.08.mseed')
+#st1.write('/home/gaia/Documents/mseed_landslide/mseed_landslide_test/20200323_10.08.mseed')
 #st1.plot()
 
 # Chemin vers ton fichier MiniSEED
