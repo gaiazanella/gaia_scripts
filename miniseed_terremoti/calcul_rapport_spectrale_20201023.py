@@ -25,7 +25,7 @@ samples = int(win * sampling_rate)
 window = np.ones(samples) / samples 
 smoothed_signal_stra = np.convolve(trace_station_stra.data, window, mode='same')
 smoothed_signal_stre = np.convolve(trace_station_stre.data, window, mode='same')
-smoothed_signal_strc = np.convolve(trace_station_strg.data, window, mode='same')
+smoothed_signal_strc = np.convolve(trace_station_strc.data, window, mode='same')
 smoothed_signal_strg = np.convolve(trace_station_strg.data, window, mode='same')
 
 # data station
@@ -80,3 +80,68 @@ plt.ylabel("Spectral Ratio")
 plt.legend()
 plt.grid(True)
 plt.show()
+
+# Calculer le spectrogramme avec plt.specgram
+plt.figure(figsize=(10, 6))
+plt.specgram(data_station_stra, NFFT=256, Fs=sampling_rate, noverlap=128, scale='dB', cmap='inferno')
+plt.title("Spectrogramme STRA")
+plt.xlabel("Time (s)")
+plt.ylabel("Freq (Hz)")
+plt.colorbar(label="Amplitude (dB)")
+plt.show()
+
+# Calculer le spectrogramme avec plt.specgram
+plt.figure(figsize=(10, 6))
+plt.specgram(data_station_stre, NFFT=256, Fs=sampling_rate, noverlap=128, scale='dB', cmap='inferno')
+plt.title("Spectrogramme STRE")
+plt.xlabel("Time (s)")
+plt.ylabel("Freq (Hz)")
+plt.colorbar(label="Amplitude (dB)")
+plt.show()
+
+# Calculer le spectrogramme avec plt.specgram
+plt.figure(figsize=(10, 6))
+plt.specgram(data_station_strc, NFFT=256, Fs=sampling_rate, noverlap=128, scale='dB', cmap='inferno')
+plt.title("Spectrogramme STRC")
+plt.xlabel("Time (s)")
+plt.ylabel("Freq (Hz)")
+plt.colorbar(label="Amplitude (dB)")
+plt.show()
+
+# Calculer le spectrogramme avec plt.specgram
+plt.figure(figsize=(10, 6))
+plt.specgram(data_station_strg, NFFT=256, Fs=sampling_rate, noverlap=128, scale='dB', cmap='inferno')
+plt.title("Spectrogramme STRG")
+plt.xlabel("Time (s)")
+plt.ylabel("Freq (Hz)")
+plt.colorbar(label="Amplitude (dB)")
+plt.show()
+
+ffff
+
+# Affichage du spectre de chaque station
+plt.figure(figsize=(10, 6))
+#plt.plot(positive_frequencies, amplitude_station_stra, label='STRA', color='red')
+#plt.plot(positive_frequencies, amplitude_station_stre, label='STRE', color='blue')
+plt.plot(positive_frequencies, amplitude_station_strc, label='STRC', color='black')
+plt.plot(positive_frequencies, amplitude_station_strg, label='STRG', color='magenta')
+plt.title("Spectres des stations")
+plt.xlabel("Fréquence (Hz)")
+plt.ylabel("Amplitude")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# Affichage du spectre de chaque station
+plt.figure(figsize=(10, 6))
+plt.plot(positive_frequencies, amplitude_station_stra, label='STRA', color='red')
+plt.plot(positive_frequencies, amplitude_station_stre, label='STRE', color='blue')
+#plt.plot(positive_frequencies, amplitude_station_strc, label='STRC', color='black')
+#plt.plot(positive_frequencies, amplitude_station_strg, label='STRG', color='magenta')
+plt.title("Spectres des stations")
+plt.xlabel("Fréquence (Hz)")
+plt.ylabel("Amplitude")
+plt.legend()
+plt.grid(True)
+plt.show()
+

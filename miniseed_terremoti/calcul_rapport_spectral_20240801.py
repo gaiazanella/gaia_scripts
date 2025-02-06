@@ -67,6 +67,43 @@ spectral_ratio_c = amplitude_station_strc / amplitude_station_ref
 spectral_ratio_g = amplitude_station_strg / amplitude_station_ref
 #print(spectral_ratio)
 
+# Calculer le spectrogramme avec plt.specgram
+plt.figure(figsize=(10, 6))
+plt.specgram(data_station_stra, NFFT=256, Fs=sampling_rate, noverlap=128, scale='dB', cmap='inferno')
+plt.title("Spectrogramme STRA")
+plt.xlabel("Time (s)")
+plt.ylabel("Freq (Hz)")
+plt.colorbar(label="Amplitude (dB)")
+plt.show()
+
+# Calculer le spectrogramme avec plt.specgram
+plt.figure(figsize=(10, 6))
+plt.specgram(data_station_stre, NFFT=256, Fs=sampling_rate, noverlap=128, scale='dB', cmap='inferno')
+plt.title("Spectrogramme STRE")
+plt.xlabel("Time (s)")
+plt.ylabel("Freq (Hz)")
+plt.colorbar(label="Amplitude (dB)")
+plt.show()
+
+# Calculer le spectrogramme avec plt.specgram
+plt.figure(figsize=(10, 6))
+plt.specgram(data_station_strc, NFFT=256, Fs=sampling_rate, noverlap=128, scale='dB', cmap='inferno')
+plt.title("Spectrogramme STRC")
+plt.xlabel("Time (s)")
+plt.ylabel("Freq (Hz)")
+plt.colorbar(label="Amplitude (dB)")
+plt.show()
+
+# Calculer le spectrogramme avec plt.specgram
+plt.figure(figsize=(10, 6))
+plt.specgram(data_station_strg, NFFT=256, Fs=sampling_rate, noverlap=128, scale='dB', cmap='inferno')
+plt.title("Spectrogramme STRG")
+plt.xlabel("Time (s)")
+plt.ylabel("Freq (Hz)")
+plt.colorbar(label="Amplitude (dB)")
+plt.show()
+fff
+
 # Affichage du rapport spectral
 plt.figure(figsize=(10, 6))
 plt.plot(positive_frequencies, spectral_ratio_e, color='blue', label='STRE/STRA')
