@@ -102,7 +102,6 @@ plt.xlabel("Time (s)")
 plt.ylabel("Freq (Hz)")
 plt.colorbar(label="Amplitude (dB)")
 plt.show()
-fff
 
 # Affichage du rapport spectral
 plt.figure(figsize=(10, 6))
