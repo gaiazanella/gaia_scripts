@@ -9,6 +9,59 @@ from scipy.signal import welch
 from scipy import interpolate
 from obspy import read
 from scipy.signal import detrend
+from obspy.signal.util import smooth
+
+stream_station = read("/home/gaia/Documents/mseed_terremoti/20201021_M5.2.mseed")
+stream_station.detrend("demean") #met le signal autour de zéro 
+stream_station.detrend("linear") 
+
+tt = stream_station[0].times()
+
+trace_station_stra = stream_station[8]
+print(trace_station_stra)
+trace_station_stre = stream_station[14]
+print(trace_station_stre)
+trace_station_strc = stream_station[11]
+print(trace_station_strc)
+trace_station_strg = stream_station[17]
+print(trace_station_strg)
+trace_station_str1 = stream_station[2]
+print(trace_station_str1)
+trace_station_str4 = stream_station[5]
+print(trace_station_str4)
+
+data_station_stra = trace_station_stra.data
+data_station_stre = trace_station_stre.data
+data_station_strc = trace_station_strc.data
+data_station_strg = trace_station_strg.data
+data_station_str1 = trace_station_str1.data
+data_station_str4 = trace_station_str4.data
+
+#data_station_stra=data_station_stra*3.18**(-6)/800 ## STRA
+#data_station_strc=data_station_strc*3.18**(-6)/800 ## STRC
+#data_station_stre=data_station_stre*3.18**(-6)/800 ## STRE
+#data_station_strg=data_station_strg*3.18**(-6)/800 ## STRG
+#data_station_str1=data_station_str4*3.18**(-6)/800 ## STR4
+#data_station_str4=data_station_str1*3.18**(-6)/800 ## STR1
+ 
+# Plot des différentes données
+fig, axs = plt.subplots(6, 1, figsize=(10, 12))  # 6 graphiques verticaux
+axs[0].plot(tt, data_station_stra, color='r', label='Station A')
+axs[1].plot(tt, data_station_stre, color='b',  label='Station E')
+axs[2].plot(tt, data_station_strc, color='g',  label='Station C')
+axs[3].plot(tt, data_station_strg, color='m', label='Station G')
+axs[4].plot(tt, data_station_str1, color='c', label='Station 1')
+axs[5].plot(tt, data_station_str4, color='y', label='Station 4')
+for i, ax in enumerate(axs):
+    #ax.set_ylabel('Seismic record\n(m/s)') # Nomme chaque station sur l'axe y
+    ax.set_ylabel('Seismic record\n(count)') # Nomme chaque station sur l'axe y
+    ax.legend(loc='best')
+    ax.grid(True)
+axs[5].set_xlabel('Time (s)')
+plt.subplots_adjust(hspace=0.5)
+plt.show()
+
+fff
 
 def smoothlog(data, window_length):
     log_data = np.log(data)  
@@ -41,7 +94,7 @@ print(len(tt))
 print(len(data))
 
 STZ = ['STR1','STR4','STRA', 'STRC', 'STRE', 'STRG']
-sconv = [(3.18**(-6)/800), (3.28**(-6)/800), (3.18**(-6)/800), (1.00**(-6)/1200), (3.20**(-6)/800), (1.00**(-6)/1200)]  # Facteurs de conversion (ajuster selon les données)
+sconv = [(3.18**(-6)/800), (3.18**(-6)/800), (3.18**(-6)/800), (3.18**(-6)/800), (3.18**(-6)/800), (3.18**(-6)/800)]  # Facteurs de conversion (ajuster selon les données)
 tt = stream_station[0].times()
 ############
 plt.figure()
@@ -63,11 +116,13 @@ for i in range(len(STZ)):  # ciclo per ogni stazione
     
     ii = np.where((tt > a[0, 0]) & (tt < a[1, 0]))[0]
     tt_selected = tt[ii]
-    yy_selected = yy[ii] / sconv[i] 
+    yy_selected = yy[ii] * sconv[i] 
     
     #smp = (tt_selected[1] - tt_selected[0]) * 86400
     smp = (tt_selected[1] - tt_selected[0])
-    smp = round(1. / smp)  # calcolo il sample rate passo di giorni a secondi
+    print(smp)
+    smp = round(1. / smp)
+    print(smp)  # calcolo il sample rate passo di giorni a secondi
 
     f, pxx = welch(yy_selected, fs=smp, nperseg=2**16) #faccio lo spettro di ampiezza
     
@@ -78,17 +133,17 @@ PXX = np.array(PXX)
 # mi salvo gli indici del ritaglio temporale selezionato
 isel = ii
 
-iref = 5  #definisco la stazione di riferimento (la 6 in questo caso)
+iref = 3  #definisco la stazione di riferimento (la 6 in questo caso)
 
-ii_f = np.where((f > 7) & (f < 15))[0] #definisco l'intervallo di frequenza da analizzare
-a0 = smoothlog(PXX[iref, ii_f], 1)  # salvo dentro a0 lo spettro di riferimento, opportunamento smoothato
+ii_f = np.where((f > 0.01) & (f < 24))[0] #definisco l'intervallo di frequenza da analizzare
+a0 = smooth(PXX[iref, ii_f], 100)  # salvo dentro a0 lo spettro di riferimento, opportunamento smoothato
 
 A = []
 Am = []
 ratio = []
 
 for i in range(len(STZ)):  # nuovo ciclo per tutte le stazioni
-    ratio_i = np.sqrt(smoothlog(PXX[i, ii_f] / a0, 1))
+    ratio_i = np.sqrt(smooth(PXX[i, ii_f],100) / a0)
     
     A.append(np.mean(ratio_i))  #media del rapporto spettrale tra lo spettro i-esimo e quello di riferimento
     Am.append(np.std(ratio_i))  #%dev.std del rapporto spettrale tra lo spettro i-esimo e quello di riferimento
@@ -105,6 +160,7 @@ for i, ratio_i in enumerate(ratio):
     plt.plot(f[ii_f], ratio_i, label=f"Station {STZ[i]}")  # f[ii_f] : fréquence dans la plage sélectionnée
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Spectral Ratio')
+plt.xscale('log')
 plt.legend()
 plt.title('Spectral Ratios for each Station relative to Reference')
 plt.grid(True)
@@ -128,15 +184,16 @@ for i in range(len(STZ)):
     
     ii = np.where((tt > a[0, 0]) & (tt < a[1, 0]))[0] 
     tt_selected = tt[ii]
-    yy_selected = yy[ii] / sconv[i]  
+    yy_selected = yy[ii] * sconv[i]  
     
     smp = (tt_selected[1] - tt_selected[0])  
     smp = round(1. / smp)  
     f, pxx = welch(yy_selected, fs=smp, nperseg=2**16)  
     
-    plt.plot(f, pxx, label=f"Station {STZ[i]}")  
+    plt.plot(f, smooth(pxx,100), label=f"Station {STZ[i]}")  
 
 plt.xlabel('Frequency (Hz)')
+plt.xscale('log')
 plt.ylabel('Power Spectral Density (Amplitude^2/Hz)')
 plt.legend()
 plt.title('Power Spectrum of each Station')
@@ -155,15 +212,16 @@ for i in range(len(STZ)):
     
     ii = np.where((tt > a[0, 0]) & (tt < a[1, 0]))[0]  
     tt_selected = tt[ii]
-    yy_selected = yy[ii] / sconv[i] 
+    yy_selected = yy[ii] * sconv[i] 
 
     smp = (tt_selected[1] - tt_selected[0])  
     smp = round(1. / smp)  
     f, pxx = welch(yy_selected, fs=smp, nperseg=2**16)  
     
     plt.subplot(nrows, ncols, i + 1)  
-    plt.plot(f, pxx) 
+    plt.plot(f, smooth(pxx,100))
     plt.xlabel('Frequency (Hz)')
+    plt.xscale('log')
     plt.ylabel('Power Spectral Density (Amplitude^2/Hz)')
     plt.title(f"Station {STZ[i]}")
     plt.grid(True)

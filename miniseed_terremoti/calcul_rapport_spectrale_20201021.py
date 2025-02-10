@@ -38,6 +38,7 @@ data_station_strc=data_station_strc*1.00**(-6)/1200 ## STRC
 data_station_stre=data_station_stre*3.20**(-6)/800 ## STRE
 data_station_strg=data_station_strg*1.00**(-6)/1200 ## STRG
 
+
 # FFT calcul for each station
 spectrum_station_stra = np.fft.fft(data_station_stra)
 spectrum_station_stre = np.fft.fft(data_station_stre)
