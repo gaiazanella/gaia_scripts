@@ -4,31 +4,83 @@ from scipy.signal import welch
 from obspy import read
 from obspy.signal.util import smooth
 
-stream_station = read("/home/gaia/Documents/mseed_terremoti/20201021_M5.2.mseed")
+stream_station = read("/home/gaia/Documents/mseed_terremoti/20240801_M5.1.mseed")
 stream_station.detrend("demean")
 stream_station.detrend("linear")
-print(len(stream_station[1].data))
+print(len(stream_station))
 
-n = 6  
-m = 18001 
+#stream_station.plot()
+
+for i in range(24):
+    print(f'trace_station_str6 = {stream_station[i]}')
+    print (i)
+
+tt = stream_station[9].times()
+
+#trace_station_str1 = stream_station[0]
+#print(trace_station_str1)
+
+trace_station_str6 = stream_station[9]
+print(trace_station_str6)
+trace_station_stra = stream_station[12]
+print(trace_station_stra)
+trace_station_strc = stream_station[16]
+print(trace_station_strc)
+trace_station_stre = stream_station[20]
+print(trace_station_stre)
+trace_station_strg = stream_station[24]
+print(trace_station_strg)
+#trace_station_str1 = stream_station[2]
+#print(trace_station_str1)
+
+data_station_stra = trace_station_stra.data
+data_station_stre = trace_station_stre.data
+data_station_strc = trace_station_strc.data
+data_station_strg = trace_station_strg.data
+#data_station_str1 = trace_station_str1.data
+data_station_str6 = trace_station_str6.data
+
+data_station_stra=data_station_stra*3.18**(-6)/800 ## STRA
+data_station_strc=data_station_strc*3.18**(-6)/800 ## STRC
+data_station_stre=data_station_stre*3.18**(-6)/800 ## STRE
+data_station_strg=data_station_strg*3.18**(-6)/800 ## STRG
+#data_station_str1=data_station_str1*3.18**(-6)/800 ## STR4
+data_station_str6=data_station_str6*3.18**(-6)/800 ## STR6
+ 
+# Plot des différentes données
+fig, axs = plt.subplots(5, 1, figsize=(10, 12))  # 6 graphiques verticaux
+axs[0].plot(tt, data_station_stra, color='r', label='STRA')
+axs[1].plot(tt, data_station_stre, color='b',  label='STRE')
+axs[2].plot(tt, data_station_strc, color='g',  label='STRC')
+axs[3].plot(tt, data_station_strg, color='m', label='STRG')
+#axs[4].plot(tt, data_station_str1, color='c', label='Station 1')
+axs[4].plot(tt, data_station_str6, color='y', label='STR6')
+for i, ax in enumerate(axs):
+    ax.set_ylabel('Seismic record\n(m/s)') # Nomme chaque station sur l'axe y
+    #ax.set_ylabel('Seismic record\n(count)') # Nomme chaque station sur l'axe y
+    ax.legend(loc='best')
+    ax.grid(True)
+axs[4].set_xlabel('Time (s)')
+plt.subplots_adjust(hspace=0.5)
+plt.show()
+
+n = 5  
+m = len(stream_station[9].data)
 
 data = np.zeros((m, n))
 
-tt = stream_station[0].times()
+data[:,0] = stream_station[9]
+data[:,1] = stream_station[12]
+data[:,2] = stream_station[16]
+data[:,3] = stream_station[20]
+data[:,4] = stream_station[24]
 
-data[:,0] = stream_station[2]
-data[:,1] = stream_station[5]
-data[:,2] = stream_station[8]
-data[:,3] = stream_station[11]
-data[:,4] = stream_station[14]
-data[:,5] = stream_station[17]
-
-STZ = ['STR1','STR4','STRA', 'STRC', 'STRE', 'STRG']
-sconv = [(3.18**(-6)/800), (3.18**(-6)/800), (3.18**(-6)/800), (3.18**(-6)/800), (3.18**(-6)/800), (3.18**(-6)/800)]  
+STZ = ['STR6','STRA', 'STRC', 'STRE', 'STRG']
+sconv = [(3.18**(-6)/800), (3.18**(-6)/800), (3.18**(-6)/800), (3.18**(-6)/800), (3.18**(-6)/800)]  
 
 # Définir les intervalles de temps que vous voulez analyser (0-50s et 150-200s)
 interval_1 = (50, 100)
-interval_2 = (150, 200)
+interval_2 = (170, 220)
 
 # Convertir les intervalles de temps en indices
 ii_1 = np.where((tt > interval_1[0]) & (tt < interval_1[1]))[0]
@@ -82,9 +134,9 @@ plt.legend()
 plt.grid(True, which="both", ls="--")  # Afficher la grille pour les axes log
 plt.show()
 
-iref = 3
-#ii_f = np.where((f_1 > 0.01) & (f_1 < 24))[0] #definisco l'intervallo di frequenza da analizzare
-ii_f = np.where((f_1 > 8) & (f_1 < 15))[0] #definisco l'intervallo di frequenza da analizzare
+iref = 2
+ii_f = np.where((f_1 > 0.01) & (f_1 < 24))[0] #definisco l'intervallo di frequenza da analizzare
+#ii_f = np.where((f_1 > 8) & (f_1 < 15))[0] #definisco l'intervallo di frequenza da analizzare
 a0_1 = smooth(PXX_1[iref, ii_f], 100)  # salvo dentro a0 lo spettro di riferimento, opportunamento smoothato
 a0_2 = smooth(PXX_2[iref, ii_f], 100)  # salvo dentro a0 lo spettro di riferimento, opportunamento smoothato
 
