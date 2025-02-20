@@ -9,12 +9,20 @@ from datetime import datetime
 ## Paramètres de base
 start_date = datetime(2020, 1, 1)  # Date de début
 end_date = datetime(2021, 1, 1)   # Date de fin
-output_dir = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strc_stra_test'  # Répertoire de sortie
+#output_dir = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strc_stra_test'  # Répertoire de sortie
+#output_dir = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strc_stra_test_0.1'
+#output_dir = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strc_stra_test_0.15'
+#output_dir = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strc_stra_test_0.2'
+output_dir = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strc_stra_test_0.05'
 
 # Paramètres pour la détection des pics
 distance_min = 1  # Ajuster cette valeur si nécessaire
-prominence = 0.5
 
+#prominence = 0.5
+#prominence = 0.1
+#prominence = 0.15
+#prominence = 0.2
+prominence = 0.05
 # Fonction pour trouver le début et la fin d'un pic
 def find_peak_edges(df_ratio, peak, threshold=0.001):
     start_index = peak
