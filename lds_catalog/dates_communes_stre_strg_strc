@@ -1,0 +1,62 @@
+import pandas as pd
+
+# Load the three CSV files into DataFrames
+file1 = pd.read_csv("/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_stre_stra_test/stre_stra_filtered_peaks_data.csv")
+file2 = pd.read_csv("/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strg_stra_test/strg_stra_all_peaks_data.csv")
+file3 = pd.read_csv("/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strc_stra_test/strc_stra_all_peaks_data.csv")
+
+# Convert the 'Peak_Time_UTC' to datetime and extract the date
+file1['Peak_Date'] = pd.to_datetime(file1['Peak_Time_UTC'], errors='coerce').dt.date
+file2['Peak_Date'] = pd.to_datetime(file2['Peak_Time_UTC'], errors='coerce').dt.date
+file3['Peak_Date'] = pd.to_datetime(file3['Peak_Time_UTC'], errors='coerce').dt.date
+
+# Check the conversion
+print(file1['Peak_Date'].head())  # Check first dates
+print(file2['Peak_Date'].head())
+print(file3['Peak_Date'].head())
+
+# Convert the 'Peak_Date' column back to datetime for using .dt
+file1['Peak_Date'] = pd.to_datetime(file1['Peak_Date'], errors='coerce')
+file2['Peak_Date'] = pd.to_datetime(file2['Peak_Date'], errors='coerce')
+file3['Peak_Date'] = pd.to_datetime(file3['Peak_Date'], errors='coerce')
+
+# Check unique years
+print(file1['Peak_Date'].dt.year.unique())  # Now you can use .dt
+print(file2['Peak_Date'].dt.year.unique())
+print(file3['Peak_Date'].dt.year.unique())
+
+# Filter for the year 2020
+file1_2020 = file1[file1['Peak_Date'].dt.year == 2020]
+file2_2020 = file2[file2['Peak_Date'].dt.year == 2020]
+file3_2020 = file3[file3['Peak_Date'].dt.year == 2020]
+
+# Check data after filtering
+print(file1_2020['Peak_Date'].head())
+print(file2_2020['Peak_Date'].head())
+print(file3_2020['Peak_Date'].head())
+
+# Extract unique dates
+dates_file1 = set(file1_2020['Peak_Date'].dt.date)
+dates_file2 = set(file2_2020['Peak_Date'].dt.date)
+dates_file3 = set(file3_2020['Peak_Date'].dt.date)
+
+# Display unique dates from each file
+print("Dates in file1:")
+print(dates_file1)
+
+print("Dates in file2:")
+print(dates_file2)
+
+print("Dates in file3:")
+print(dates_file3)
+
+# Find common dates between the three files
+common_dates = dates_file1.intersection(dates_file2).intersection(dates_file3)
+
+# Display common dates
+print("Common dates between the three files:")
+for date in sorted(common_dates):
+    print(date)
+
+# Display the count of common dates
+print(f"Number of common dates: {len(common_dates)}")

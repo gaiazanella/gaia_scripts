@@ -7,11 +7,11 @@ from obspy.signal.filter import bandpass
 from obspy.clients.filesystem.sds import Client
 
 # Chemin vers le fichier CSV contenant les ratios
-file_path = '/home/gaia/Documents/processing_10_sec/2020/rsam_ratio_test/ratio_rsam_stra_stre_strg_strc_20200711.csv'
-peaks_file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_stre_stra_test/stre_stra_peaks_data_20200711.csv'
-strg_stra_peaks_file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strg_stra_test/strg_stra_peaks_data_20200711.csv'
-strc_stra_peaks_file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strc_stra_test/strc_stra_peaks_data_20200711.csv'
-ti = UTCDateTime("2020-07-11T00:00:00.000")
+file_path = '/home/gaia/Documents/processing_10_sec/2020/rsam_ratio_test/ratio_rsam_stra_stre_strg_strc_20201202.csv'
+peaks_file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_stre_stra_test/stre_stra_peaks_data_20201202.csv'
+strg_stra_peaks_file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strg_stra_test/strg_stra_peaks_data_20201202.csv'
+strc_stra_peaks_file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strc_stra_test/strc_stra_peaks_data_20201202.csv'
+ti = UTCDateTime("2020-12-02T00:00:00.000")
 
 # Charger le fichier CSV dans un DataFrame
 data_csv = pd.read_csv(file_path)
