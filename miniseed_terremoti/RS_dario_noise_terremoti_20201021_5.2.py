@@ -3,34 +3,69 @@ import matplotlib.pyplot as plt
 from scipy.signal import welch
 from obspy import read
 from obspy.signal.util import smooth
+from scipy.signal import welch, detrend
+import numpy as np
+import matplotlib.pyplot as plt
+from obspy import read
 
+# Lire les données
 stream_station = read("/home/gaia/Documents/mseed_terremoti/20201021_M5.2.mseed")
+print(stream_station)
 stream_station.detrend("demean")
 stream_station.detrend("linear")
-print(len(stream_station[1].data))
-stream_station.plot()
-fff
+sconv1=3.18*10**(-6)
+sconv2=800
+sconv=sconv1/sconv2
+print(sconv)
+print(2**16)
 
-n = 6  
-m = 18001 
+#n = 6  # Nombre de stations
+n=6
+m = 18001  # Nombre d'échantillons
 
 data = np.zeros((m, n))
+x=189*(3.18*10**(-6))/800
+print(x)
+
+# Récupérer les données pour chaque station
+data[:, 0] = stream_station[2].data  # STR1
+data[:, 1] = stream_station[5].data  # STR4
+data[:, 2] = stream_station[8].data  # STRA
+data[:, 0] = stream_station[8].data  # STRA
+data[:, 3] = stream_station[11].data  # STRC
+data[:, 4] = stream_station[14].data  # STRE
+data[:, 5] = stream_station[17].data  # STRG
+print(data)
+
+# Créer un tableau avec les noms des stations
+STZ = ['STR1', 'STR4', 'STRA', 'STRC', 'STRE', 'STRG']
+#STZ = ['STRA']
+
+# Tracer toutes les stations sur le même graphique
+plt.figure(figsize=(10, 6))
+
+# Tracer chaque station
+for i in range(n):
+    print(f"Contenu de data[:, {i}] :")
+    print(data[:, i])
+    print(f"Contenu de data[:, {i}] après multiplication par sconv :")
+    print(data[:, i]*sconv)
+    plt.plot(stream_station[0].times(), (data[:, i]*sconv), label=STZ[i])
+
+# Ajouter des labels et un titre
+plt.xlabel("Temps (s)")
+plt.ylabel("Amplitude")
+#plt.ylim(-1.5**(-5), 2.5**(-5))
+plt.title("Traces des stations")
+plt.legend()
+plt.show()
 
 tt = stream_station[0].times()
 
-data[:,0] = stream_station[2]
-data[:,1] = stream_station[5]
-data[:,2] = stream_station[8]
-data[:,3] = stream_station[11]
-data[:,4] = stream_station[14]
-data[:,5] = stream_station[17]
-
-STZ = ['STR1','STR4','STRA', 'STRC', 'STRE', 'STRG']
-sconv = [(3.18**(-6)/800), (3.18**(-6)/800), (3.18**(-6)/800), (3.18**(-6)/800), (3.18**(-6)/800), (3.18**(-6)/800)]  
 
 # Définir les intervalles de temps que vous voulez analyser (0-50s et 150-200s)
-interval_1 = (50, 100)
-interval_2 = (150, 200)
+interval_1 = (0, 120)
+interval_2 = (125, 245)
 
 # Convertir les intervalles de temps en indices
 ii_1 = np.where((tt > interval_1[0]) & (tt < interval_1[1]))[0]
@@ -45,20 +80,26 @@ for i in range(len(STZ)):
     
     # Intervalle 1 (0-50s)
     tt_selected_1 = tt[ii_1]
-    yy_selected_1 = yy[ii_1] * sconv[i]  
-    
-    smp_1 = (tt_selected_1[1] - tt_selected_1[0])  
+    yy_selected_1 = yy[ii_1] * sconv 
+    #yy_selected_1_detrended = detrend(yy_selected_1)
+
+    smp_1 = (tt_selected_1[1] - tt_selected_1[0]) 
     smp_1 = round(1. / smp_1)  
-    f_1, pxx_1 = welch(yy_selected_1, fs=smp_1, nperseg=2**16)  
+    #f_1, pxx_1 = welch(yy_selected_1, fs=smp_1, nperseg=2**16)  
+    nperseg_1=min(2**16, len(yy_selected_1))
+    f_1, pxx_1 = welch(yy_selected_1, fs=smp_1, nperseg=nperseg_1) 
     PXX_1.append(pxx_1)
     
     # Intervalle 2 (150-200s)
     tt_selected_2 = tt[ii_2]
-    yy_selected_2 = yy[ii_2] * sconv[i]  
+    yy_selected_2 = yy[ii_2] * sconv  
     
     smp_2 = (tt_selected_2[1] - tt_selected_2[0])  
-    smp_2 = round(1. / smp_2)  
-    f_2, pxx_2 = welch(yy_selected_2, fs=smp_2, nperseg=2**16)  
+    smp_2 = round(1. / smp_2) 
+    #yy_selected_2_detrended = detrend(yy_selected_2)
+    nperseg_2=min(2**16, len(yy_selected_1))
+    f_2, pxx_2 = welch(yy_selected_2, fs=smp_2, nperseg=nperseg_2) 
+    #f_2, pxx_2 = welch(yy_selected_2, fs=smp_2, nperseg=2**16)  
     PXX_2.append(pxx_2)
 
 PXX_1 = np.array(PXX_1)
@@ -76,6 +117,7 @@ for i in range(len(STZ)):
 
 # Changer l'échelle de l'axe des x en logarithmique
 plt.xscale('log')
+plt.yscale('log')
 plt.xlabel('Frequency (Hz)')
 #plt.ylabel('Power Spectral Density (Amplitude^2/Hz)')
 plt.ylabel(r'PSD $(\text{m/s})^2/\text{ Hz}$')

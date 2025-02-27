@@ -11,12 +11,12 @@ from obspy import read
 db = '/mnt/bigmama3/miniseed'
 stz = ['STR*']
 net = ['I*']
-channel = ['*H*']
+channel = ['*HZ']
 
 # Client pour récupérer les données
 client = Client(db)
-ti = UTCDateTime("2020-10-21:23:00.000")
-tf = ti + (60 * 6 * 1)  # 20 min de données
+ti = UTCDateTime("2024-11-30:15:10.000")
+tf = ti + (60 * 25 * 1)  # 20 min de données
 #tf = UTCDateTime("2020-10-21:23:30.000")
 
 # Récupérer les données pour les deux stations
