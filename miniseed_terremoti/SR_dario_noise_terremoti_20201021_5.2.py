@@ -10,14 +10,14 @@ from obspy import read
 
 # Lire les données
 stream_station = read("/home/gaia/Documents/mseed_terremoti/20201021_M5.2.mseed")
-print(stream_station)
+#print(stream_station)
 stream_station.detrend("demean")
 stream_station.detrend("linear")
 sconv1=3.18*10**(-6)
 sconv2=800
 sconv=sconv1/sconv2
-print(sconv)
-print(2**16)
+#print(sconv)
+#print(2**16)
 
 #n = 6  # Nombre de stations
 n=6
@@ -25,7 +25,7 @@ m = 18001  # Nombre d'échantillons
 
 data = np.zeros((m, n))
 x=189*(3.18*10**(-6))/800
-print(x)
+#print(x)
 
 # Récupérer les données pour chaque station
 data[:, 0] = stream_station[2].data  # STR1
@@ -35,7 +35,7 @@ data[:, 0] = stream_station[8].data  # STRA
 data[:, 3] = stream_station[11].data  # STRC
 data[:, 4] = stream_station[14].data  # STRE
 data[:, 5] = stream_station[17].data  # STRG
-print(data)
+#print(data)
 
 # Créer un tableau avec les noms des stations
 STZ = ['STR1', 'STR4', 'STRA', 'STRC', 'STRE', 'STRG']
@@ -46,10 +46,10 @@ plt.figure(figsize=(10, 6))
 
 # Tracer chaque station
 for i in range(n):
-    print(f"Contenu de data[:, {i}] :")
-    print(data[:, i])
-    print(f"Contenu de data[:, {i}] après multiplication par sconv :")
-    print(data[:, i]*sconv)
+    #print(f"Contenu de data[:, {i}] :")
+    #print(data[:, i])
+    #print(f"Contenu de data[:, {i}] après multiplication par sconv :")
+    #print(data[:, i]*sconv)
     plt.plot(stream_station[0].times(), (data[:, i]*sconv), label=STZ[i])
 
 # Ajouter des labels et un titre
@@ -61,15 +61,20 @@ plt.legend()
 plt.show()
 
 tt = stream_station[0].times()
+print(tt)
 
 
 # Définir les intervalles de temps que vous voulez analyser (0-50s et 150-200s)
-interval_1 = (0, 120)
-interval_2 = (125, 245)
+interval_1 = (0, 100)
+interval_2 = (150, 250)
 
 # Convertir les intervalles de temps en indices
 ii_1 = np.where((tt > interval_1[0]) & (tt < interval_1[1]))[0]
+print(ii_1)
+print(len(ii_1))
 ii_2 = np.where((tt > interval_2[0]) & (tt < interval_2[1]))[0]
+print(ii_2)
+print(len(ii_2))
 
 # Calculer le PSD pour les deux intervalles
 PXX_1 = []
@@ -85,9 +90,9 @@ for i in range(len(STZ)):
 
     smp_1 = (tt_selected_1[1] - tt_selected_1[0]) 
     smp_1 = round(1. / smp_1)  
-    #f_1, pxx_1 = welch(yy_selected_1, fs=smp_1, nperseg=2**16)  
-    nperseg_1=min(2**16, len(yy_selected_1))
-    f_1, pxx_1 = welch(yy_selected_1, fs=smp_1, nperseg=nperseg_1) 
+    f_1, pxx_1 = welch(yy_selected_1, fs=smp_1, nperseg=2**16)  
+    #nperseg_1=min(2**16, len(yy_selected_1))
+    #f_1, pxx_1 = welch(yy_selected_1, fs=smp_1, nperseg=nperseg_1) 
     PXX_1.append(pxx_1)
     
     # Intervalle 2 (150-200s)
@@ -97,9 +102,9 @@ for i in range(len(STZ)):
     smp_2 = (tt_selected_2[1] - tt_selected_2[0])  
     smp_2 = round(1. / smp_2) 
     #yy_selected_2_detrended = detrend(yy_selected_2)
-    nperseg_2=min(2**16, len(yy_selected_1))
-    f_2, pxx_2 = welch(yy_selected_2, fs=smp_2, nperseg=nperseg_2) 
-    #f_2, pxx_2 = welch(yy_selected_2, fs=smp_2, nperseg=2**16)  
+    #nperseg_2=min(2**16, len(yy_selected_1))
+    #f_2, pxx_2 = welch(yy_selected_2, fs=smp_2, nperseg=nperseg_2) 
+    f_2, pxx_2 = welch(yy_selected_2, fs=smp_2, nperseg=2**16)  
     PXX_2.append(pxx_2)
 
 PXX_1 = np.array(PXX_1)
@@ -185,7 +190,7 @@ plt.legend()
 plt.grid(True)
 plt.show()
 
-print(A_1)
-print(A_2)
-print(Am_1)
-print(Am_2)
+#print(A_1)
+#print(A_2)
+#print(Am_1)
+#print(Am_2)
