@@ -7,8 +7,41 @@ import pandas as pd
 from obspy.clients.filesystem.sds import Client
 from obspy import read
 
+# Chemin vers le fichier .mseed
+file_path = "/home/gaia/Documents/mseed_landslide/mseed_lds_catalog/20200608_12.33.mseed"
+
+# Lire le fichier .mseed
+stream = read(file_path)
+
+# Afficher un résumé de la trace
+print(stream)
+
+# Accéder aux informations sur chaque trace
+for trace in stream:
+    print(f"Station: {trace.stats.station}")
+    print(f"Starttime: {trace.stats.starttime}")
+    print(f"Endtime: {trace.stats.endtime}")
+    print(f"Sampling rate: {trace.stats.sampling_rate}")
+    print(f"Number of points: {len(trace.data)}")
+    
+    # Afficher la première valeur des données pour chaque trace
+    print(f"First data point: {trace.data[0]}")
+    print("-" * 50)
+
+# Tracer les données sismiques (si nécessaire)
+import matplotlib.pyplot as plt
+
+# Tracer toutes les traces sismiques sur un seul graphique
+for trace in stream:
+    trace.plot()
+
+# Afficher le graphique
+plt.show()
+
+fff
+
 # Paramètres
-db = '/mnt/bigmama3/miniseed'
+db = '/mnt/bigmama3'
 stz = ['STR*']
 net = ['I*']
 channel = ['*HZ']
@@ -19,10 +52,10 @@ client = Client(db)
 #tf = ti + (60 * 2 * 1)  # 20 min de données
 
 # Heure de début précise à 19:02
-ti = UTCDateTime("2020-06-26T04:00:00.000")
+ti = UTCDateTime("2020-12-02T18:18:00.000")
 
-# Heure de fin précise à 19:04
-tf = UTCDateTime("2020-06-26T06:30:00.000")
+# Heure de fin précise à 19:0
+tf = UTCDateTime("2020-12-02T18:20:00.000")
 
 # Récupérer les données pour les deux stations
 st1 = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[0], starttime=ti, endtime=tf)
@@ -39,7 +72,7 @@ for trace in st1:
 # Afficher le stream prétraité
 st1.plot()
 
-st1.write('/home/gaia/Documents/mseed_landslide/mseed_lds_catalog/20200626_04.15.mseed')
+st1.write('/home/gaia/Documents/mseed_landslide/mseed_lds_catalog/20201202_18.15.mseed')
 
 
 ########################
