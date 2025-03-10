@@ -1,3 +1,4 @@
+### GOOODDD création rsam
 ###PACKAGES
 import obspy
 from obspy import read, UTCDateTime

@@ -1,5 +1,9 @@
 import pandas as pd
+peaks_f = pd.read_csv("/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_stre_stra_test/stre_stra_filtered_peaks_data.csv")
 
+print(len(peaks_f))
+
+fff
 # Charger le fichier CSV
 peaks_data = pd.read_csv("/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_stre_stra_test/stre_stra_all_peaks_data.csv")
 

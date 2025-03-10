@@ -49,8 +49,8 @@ strg_stra_peaks_data['Final_Peak_Time_w'] = pd.to_datetime(strg_stra_peaks_data[
 #print("Contenu du fichier CSV des pics STRG/STRA :")
 #print(strg_stra_peaks_data.head())
 
-# Charger le fichier CSV contenant les données des pics pour STRG/STRA
-strc_stra_peaks_file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strc_stra_test/strc_stra_peaks_data_20200628.csv'
+# Charger le fichier CSV contenant les données des pics pour STRG/STRA ## CHANGEMENTS POUR STRC J'AI PRIS THTR=0.05
+strc_stra_peaks_file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strc_stra_test_0.05/strc_stra_peaks_data_20200628.csv'
 strc_stra_peaks_data = pd.read_csv(strc_stra_peaks_file_path)
 
 # Convertir la colonne 'Peak_Time_UTC' en format datetime
@@ -65,7 +65,7 @@ strc_stra_peaks_data['Final_Peak_Time_w'] = pd.to_datetime(strc_stra_peaks_data[
 #print(strg_stra_peaks_data.head())
 
 # Configuration pour récupérer les données sismiques
-db = '/mnt/bigmama3/miniseed'
+db = '/mnt/bigmama3'
 stations = ['STRE', 'STRA', 'STRG', 'STRC']  # Ajouter STRG
 network = '*'  # Accepter tous les réseaux
 channel = '*HZ'  # Composante Z

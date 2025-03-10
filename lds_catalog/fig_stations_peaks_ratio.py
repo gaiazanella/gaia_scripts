@@ -8,6 +8,7 @@ from obspy.clients.filesystem.sds import Client
 
 # Chemin vers le fichier CSV contenant les ratios
 file_path = '/home/gaia/Documents/processing_10_sec/2020/rsam_ratio_test/ratio_rsam_stra_stre_strg_strc_20201202.csv'
+#file_path = '/home/gaia/Documents/processing_10_sec/2020/rsam_ratio_test/ratio_rsam_all_2020.csv'
 peaks_file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_stre_stra_test/stre_stra_peaks_data_20201202.csv'
 strg_stra_peaks_file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strg_stra_test/strg_stra_peaks_data_20201202.csv'
 strc_stra_peaks_file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_strc_stra_test/strc_stra_peaks_data_20201202.csv'
@@ -67,7 +68,7 @@ strc_stra_peaks_data['Final_Peak_Time_w'] = pd.to_datetime(strc_stra_peaks_data[
 #print(strg_stra_peaks_data.head())
 
 # Configuration pour récupérer les données sismiques
-db = '/mnt/bigmama3/miniseed'
+db = '/mnt/bigmama3'
 stations = ['STRE', 'STRA', 'STRG', 'STRC']  # Ajouter STRG
 network = '*'  # Accepter tous les réseaux
 channel = '*HZ'  # Composante Z
@@ -210,12 +211,12 @@ filtered_peaks_red = peaks_data[(peaks_data['RSAM_E'] > 875) & (peaks_data['Rati
 filtered_peaks_black = peaks_data[~((peaks_data['RSAM_E'] > 875) & (peaks_data['Ratio'] < 6.5))]
 
 # Affichage des étoiles rouges (pour les pics filtrés)
-ax[5].scatter(filtered_peaks_red['Peak_Time_UTC'], filtered_peaks_red['Ratio'], color='black', marker='*', label='Detection (E/A) - Filtered')
+ax[5].scatter(filtered_peaks_red['Peak_Time_UTC'], filtered_peaks_red['Ratio'], color='red', marker='*', label='Detection (E/A) - Filtered')
 print(len(filtered_peaks_red['Ratio']))
 print(filtered_peaks_red['Peak_Time_UTC'])
 
 # Affichage des étoiles noires (pour les autres pics)
-ax[5].scatter(filtered_peaks_black['Peak_Time_UTC'], filtered_peaks_black['Ratio'], color='red', marker='*', label='Detection (E/A) - Not filtered')
+ax[5].scatter(filtered_peaks_black['Peak_Time_UTC'], filtered_peaks_black['Ratio'], color='black', marker='*', label='Detection (E/A) - Not filtered')
 
 # Ajouter des étoiles basées sur les pics du fichier peaks_data.csv
 #ax[3].scatter(peaks_data['Peak_Time_UTC'], peaks_data['Ratio'], color='red', marker='*', label='Detection (E/A)')

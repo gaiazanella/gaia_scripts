@@ -1,9 +1,10 @@
+#GOOOOOD création rsam_ratio
 import pandas as pd
 import os
 import numpy as np
 
 # Définir le chemin du dossier contenant les fichiers
-input_dir = '/home/gaia/Documents/processing_10_sec/2020/rsam_test_0.05/'
+input_dir = '/home/gaia/Documents/processing_10_sec/2020/rsam_test/'
 output_dir = '/home/gaia/Documents/processing_10_sec/2020/rsam_ratio_test_0.05'
 
 # Créer une liste de tous les jours de 2020

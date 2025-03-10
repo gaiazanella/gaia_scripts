@@ -61,7 +61,6 @@ axs[5].set_xlabel('Time (s)')
 plt.subplots_adjust(hspace=0.5)
 plt.show()
 
-fff
 
 def smoothlog(data, window_length):
     log_data = np.log(data)  
@@ -188,9 +187,11 @@ for i in range(len(STZ)):
     
     smp = (tt_selected[1] - tt_selected[0])  
     smp = round(1. / smp)  
-    f, pxx = welch(yy_selected, fs=smp, nperseg=2**16)  
+    #f, pxx = welch(yy_selected, fs=smp, nperseg=2**16)  
+    f, pxx = welch(yy_selected, fs=smp, nperseg=len(data)) 
     
-    plt.plot(f, smooth(pxx,100), label=f"Station {STZ[i]}")  
+    #plt.plot(f, smooth(pxx,100), label=f"Station {STZ[i]}")  ### se voglio smooth
+    plt.plot(f, pxx, label=f"Station {STZ[i]}")
 
 plt.xlabel('Frequency (Hz)')
 plt.xscale('log')
@@ -216,8 +217,9 @@ for i in range(len(STZ)):
 
     smp = (tt_selected[1] - tt_selected[0])  
     smp = round(1. / smp)  
-    f, pxx = welch(yy_selected, fs=smp, nperseg=2**16)  
-    
+    #f, pxx = welch(yy_selected, fs=smp, nperseg=2**16)  
+    f, pxx = welch(yy_selected, fs=smp, nperseg=len(data)) 
+
     plt.subplot(nrows, ncols, i + 1)  
     plt.plot(f, smooth(pxx,100))
     plt.xlabel('Frequency (Hz)')

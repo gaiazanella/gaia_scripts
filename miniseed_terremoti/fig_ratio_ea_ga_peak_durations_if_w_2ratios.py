@@ -50,7 +50,7 @@ print("Contenu du fichier CSV des pics STRG/STRA :")
 print(strg_stra_peaks_data.head())
 
 # Configuration pour récupérer les données sismiques
-db = '/mnt/bigmama3/miniseed'
+db = '/mnt/bigmama3'
 stations = ['STRE', 'STRA', 'STRG']  # Ajouter STRG
 network = '*'  # Accepter tous les réseaux
 channel = '*HZ'  # Composante Z
