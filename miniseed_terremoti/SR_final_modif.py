@@ -53,16 +53,16 @@ for station in stations:
     noverlap = 128
     
     # Calculer la densité spectrale de puissance pour "EQ" (données traitées)
-    f_eq, Pxx_eq = welch(data_eq_demeaned * 1E-6 / 800, fs=fs, nperseg=nperseg)
+    f_eq, Pxx_eq = welch(data_eq_demeaned * 1E-6 / 1200, fs=fs, nperseg=nperseg)
 
     # Calculer la densité spectrale de puissance pour "Noise" (données traitées)
-    f_noise, Pxx_noise = welch(data_noise_demeaned * 1E-6 / 800, fs=fs, nperseg=nperseg)
+    f_noise, Pxx_noise = welch(data_noise_demeaned * 1E-6 / 1200, fs=fs, nperseg=nperseg)
 
     # Afficher l'amplitude en fonction de la fréquence sur une échelle logarithmique pour "EQ"
-    plt.loglog(f_eq, smooth(Pxx_eq, 100), label=f"{station} - EQ", color=colors[station], linestyle='-', alpha=0.7)
+    plt.loglog(f_eq, smooth(Pxx_eq, 1), label=f"{station} - EQ", color=colors[station], linestyle='-', alpha=0.7)
 
     # Afficher l'amplitude en fonction de la fréquence sur une échelle logarithmique pour "Noise"
-    plt.loglog(f_noise, smooth(Pxx_noise, 100), label=f"{station} - Noise", color=colors[station], linestyle='--', alpha=0.7)
+    plt.loglog(f_noise, smooth(Pxx_noise, 1), label=f"{station} - Noise", color=colors[station], linestyle='--', alpha=0.7)
 
 # Configuration de la figure
 plt.xlabel("Frequency (Hz)")
@@ -101,20 +101,22 @@ for station in stations:
     noverlap = 128
 
     # Calculer la densité spectrale de puissance pour "EQ" (données traitées)
-    f_eq, Pxx_eq = welch(data_eq_demeaned * 1E-6 / 800, fs=fs, nperseg=nperseg)
+    f_eq, Pxx_eq = welch(data_eq_demeaned * 1E-6 / 1200, fs=fs, nperseg=nperseg)
+##IT 3.2E-6/800
+##IV 1E-6/1200
 
     # Calculer la densité spectrale de puissance pour "Noise" (données traitées)
-    f_noise, Pxx_noise = welch(data_noise_demeaned * 1E-6 / 800, fs=fs, nperseg=nperseg)
+    f_noise, Pxx_noise = welch(data_noise_demeaned * 1E-6 / 1200, fs=fs, nperseg=nperseg)
 
     # Filtrer les fréquences et la densité spectrale de puissance pour la plage [8, 15] Hz
     idx_eq = (f_eq >= 8) & (f_eq <= 15)
     idx_noise = (f_noise >= 8) & (f_noise <= 15)
 
     # Afficher l'amplitude pour les fréquences entre 8 et 15 Hz pour "EQ"
-    plt.loglog(f_eq[idx_eq], smooth(Pxx_eq[idx_eq], 100), label=f"{station} - EQ", color=colors[station], linestyle='-', alpha=0.7)
+    plt.loglog(f_eq[idx_eq], smooth(Pxx_eq[idx_eq], 1), label=f"{station} - EQ", color=colors[station], linestyle='-', alpha=0.7)
 
     # Afficher l'amplitude pour les fréquences entre 8 et 15 Hz pour "Noise"
-    plt.loglog(f_noise[idx_noise], smooth(Pxx_noise[idx_noise], 100), label=f"{station} - Noise", color=colors[station], linestyle='--', alpha=0.7)
+    plt.loglog(f_noise[idx_noise], smooth(Pxx_noise[idx_noise], 1), label=f"{station} - Noise", color=colors[station], linestyle='--', alpha=0.7)
 
 # Configuration de la deuxième figure
 plt.xlabel("Frequency (Hz)")
