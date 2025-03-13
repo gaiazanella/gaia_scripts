@@ -31,7 +31,7 @@ range_lat_m = max(A_m[1], B_m[1], C_m[1], D_m[1]) - min(A_m[1], B_m[1], C_m[1], 
 range_lon_m = max(A_m[0], B_m[0], C_m[0], D_m[0]) - min(A_m[0], B_m[0], C_m[0], D_m[0])
 
 # Espacement souhaité en mètres
-spacing = 10  # Espacement entre les points en mètres
+spacing = 100  # Espacement entre les points en mètres
 
 # Calcul du nombre de points pour la grille
 n_lat = int(range_lat_m / spacing) + 1
