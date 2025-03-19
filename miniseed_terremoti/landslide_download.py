@@ -8,37 +8,37 @@ from obspy.clients.filesystem.sds import Client
 from obspy import read
 
 # Chemin vers le fichier .mseed
-file_path = "/home/gaia/Documents/mseed_landslide/mseed_lds_catalog/20200608_12.33.mseed"
+#file_path = "/home/gaia/Documents/mseed_landslide/mseed_lds_catalog/20200608_12.33.mseed"
 
 # Lire le fichier .mseed
-stream = read(file_path)
+#stream = read(file_path)
 
 # Afficher un résumé de la trace
-print(stream)
+#print(stream)
 
 # Accéder aux informations sur chaque trace
-for trace in stream:
-    print(f"Station: {trace.stats.station}")
-    print(f"Starttime: {trace.stats.starttime}")
-    print(f"Endtime: {trace.stats.endtime}")
-    print(f"Sampling rate: {trace.stats.sampling_rate}")
-    print(f"Number of points: {len(trace.data)}")
+#for trace in stream:
+ #   print(f"Station: {trace.stats.station}")
+  #  print(f"Starttime: {trace.stats.starttime}")
+  #  print(f"Endtime: {trace.stats.endtime}")
+  #  print(f"Sampling rate: {trace.stats.sampling_rate}")
+   # print(f"Number of points: {len(trace.data)}")
     
     # Afficher la première valeur des données pour chaque trace
-    print(f"First data point: {trace.data[0]}")
-    print("-" * 50)
+    #print(f"First data point: {trace.data[0]}")
+    #print("-" * 50)
 
 # Tracer les données sismiques (si nécessaire)
 import matplotlib.pyplot as plt
 
 # Tracer toutes les traces sismiques sur un seul graphique
-for trace in stream:
-    trace.plot()
+#for trace in stream:
+#    trace.plot()
 
 # Afficher le graphique
-plt.show()
+#plt.show()
 
-fff
+#fff
 
 # Paramètres
 db = '/mnt/bigmama3'
@@ -48,14 +48,14 @@ channel = ['*HZ']
 
 # Client pour récupérer les données
 client = Client(db)
-#ti = UTCDateTime("2020-03-23:19:02.000")
-#tf = ti + (60 * 2 * 1)  # 20 min de données
+ti = UTCDateTime("2020-10-06T08:55:00.000")
+tf = ti + (60 * 20 * 1)  # 20 min de données
 
 # Heure de début précise à 19:02
-ti = UTCDateTime("2020-12-02T18:18:00.000")
+#ti = UTCDateTime("2020-10-06T08:55:00.000")
 
 # Heure de fin précise à 19:0
-tf = UTCDateTime("2020-12-02T18:20:00.000")
+#tf = UTCDateTime("2020-10-06T09:05:00.000")
 
 # Récupérer les données pour les deux stations
 st1 = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[0], starttime=ti, endtime=tf)
@@ -72,7 +72,7 @@ for trace in st1:
 # Afficher le stream prétraité
 st1.plot()
 
-st1.write('/home/gaia/Documents/mseed_landslide/mseed_lds_catalog/20201202_18.15.mseed')
+st1.write('/home/gaia/Documents/mseed_landslide/mseed_lds_catalog/20201006_08.55.mseed')
 
 
 ########################
