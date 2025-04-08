@@ -15,7 +15,7 @@ fs = 50  # Fréquence cible
 
 # Client pour récupérer les données
 client = Client(db)
-ti = UTCDateTime("2020-03-17T01:01:00.000")
+ti = UTCDateTime("2020-03-31T00:00:00.000")
 #ti = UTCDateTime("2020-03-19T04:55:30.000")
 tf = ti + (60 * 4 * 1 * 1)  # 5 minutes de données
 

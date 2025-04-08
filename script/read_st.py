@@ -16,19 +16,28 @@ from scipy.stats import friedmanchisquare
 import glob
 import os
 
-db = '/mnt/bigmama3/miniseed'
+db = '/mnt/bigmama3'
 stz = ['STRA', 'STRE','STRG']
 net = ['IT', 'IV']
 channel = ['EHE', '*HZ']
 fs = 50  # Fréquence cible
 
 client = Client(db)
-ti = UTCDateTime("2020-10-21T23:00:00.000")
-tf = ti + (60 * 60 * 1 * 1)
+ti = UTCDateTime("2020-03-31T00:00:00.000")
+tf = ti + (60 * 60 * 24 * 1)
 
 #st = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[1], starttime=ti, endtime=tf)
 st = client.get_waveforms(network='*', station=stz[0], location="", channel=channel[1], starttime=ti, endtime=tf)
 print(st)
+st.plot()
+st = client.get_waveforms(network='*', station=stz[1], location="", channel=channel[1], starttime=ti, endtime=tf)
+print(st)
+
+st = client.get_waveforms(network='*', station=stz[2], location="", channel=channel[1], starttime=ti, endtime=tf)
+print(st)
+
+fff
+
 st.merge(fill_value='interpolate')
 st.detrend("demean")
 st.detrend("linear")
@@ -37,6 +46,7 @@ data = bandpass(data, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True
 
 starttime = UTCDateTime(st[0].stats.starttime).datetime
 time = pd.to_datetime(starttime + pd.to_timedelta(np.arange(0, len(data) / fs, 1 / fs), unit='s'))
+
 
 plt.figure(figsize=(12, 6))
 

@@ -15,8 +15,8 @@ fs = 50  # Fréquence cible
 
 # Client pour récupérer les données
 client = Client(db)
-ti = UTCDateTime("2020-03-19T04:55:30.000")
-tf = ti + (60 * 9 * 1 * 1)  # 5 minutes de données
+ti = UTCDateTime("2020-03-31T01:00:00.000")
+tf = ti + (60 * 60 * 4 * 1)  # 5 minutes de données
 
 # Initialisation de dictionnaires pour stocker les données traitées
 data_sismique = {}

@@ -14,7 +14,8 @@ fs = 50  # Fréquence cible
 
 # Client pour récupérer les données
 client = Client(db)
-ti = UTCDateTime("2020-10-07T02:52:00.000")
+#ti = UTCDateTime("2020-10-07T02:52:00.000")
+ti = UTCDateTime("2020-03-31T00:00:00.000")
 tf = ti + (60 * 60 * 24 * 1)  # 1 jour de données
 
 # Récupérer laes données pour les deux stations
@@ -46,7 +47,8 @@ time1 = pd.to_datetime(starttime1 + pd.to_timedelta(np.arange(0, len(data1_full)
 time2 = pd.to_datetime(starttime2 + pd.to_timedelta(np.arange(0, len(data2_full) / fs, 1 / fs), unit='s'))
 
 # Lire le fichier CSV contenant les événements
-csv_file = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_stre_stra/peaks_data_20201007.csv'
+#csv_file = '/home/gaia/Documents/processing_1_sec/2020/double_duration_speed_stre_stra/peaks_data_20200331.csv'
+csv_file = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_stre_stra_test/stre_stra_peaks_data_20200331.csv'
 df_csv = pd.read_csv(csv_file)
 
 # Convertir les colonnes en format datetime
@@ -55,8 +57,11 @@ df_csv['Initial_Peak_Time_w'] = pd.to_datetime(df_csv['Initial_Peak_Time_w'])
 df_csv['Final_Peak_Time_w'] = pd.to_datetime(df_csv['Final_Peak_Time_w'])
 
 # Charger les fichiers CSV pour RSAM (STRA et STRE)
-rsam_stra_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRA_20201007.csv'
-rsam_stre_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRE_20201007.csv'
+#rsam_stra_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRA_20200331.csv'
+#rsam_stre_file = '/home/gaia/Documents/processing_1_sec/2020/rsam/rsam_STRE_20200331.csv'
+
+rsam_stra_file = '/home/gaia/Documents/processing_10_sec/2020/rsam_test/rsam_STRA_20200331.csv'
+rsam_stre_file = '/home/gaia/Documents/processing_10_sec/2020/rsam_test/rsam_STRE_20200331.csv'
 
 rsam_stra = pd.read_csv(rsam_stra_file)
 rsam_stre = pd.read_csv(rsam_stre_file)
