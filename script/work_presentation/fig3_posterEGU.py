@@ -132,6 +132,16 @@ ax[4].grid(True)
 ax[4].scatter(strg_stra_peaks_data['Peak_Time_UTC'], strg_stra_peaks_data['Ratio'], color='blue', marker='*', label='Detection (G/A)')
 ax[4].legend(loc='upper right')
 
+# Cinquième graphique : Ratio STRG/STRA (G/A)
+ax[5].plot(data_csv['time_UTC'], data_csv['Ratio_STRC_STRA'], color='purple', label='STRC/STRA')
+ax[5].set_ylabel('Ratio')
+#ax[4].set_ylim(ratio_min, ratio_max)  # Appliquer les mêmes limites pour l'axe y
+ax[5].legend(loc='upper right')
+ax[5].grid(True)
+
+# Ajouter des étoiles basées sur les pics du fichier strg_stra_peaks_data.csv
+ax[5].scatter(strg_stra_peaks_data['Peak_Time_UTC'], strg_stra_peaks_data['Ratio'], color='blue', marker='*', label='Detection (C/A)')
+ax[5].legend(loc='upper right')
 # Ajuster l'espacement entre les sous-graphiques
 plt.tight_layout()
 

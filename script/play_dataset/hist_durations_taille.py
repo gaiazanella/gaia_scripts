@@ -2,7 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Charger le fichier 'all_peaks.csv' pour 'auto'
-file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed/all_peaks.csv'
+#file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed/all_peaks.csv'
+file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_stre_stra_test/stre_stra_all_peaks_data.csv'
+
 data = pd.read_csv(file_path)
 
 # Filtrer les données en fonction des critères 'RSAM_E > 875' et 'Ratio < 6.5'
@@ -117,3 +119,190 @@ print(f"Min: {duration_stats['min']:.2f}")
 print(f"Max: {duration_stats['max']:.2f}")
 print(f"1st Quartile: {quartiles[0.25]:.2f}")
 print(f"3rd Quartile: {quartiles[0.75]:.2f}")
+
+param_name = 'Ratio'  # Remplace par n'importe quel nom de colonne présent dans filtered_data
+
+# Vérifier que le paramètre existe dans les données filtrées
+if param_name in filtered_data.columns:
+    # Calcul des stats descriptives
+    param_stats = filtered_data[param_name].describe()
+    param_median = filtered_data[param_name].median()
+    param_quartiles = filtered_data[param_name].quantile([0.25, 0.75])
+
+    # Affichage de l'histogramme
+    plt.figure(figsize=(12, 8))
+    plt.hist(filtered_data[param_name], bins=50, color='lightcoral', edgecolor='black', alpha=0.7)
+    plt.xlabel(param_name, fontsize=18)
+    plt.ylabel('Count', fontsize=18)
+    plt.title(f'{param_name} Distribution\nMean={param_stats["mean"]:.2f}, Median={param_median:.2f}, Std={param_stats["std"]:.2f}', fontsize=18)
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.show()
+
+    # Impression des statistiques
+    print(f"\nStatistical Distribution of '{param_name}':")
+    print(f"Mean: {param_stats['mean']:.2f}")
+    print(f"Median: {param_median:.2f}")
+    print(f"Min: {param_stats['min']:.2f}")
+    print(f"Max: {param_stats['max']:.2f}")
+    print(f"1st Quartile: {param_quartiles[0.25]:.2f}")
+    print(f"3rd Quartile: {param_quartiles[0.75]:.2f}")
+else:
+    print(f"\nLe paramètre '{param_name}' n'existe pas dans les données filtrées.")
+
+param_name = 'RSAM_A'
+sconv1 = 3.18e-6
+sconv2 = 800
+sconv = sconv1 / sconv2  # ≈ 3.975e-9
+
+if param_name in filtered_data.columns:
+    transformed_param = filtered_data[param_name] * sconv
+
+    # Stats
+    param_stats = transformed_param.describe()
+    param_median = transformed_param.median()
+    param_quartiles = transformed_param.quantile([0.25, 0.75])
+
+    # Histogramme
+    plt.figure(figsize=(12, 8))
+    plt.hist(transformed_param, bins=50, color='lightcoral', edgecolor='black', alpha=0.7)
+    plt.xlabel(f'{param_name} (transformed)', fontsize=18)
+    plt.ylabel('Count', fontsize=18)
+    plt.title(f'{param_name} (transformed) Distribution\n'
+              f'Mean={param_stats["mean"]}, Median={param_median}, Std={param_stats["std"]}', fontsize=18)
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.show()
+
+    # Statistiques
+    print(f"\nStatistical Distribution of transformed '{param_name}':")
+    print(f"Mean: {param_stats['mean']}")
+    print(f"Median: {param_median}")
+    print(f"Min: {param_stats['min']}")
+    print(f"Max: {param_stats['max']}")
+    print(f"1st Quartile: {param_quartiles[0.25]}")
+    print(f"3rd Quartile: {param_quartiles[0.75]}")
+else:
+    print(f"\nLe paramètre '{param_name}' n'existe pas dans les données filtrées.")
+
+param_name = 'RSAM_E'
+sconv1 = 3.18e-6
+sconv2 = 800
+sconv = sconv1 / sconv2  # ≈ 3.975e-9
+
+if param_name in filtered_data.columns:
+    transformed_param = filtered_data[param_name] * sconv
+
+    # Stats
+    param_stats = transformed_param.describe()
+    param_median = transformed_param.median()
+    param_quartiles = transformed_param.quantile([0.25, 0.75])
+
+    # Histogramme
+    plt.figure(figsize=(12, 8))
+    plt.hist(transformed_param, bins=50, color='lightcoral', edgecolor='black', alpha=0.7)
+    plt.xlabel(f'{param_name} (transformed)', fontsize=18)
+    plt.ylabel('Count', fontsize=18)
+    plt.title(f'{param_name} (transformed) Distribution\n'
+              f'Mean={param_stats["mean"]}, Median={param_median}, Std={param_stats["std"]}', fontsize=18)
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.show()
+
+    # Statistiques
+    print(f"\nStatistical Distribution of transformed '{param_name}':")
+    print(f"Mean: {param_stats['mean']}")
+    print(f"Median: {param_median}")
+    print(f"Min: {param_stats['min']}")
+    print(f"Max: {param_stats['max']}")
+    print(f"1st Quartile: {param_quartiles[0.25]}")
+    print(f"3rd Quartile: {param_quartiles[0.75]}")
+else:
+    print(f"\nLe paramètre '{param_name}' n'existe pas dans les données filtrées.")
+
+
+# Conversion RSAM_A et RSAM_E
+sconv1 = 3.18e-6
+sconv2 = 800
+sconv = sconv1 / sconv2  # ≈ 3.975e-9
+
+# Transformation des colonnes RSAM
+filtered_data['RSAM_A_transformed'] = filtered_data['RSAM_A'] * sconv
+filtered_data['RSAM_E_transformed'] = filtered_data['RSAM_E'] * sconv
+
+# Création d'une figure avec 4 sous-graphiques
+fig, axs = plt.subplots(4, 1, figsize=(12, 20))
+
+# Histogramme de Duration
+axs[0].hist(filtered_data['Duration'], bins=50, color='skyblue', edgecolor='black', alpha=0.7)
+axs[0].set_title('Distribution of Duration', fontsize=16)
+axs[0].set_xlabel('Duration (s)', fontsize=14)
+axs[0].set_ylabel('Count', fontsize=14)
+axs[0].grid(axis='y', linestyle='--', alpha=0.7)
+
+# Histogramme de Ratio
+axs[1].hist(filtered_data['Ratio'], bins=50, color='lightcoral', edgecolor='black', alpha=0.7)
+axs[1].set_title('Distribution of Ratio', fontsize=16)
+axs[1].set_xlabel('Ratio', fontsize=14)
+axs[1].set_ylabel('Count', fontsize=14)
+axs[1].grid(axis='y', linestyle='--', alpha=0.7)
+
+# Histogramme de RSAM_A transformé
+axs[2].hist(filtered_data['RSAM_A_transformed'], bins=50, color='lightgreen', edgecolor='black', alpha=0.7)
+axs[2].set_title('Distribution of RSAM_A (transformed)', fontsize=16)
+axs[2].set_xlabel('RSAM_A (m/s)', fontsize=14)
+axs[2].set_ylabel('Count', fontsize=14)
+axs[2].grid(axis='y', linestyle='--', alpha=0.7)
+
+# Histogramme de RSAM_E transformé
+axs[3].hist(filtered_data['RSAM_E_transformed'], bins=50, color='plum', edgecolor='black', alpha=0.7)
+axs[3].set_title('Distribution of RSAM_E (transformed)', fontsize=16)
+axs[3].set_xlabel('RSAM_E (m/s)', fontsize=14)
+axs[3].set_ylabel('Count', fontsize=14)
+axs[3].grid(axis='y', linestyle='--', alpha=0.7)
+
+# Ajustement de l'espacement
+plt.tight_layout()
+plt.show()
+
+
+# Conversion RSAM_A et RSAM_E
+sconv1 = 3.18e-6
+sconv2 = 800
+sconv = sconv1 / sconv2
+
+# Transformation des colonnes RSAM
+filtered_data['RSAM_A_transformed'] = filtered_data['RSAM_A'] * sconv
+filtered_data['RSAM_E_transformed'] = filtered_data['RSAM_E'] * sconv
+
+# Création de la figure avec 2 lignes et 2 colonnes
+fig, axs = plt.subplots(2, 2, figsize=(16, 12))
+
+# Histogramme de Duration
+axs[0, 0].hist(filtered_data['Duration'], bins=40, color='grey', edgecolor='black', alpha=0.7)
+#axs[0, 0].set_title('Distribution of Duration', fontsize=16)
+axs[0, 0].set_xlabel('Duration (s)', fontsize=14)
+#axs[0, 0].set_ylabel('Count', fontsize=14)
+axs[0, 0].grid(axis='y', linestyle='--', alpha=0.7)
+
+# Histogramme de Ratio
+axs[0, 1].hist(filtered_data['Ratio'], bins=50, color='grey', edgecolor='black', alpha=0.7)
+#axs[0, 1].set_title('Distribution of Ratio', fontsize=16)
+axs[0, 1].set_xlabel('Amplitude Ratio', fontsize=14)
+#axs[0, 1].set_ylabel('Count', fontsize=14)
+axs[0, 1].grid(axis='y', linestyle='--', alpha=0.7)
+
+# Histogramme de RSAM_A transformé
+axs[1, 0].hist(filtered_data['RSAM_A_transformed'], bins=50, color='grey', edgecolor='black', alpha=0.7)
+#axs[1, 0].set_title('Distribution of RSAM_A (transformed)', fontsize=16)
+axs[1, 0].set_xlabel('RSAM STRA (m/s)', fontsize=14)
+#axs[1, 0].set_ylabel('Count', fontsize=14)
+axs[1, 0].grid(axis='y', linestyle='--', alpha=0.7)
+
+# Histogramme de RSAM_E transformé
+axs[1, 1].hist(filtered_data['RSAM_E_transformed'], bins=50, color='grey', edgecolor='black', alpha=0.7)
+#axs[1, 1].set_title('Distribution of RSAM_E (transformed)', fontsize=16)
+axs[1, 1].set_xlabel('RSAM STRE (m/s)', fontsize=14)
+#axs[1, 1].set_ylabel('Count', fontsize=14)
+axs[1, 1].grid(axis='y', linestyle='--', alpha=0.7)
+
+# Ajustement des espacements
+plt.tight_layout()
+plt.show()
