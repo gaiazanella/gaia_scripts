@@ -42,8 +42,9 @@ samples = win*fs
 t_init=UTCDateTime("2020-01-01T00:00:00")
 t_end=UTCDateTime("2021-01-01T00:00:00")
 save_dir = '/home/gaia/Documents/processing_10_sec/2020/rsam_test'
-db = '/mnt/bigmama3/miniseed'
-stz = ['STRC','STRG','STRA','STRE']
+db = '/mnt/bigmama3'
+stz = ['STR1']
+#stz = ['STRC','STRG','STRA','STRE']
 net = ['I*', 'I*']
 channel = ['*HZ', '*HZ']
 

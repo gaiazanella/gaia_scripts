@@ -15,9 +15,10 @@ fs = 50  # Fréquence cible
 
 # Client pour récupérer les données
 client = Client(db)
-ti = UTCDateTime("2020-03-31T00:00:00.000")
+ti=UTCDateTime("2020-03-17T01:01:00.000")
+#ti = UTCDateTime("2020-03-31T00:00:00.000")
 #ti = UTCDateTime("2020-03-19T04:55:30.000")
-tf = ti + (60 * 4 * 1 * 1)  # 5 minutes de données
+tf = ti + (60 * 5 * 1 * 1)  # 5 minutes de données
 
 # Initialisation de dictionnaires pour stocker les données traitées
 data_sismique = {}
@@ -25,7 +26,7 @@ data_sismique = {}
 # Récupérer les données pour chaque station (STRA, STRE, STRG)
 for i, station in enumerate(stz):
     st = client.get_waveforms(network=net[i], station=station, location="", channel=channel[i], starttime=ti, endtime=tf)
-    
+    print(st)
     # Fusionner les données (interpolation)
     st.merge(fill_value='interpolate')
     
@@ -37,22 +38,39 @@ for i, station in enumerate(stz):
     data = st[0].data
     data_sismique[station] = {}
     data_sismique[station]['raw'] = data
-    data_sismique[station]['filtered'] = bandpass(data, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
-    data_sismique[station]['filtered_vlp'] = bandpass(data, freqmin=0.03, freqmax=1, df=fs, corners=4, zerophase=True)
+    sconv1=3.18e-6
+    sconv2=800
+    sconv=sconv1/sconv2
+    data_sismique[station]['filtered'] = bandpass(data, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True) * sconv
+    data_sismique[station]['filtered_vlp'] = bandpass(data, freqmin=0.03, freqmax=1, df=fs, corners=4, zerophase=True) * sconv
     
     # Créer un axe temporel pour chaque station
     starttime = UTCDateTime(st[0].stats.starttime).datetime
     data_sismique[station]['time'] = pd.to_datetime(starttime + pd.to_timedelta(np.arange(0, len(data) / fs, 1 / fs), unit='s'))
 
 # Calcul des limites (min et max) pour les 4 subplots
+#min_val = min(
+#    min(data_sismique['STRA']['filtered_vlp'].min(), data_sismique['STRA']['filtered'].min()),
+#    min(data_sismique['STRE']['filtered'].min(), data_sismique['STRG']['filtered'].min())
+#)
+
+#max_val = max(
+#    max(data_sismique['STRA']['filtered_vlp'].max(), data_sismique['STRA']['filtered'].max()),
+#    max(data_sismique['STRE']['filtered'].max(), data_sismique['STRG']['filtered'].max())
+#)
+
 min_val = min(
-    min(data_sismique['STRA']['filtered_vlp'].min(), data_sismique['STRA']['filtered'].min()),
-    min(data_sismique['STRE']['filtered'].min(), data_sismique['STRG']['filtered'].min())
+    data_sismique['STRA']['filtered'].min(),
+    data_sismique['STRE']['filtered'].min(),
+    data_sismique['STRG']['filtered'].min(),
+    data_sismique['STRC']['filtered'].min()
 )
 
 max_val = max(
-    max(data_sismique['STRA']['filtered_vlp'].max(), data_sismique['STRA']['filtered'].max()),
-    max(data_sismique['STRE']['filtered'].max(), data_sismique['STRG']['filtered'].max())
+    data_sismique['STRA']['filtered'].max(),
+    data_sismique['STRE']['filtered'].max(),
+    data_sismique['STRG']['filtered'].max(),
+    data_sismique['STRC']['filtered'].max()
 )
 
 # Création des subplots (4 sous-graphiques)
@@ -64,7 +82,7 @@ fig, axs = plt.subplots(5, 1, figsize=(12, 10), sharex=True)  # Augmenter la lar
 axs[0].plot(data_sismique['STRA']['time'], data_sismique['STRA']['filtered_vlp'], color='r')
 axs[0].legend()
 axs[0].grid(True)
-axs[0].set_ylim(-2900, 2200)  # Uniformiser les limites de y
+#axs[0].set_ylim(-2900, 2200)  # Uniformiser les limites de y
 
 # 2ème subplot pour STRA (filtrage 0.03-24Hz)
 axs[1].plot(data_sismique['STRA']['time'], data_sismique['STRA']['filtered'], color='r')

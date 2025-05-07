@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Charger le fichier 'all_peaks.csv' pour 'auto'
 file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_stre_stra_test/stre_stra_all_peaks_data.csv'
@@ -20,13 +21,55 @@ result_auto = pd.DataFrame({
     'frane': daily_counts.values
 }).sort_values('Date')
 
+# Calcul de la moyenne des occurrences par jour
+mean_daily = np.mean(daily_counts)
+print(f"Moyenne des occurrences par jour : {mean_daily:.2f}")
+
+# Calcul de l'écart-type des occurrences par jour
+std_daily = np.std(daily_counts)
+print(f"Écart-type des occurrences par jour : {std_daily:.2f}")
+
+# Calcul du 1er quartile (Q1)
+q1_daily = np.percentile(daily_counts, 25)
+print(f"1er quartile (Q1) des occurrences par jour : {q1_daily:.2f}")
+
+# Calcul du 3e quartile (Q3)
+q3_daily = np.percentile(daily_counts, 75)
+print(f"3e quartile (Q3) des occurrences par jour : {q3_daily:.2f}")
+
+# Calcul de la valeur minimale
+min_daily = np.min(daily_counts)
+print(f"Valeur minimale des occurrences par jour : {min_daily}")
+
+# Calcul de la valeur maximale
+max_daily = np.max(daily_counts)
+print(f"Valeur maximale des occurrences par jour : {max_daily}")
+
 # Calculer la moyenne mobile sur 7 jours pour les données 'auto'
 result_auto['frane_rolling'] = result_auto['frane'].rolling(window=7).mean()
 
 # Charger le fichier '2020_manual.csv' pour 'manual' sans appliquer les critères de sélection
 manual_file_path = '/home/gaia/Documents/2020_manual.csv'
 manual_data = pd.read_csv(manual_file_path)
+# Calcul de la moyenne
+print(f"Moyenne : {np.mean(manual_data['frane']):.2f}")
 
+# Calcul de l'écart-type
+print(f"Écart-type : {np.std(manual_data['frane']):.2f}")
+
+# Calcul du 1er quartile (Q1)
+print(f"1er quartile (Q1) : {np.percentile(manual_data['frane'], 25)}")
+
+# Calcul du 3e quartile (Q3)
+print(f"3e quartile (Q3) : {np.percentile(manual_data['frane'], 75)}")
+
+# Valeur minimale
+print(f"Valeur minimale : {np.min(manual_data['frane'])}")
+
+# Valeur maximale
+print(f"Valeur maximale : {np.max(manual_data['frane'])}")
+
+fff
 # Extraire la date sans l'heure de la colonne 'Date' pour 'manual'
 manual_data['Date'] = pd.to_datetime(manual_data['Date'])
 
@@ -45,6 +88,20 @@ lines_data = pd.read_csv(lines_file_path, sep=';', header=None, names=['Date', '
 # Convertir les dates et heures en datetime
 lines_data['Datetime'] = pd.to_datetime(lines_data['Date'] + ' ' + lines_data['Time'], format='%d/%m/%Y %H:%M')
 
+plt.figure()
+
+# Subplot 1 : Moyenne mobile sur 7 jours pour Auto et Manual
+plt.plot(result_auto['Date'], result_auto['frane_rolling'], label='Automatic', color='royalblue', linewidth=2)
+plt.plot(manual_daily_counts_rolling.index, manual_daily_counts_rolling.values, label='Manual', color='black', linewidth=2)
+#axs[0].set_title('7-Day Rolling Average (Auto vs Manual)')
+plt.ylabel('Rockfall daily rate')
+plt.legend()
+plt.grid(True)
+
+# Afficher la première figure
+plt.tight_layout()
+plt.show()
+fff
 # Première figure : uniquement le premier subplot
 plt.figure(figsize=(10, 6))
 

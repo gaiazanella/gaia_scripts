@@ -5,6 +5,13 @@ import matplotlib.pyplot as plt
 #file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed/all_peaks.csv'
 file_path = '/home/gaia/Documents/processing_10_sec/2020/double_duration_speed_stre_stra_test/stre_stra_all_peaks_data.csv'
 
+dur_41 = [
+    140, 160, 180, 310, 260, 230, 170, 320, 220, 290,
+    140, 140, 150, 230, 230, 180, 220, 160, 220, 270,
+    180, 210, 290, 130, 200, 270, 230, 150, 190, 280,
+    200, 320, 250, 190, 210, 200, 230, 190, 130, 230, 240
+]
+
 data = pd.read_csv(file_path)
 
 # Filtrer les données en fonction des critères 'RSAM_E > 875' et 'Ratio < 6.5'
@@ -53,6 +60,32 @@ duration_stats = filtered_data['Duration'].describe()
 median_duration = filtered_data['Duration'].median()
 quartiles = filtered_data['Duration'].quantile([0.25, 0.5, 0.75])
 
+# Deuxième figure : distribution statistique des 'Durations'
+plt.figure(figsize=(12, 8))
+plt.hist(filtered_data['Duration'], bins=20, color='grey', edgecolor='black', alpha=0.7)
+#plt.hist(dur_41, bins=20, color='grey', edgecolor='black', alpha=0.7)
+plt.xlabel('Landslide Durations (s)', fontsize=18)  # Taille de la police de l'axe X
+#plt.ylabel('Count', fontsize=18)  # Taille de la police de l'axe Y
+#plt.title(f'Landslide Duration Distribution\nMean={duration_stats["mean"]:.2f}, Median={median_duration:.2f}, Std={duration_stats["std"]:.2f}', fontsize=18)
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.xlim(0, 500)
+
+# Afficher la deuxième figure
+plt.show()
+
+plt.figure(figsize=(12, 8))
+#plt.hist(filtered_data['Duration'], bins=20, color='grey', edgecolor='black', alpha=0.7)
+plt.hist(dur_41, bins=5, color='grey', edgecolor='black', alpha=0.7)
+plt.xlabel('Landslide Durations (s)', fontsize=18)  # Taille de la police de l'axe X
+
+#plt.ylabel('Count', fontsize=18)  # Taille de la police de l'axe Y
+#plt.title(f'Landslide Duration Distribution\nMean={duration_stats["mean"]:.2f}, Median={median_duration:.2f}, Std={duration_stats["std"]:.2f}', fontsize=18)
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+plt.xlim(0, 500)
+# Afficher la deuxième figure
+plt.show()
+
+fff
 # Première figure : les 4 premiers plots
 fig, axs = plt.subplots(4, 1, figsize=(12, 16), sharex=True)
 
@@ -100,16 +133,7 @@ plt.tight_layout()
 # Afficher la première figure
 plt.show()
 
-# Deuxième figure : distribution statistique des 'Durations'
-plt.figure(figsize=(12, 8))
-plt.hist(filtered_data['Duration'], bins=50, color='skyblue', edgecolor='black', alpha=0.7)
-plt.xlabel('Landslide Durations (s)', fontsize=18)  # Taille de la police de l'axe X
-plt.ylabel('Count', fontsize=18)  # Taille de la police de l'axe Y
-plt.title(f'Landslide Duration Distribution\nMean={duration_stats["mean"]:.2f}, Median={median_duration:.2f}, Std={duration_stats["std"]:.2f}', fontsize=18)
-plt.grid(axis='y', linestyle='--', alpha=0.7)
 
-# Afficher la deuxième figure
-plt.show()
 
 # Impression des statistiques
 print("Statistical Distribution of 'Durations':")
