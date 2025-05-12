@@ -20,6 +20,7 @@ ti=UTCDateTime("2020-03-17T01:01:00.000")
 #ti = UTCDateTime("2020-03-19T04:55:30.000")
 tf = ti + (60 * 5 * 1 * 1)  # 5 minutes de données
 
+
 # Initialisation de dictionnaires pour stocker les données traitées
 data_sismique = {}
 
