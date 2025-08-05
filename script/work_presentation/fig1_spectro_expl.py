@@ -9,7 +9,7 @@ import pandas as pd
 from obspy.clients.filesystem.sds import Client
 
 # Parameters
-db = '/mnt/bigmama3/miniseed'
+db = '/mnt/bigmama3'
 stz = ['STRA', 'STRE']
 net = ['I*', 'I*']
 channel = ['*HZ', '*HZ']
