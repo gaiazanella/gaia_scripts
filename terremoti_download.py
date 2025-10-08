@@ -10,15 +10,15 @@ from obspy.clients.filesystem.sds import Client
 db = '/mnt/bigmama3/'
 stz = ['STR*']
 net = ['I*']
-#channel = ['*HZ']
-channel = ['*H*']
+channel = ['*HZ']
+#channel = ['*H*']
 
 
 # Client pour récupérer les données
 client = Client(db)
-ti = UTCDateTime("2020-08-01T15:00:00.000")
+ti = UTCDateTime("2020-01-23T19:30:00.000")
 #tf = ti + (60 * 60 * 1) # 1 heure de données
-tf= ti+ (60*20)  
+tf= ti+ (60*60)  
 
 # Récupérer les données pour les deux stations
 st1 = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[0], starttime=ti, endtime=tf)
@@ -28,4 +28,5 @@ st1 = client.get_waveforms(network=net[0], station=stz[0], location="", channel=
 
 #st1.write('/home/gaia/Documents/mseed_terremoti/qf_terremoti/20240801_5_1.mseed')
 #st1.write('/home/gaia/Documents/mseed_terremoti/qf_terremoti/20240801_5_1_compoz.mseed')
+#st1.write('/home/gaia/Documents/lds_gt_4000/20201116_09_18.mseed')
 st1.plot()

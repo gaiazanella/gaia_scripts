@@ -22,7 +22,7 @@ client = Client(db)
 
 # Fenêtre temporelle
 #ti = UTCDateTime("2020-03-17T01:00:00.000")
-ti = UTCDateTime("2020-02-06T00:00:00.000")
+ti = UTCDateTime("2020-01-23T19:30:00.000")
 tf = ti + 60 * 60 # 24 heures
 
 data_sismique = {}

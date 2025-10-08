@@ -17,13 +17,14 @@ import glob
 import os
 
 db = '/mnt/bigmama3'
-stz = ['STRA', 'STRE','STRG', 'STR1', 'STR4', 'STR6']
+#stz = ['STRA', 'STRE','STRG', 'STR1', 'STR4', 'STR6']
+stz = ['STR*']
 net = ['IT', 'IV']
 channel = ['EHE', '*HZ']
 fs = 50  # Fréquence cible
 
 client = Client(db)
-ti = UTCDateTime("2025-06-06T00:00:00.000")
+ti = UTCDateTime("2020-09-14T12:00:00.000")
 tf = ti + (60 * 60 * 24 * 1)
 
 #st = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[1], starttime=ti, endtime=tf)

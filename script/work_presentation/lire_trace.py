@@ -13,7 +13,7 @@ import matplotlib.dates as mdates
 # Configuration SDS client
 db = '/mnt/bigmama3'
 stations = ['STRE', 'STRA', 'STRG', 'STRC'] 
-stations = ['STRE', 'STRA', 'STRG'] # Ajout de STRC
+#stations = ['STRE', 'STRA', 'STRG'] # Ajout de STRC
 network = '*'
 channel = '*HZ'
 fs = 50  # Hz
@@ -22,8 +22,9 @@ client = Client(db)
 
 # Fenêtre temporelle
 #ti = UTCDateTime("2020-03-17T01:00:00.000")
-ti = UTCDateTime("2020-02-06T15:00:00.000")
-tf = ti + 60 * 60 *9 # 24 heures
+#ti = UTCDateTime("2020-02-06T15:00:00.000")
+ti = UTCDateTime("2020-09-13T12:00:00.000")
+tf = ti + 60 * 8 # 24 heures
 
 data_sismique = {}
 for station in stations:
@@ -65,7 +66,7 @@ y_max = 14e-5
 
 
 # Créer la figure avec 5 sous-graphiques
-fig, ax = plt.subplots(4, 1, figsize=(12, 14), sharex=True)
+fig, ax = plt.subplots(5, 1, figsize=(12, 14), sharex=True)
 
 # Subplot 1 : STRA (0.01–1 Hz)
 ax[0].plot(data_sismique['STRA_time'], data_sismique['STRA'], color='red', label='STRA (0.01–1 Hz)')
@@ -81,18 +82,25 @@ ax[1].legend(loc='upper right')
 ax[1].grid(True)
 
 # Subplot 3 : STRE (8–15 Hz)
-ax[2].plot(data_sismique['STRE_time'], data_sismique['STRE'], color='blue', label='STRE (8–15 Hz)')
-ax[2].set_ylabel('Seismic record (m/s)')
+#ax[2].plot(data_sismique['STRE_time'], data_sismique['STRE'], color='blue', label='STRE (8–15 Hz)')
+#ax[2].set_ylabel('Seismic record (m/s)')
 #ax[2].set_ylim(y_min, y_max)
-ax[2].legend(loc='upper right')
-ax[2].grid(True)
+#ax[2].legend(loc='upper right')
+#ax[2].grid(True)
 
 # Subplot 4 : STRG (8–15 Hz)
-ax[3].plot(data_sismique['STRG_time'], data_sismique['STRG'], color='magenta', label='STRG (8–15 Hz)')
-ax[3].set_ylabel('Seismic record (m/s)')
+#ax[3].plot(data_sismique['STRG_time'], data_sismique['STRG'], color='magenta', label='STRG (8–15 Hz)')
+#ax[3].set_ylabel('Seismic record (m/s)')
 #ax[3].set_ylim(y_min, y_max)
-ax[3].legend(loc='upper right')
-ax[3].grid(True)
+#ax[3].legend(loc='upper right')
+#ax[3].grid(True)
+
+# Subplot 4 : STRC (8–15 Hz)
+#ax[4].plot(data_sismique['STRC_time'], data_sismique['STRC'], color='cyan', label='STRC (8–15 Hz)')
+#ax[4].set_ylabel('Seismic record (m/s)')
+#ax[3].set_ylim(y_min, y_max)
+#ax[4].legend(loc='upper right')
+#ax[4].grid(True)
 
 # X-axis formatting (sur le dernier subplot)
 #ax[3].xaxis.set_major_locator(mdates.MinuteLocator(interval=1))
