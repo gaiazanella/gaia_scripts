@@ -7,7 +7,7 @@ import pandas as pd
 from obspy.clients.filesystem.sds import Client
 
 # Paramètres
-db = '/mnt/bigmama3/'
+db = '/mnt/bigmama3'
 stz = ['STR*']
 net = ['I*']
 channel = ['*HZ']
@@ -22,6 +22,9 @@ tf= ti+ (60*60)
 
 # Récupérer les données pour les deux stations
 st1 = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[0], starttime=ti, endtime=tf)
+print(st1)
+
+fff
 #stvlp = client.get_waveforms(network=net[0], station='STR1', location="", channel=channel[0], starttime=ti, endtime=tf)
 #stvlp.integrate().filter('bandpass',freqmin=1/30,freqmax=1)
 #st1+=stvlp

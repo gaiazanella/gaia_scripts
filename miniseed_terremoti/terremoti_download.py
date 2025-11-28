@@ -15,9 +15,9 @@ channel = ['*HZ']
 
 # Client pour récupérer les données
 client = Client(db)
-ti = UTCDateTime("2025-02-07T15:18:00.000")
+ti = UTCDateTime("2020-04-04T10:00:00.000")
 #tf = ti + (60 * 20 * 1)  # 20 min de données
-tf = UTCDateTime("2025-02-07T15:25:00.000")
+tf = UTCDateTime("2020-04-04T11:00:00.000")
 
 # Récupérer les données pour les deux stations
 st1 = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[0], starttime=ti, endtime=tf)
