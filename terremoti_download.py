@@ -16,7 +16,7 @@ channel = ['*HZ']
 
 # Client pour récupérer les données
 client = Client(db)
-ti = UTCDateTime("2020-01-23T19:30:00.000")
+ti = UTCDateTime("2020-09-14T18:00:00.000")
 #tf = ti + (60 * 60 * 1) # 1 heure de données
 tf= ti+ (60*60)  
 
@@ -24,7 +24,7 @@ tf= ti+ (60*60)
 st1 = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[0], starttime=ti, endtime=tf)
 print(st1)
 
-fff
+#fff
 #stvlp = client.get_waveforms(network=net[0], station='STR1', location="", channel=channel[0], starttime=ti, endtime=tf)
 #stvlp.integrate().filter('bandpass',freqmin=1/30,freqmax=1)
 #st1+=stvlp
