@@ -2,13 +2,15 @@
 from obspy import UTCDateTime
 from obspy.signal.filter import bandpass
 import numpy as np
+import matplotlib
+#matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
 import pandas as pd
 from obspy.clients.filesystem.sds import Client
 
 # Paramètres
 db = '/mnt/bigmama3'
-stz = ['STR*']
+stz = ['STRE']
 net = ['I*']
 channel = ['*HZ']
 #channel = ['*H*']
@@ -16,9 +18,9 @@ channel = ['*HZ']
 
 # Client pour récupérer les données
 client = Client(db)
-ti = UTCDateTime("2020-09-14T18:00:00.000")
+ti = UTCDateTime("2021-05-19T12:00:00.000")
 #tf = ti + (60 * 60 * 1) # 1 heure de données
-tf= ti+ (60*60)  
+tf= ti+ (60*60) *2 
 
 # Récupérer les données pour les deux stations
 st1 = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[0], starttime=ti, endtime=tf)

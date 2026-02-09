@@ -39,10 +39,10 @@ fs=50 #50 Hz
 samples = win*fs
 
 # Initialise dates using datetime
-t_init=UTCDateTime("2019-01-01T00:00:00")
-t_end=UTCDateTime("2020-01-01T00:00:00")
+t_init=UTCDateTime("2022-01-01T00:00:00")
+t_end=UTCDateTime("2023-01-01T00:00:00")
 #save_dir = '/home/gaia/Documents/processing_10_sec/2019/rsam_test'
-save_dir = '/home/dario/Documenti/processing_10_sec/2019/rsam_test/'
+save_dir = '/home/dario/Documenti/processing_10_sec/2022/rsam_test/'
 db = '/mnt/bigmama3'
 #stz = ['STR1']
 stz = ['STR1','STRA','STRC','STRE','STRG']
