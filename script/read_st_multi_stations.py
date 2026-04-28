@@ -7,7 +7,7 @@ import pandas as pd
 from obspy.clients.filesystem.sds import Client
 
 # Paramètres
-db = '/mnt/bigmama3/miniseed'
+db = '/mnt/bigmama3'
 stz = ['STRA', 'STRE', 'STRG', 'STRC']
 net = ['I*', 'I*']
 channel = ['*HZ', '*HZ']
@@ -15,8 +15,8 @@ fs = 50  # Fréquence cible
 
 # Client pour récupérer les données
 client = Client(db)
-ti = UTCDateTime("2020-10-21T22:00:00.000")
-tf = ti + (60 * 60 * 2 * 1)  # 1 heure de données
+ti = UTCDateTime("2022-10-09T07:00:40")
+tf = ti + (60 * 60 * 1)  # 1 heure de données
 
 # Récupérer les données pour les deux stations
 st1 = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[1], starttime=ti, endtime=tf)
@@ -31,24 +31,24 @@ st3.merge(fill_value='interpolate')
 st4.merge(fill_value='interpolate')
 
 # Detrend les signaux
-st1.detrend("demean")
-st1.detrend("linear")
-st2.detrend("demean")
-st2.detrend("linear")
-st3.detrend("demean")
-st3.detrend("linear")
-st4.detrend("demean")
-st4.detrend("linear")
+#st1.detrend("demean")
+#st1.detrend("linear")
+#st2.detrend("demean")
+#st2.detrend("linear")
+#st3.detrend("demean")
+#st3.detrend("linear")
+#st4.detrend("demean")
+#st4.detrend("linear")
 
 # Appliquer un filtre bandpass sur les données
 data1 = st1[0].data
 data2 = st2[0].data
 data3 = st3[0].data
 data4 = st4[0].data
-data1 = bandpass(data1, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
-data2 = bandpass(data2, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
-data3 = bandpass(data1, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
-data4 = bandpass(data2, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
+#data1 = bandpass(data1, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
+#data2 = bandpass(data2, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
+#data3 = bandpass(data1, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
+#data4 = bandpass(data2, freqmin=0.03, freqmax=24, df=fs, corners=4, zerophase=True)
 
 # Convertir les temps en datetime
 starttime1 = UTCDateTime(st1[0].stats.starttime).datetime
@@ -96,3 +96,51 @@ axs[3].legend()
 #plt.xticks(rotation=45)
 plt.tight_layout()
 plt.show()
+
+
+from obspy import Stream
+## PACKAGES
+from obspy import UTCDateTime
+from obspy.signal.filter import bandpass
+import numpy as np
+import matplotlib
+#matplotlib.use('Qt5Agg')
+import matplotlib.pyplot as plt
+import pandas as pd
+from obspy.clients.filesystem.sds import Client
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Qt5Agg')  # ou 'TkAgg' selon ton système
+import matplotlib.pyplot as plt
+
+# Paramètres
+db = '/mnt/bigmama3'
+net = ['I*']
+channel = ['*HZ']
+ti = UTCDateTime("2022-10-09T07:00:40")
+#ti = UTCDateTime("2022-12-04T15:00:00")
+#tf = ti + (60 * 60 * 1) # 1 heure de données
+tf= ti+ (60*60)*1
+#channel = ['*H*']
+
+t1 = UTCDateTime("2022-10-09T07:23:10")
+t2 = UTCDateTime("2022-10-09T07:23:30")
+
+# Client pour récupérer les données
+client = Client(db)
+stations = ['STRA', 'STRE', 'STRG', 'STRC']
+st1 = Stream()
+
+for sta in stations:
+    st = client.get_waveforms(
+        network=net[0],
+        station=sta,
+        location="",
+        channel=channel[0],
+        starttime=ti,
+        endtime=tf
+    )
+    st1 += st
+
+print(st1)
+st1.plot()

@@ -1,0 +1,144 @@
+### PACKAGES
+from obspy import UTCDateTime
+from obspy.clients.filesystem.sds import Client
+import matplotlib.pyplot as plt
+import numpy as np   # 🔑 nécessaire pour NaN
+
+# =====================
+# Paramètres généraux
+# =====================
+db = '/mnt/bigmama3'
+client = Client(db)
+
+station = 'STRE'
+network = 'I*'
+channel = '*HZ'
+location = ""
+
+duration = 4 * 60  # 4 minutes
+
+# =====================
+# Dates / heures
+# =====================
+times = [
+    UTCDateTime("2022-12-04T15:17:00"),
+    UTCDateTime("2022-10-09T07:21:40"),
+    UTCDateTime("2019-07-03T14:44:00"),
+    UTCDateTime("2019-08-28T10:16:00"),
+    UTCDateTime("2021-05-19T12:50:00"),
+    UTCDateTime("2020-11-16T09:17:00"),
+]
+
+# =====================
+# Figure
+# =====================
+fig, axes = plt.subplots(6, 1, figsize=(12, 8), sharex=False)
+
+for i, ti in enumerate(times):
+    tf = ti + duration
+
+    st = client.get_waveforms(
+    network=network,
+    station=station,
+    location=location,
+    channel=channel,
+    starttime=ti,
+    endtime=tf
+)
+
+# 🔑 autoriser NaN
+    for tr in st:
+        tr.data = tr.data.astype(float)
+
+# 🔑 blancs dans les gaps
+    st.merge(method=1, fill_value=np.nan)
+    st.trim(ti, tf, pad=True, fill_value=np.nan)
+
+    tr = st[0]
+
+    # 🔑 FILTRAGE 8–15 Hz
+    tr.filter("bandpass", freqmin=8, freqmax=15, corners=4, zerophase=True)
+
+    t = tr.times() / 60.0
+    axes[i].plot(t, tr.data, 'k', linewidth=0.8)
+    axes[i].set_ylabel("Amplitude (counts)")
+
+axes[-1].set_xlabel("Time (minutes)")
+plt.tight_layout()
+plt.show()
+
+### PACKAGES
+from obspy import UTCDateTime
+from obspy.clients.filesystem.sds import Client
+import matplotlib.pyplot as plt
+import numpy as np
+
+# =====================
+# Paramètres généraux
+# =====================
+db = '/mnt/bigmama3'
+client = Client(db)
+
+station = 'STRE'
+network = 'I*'
+channel = '*HZ'
+location = ""
+
+duration = 4 * 60  # 4 minutes
+
+
+# =====================
+# Première boucle : récupérer toutes les traces filtrées et trouver max Y
+# =====================
+filtered_traces = []
+ymax = 0
+
+for ti in times:
+    tf = ti + duration
+
+    st = client.get_waveforms(
+        network=network,
+        station=station,
+        location=location,
+        channel=channel,
+        starttime=ti,
+        endtime=tf
+    )
+
+    # convertir en float pour NaN
+    for tr in st:
+        tr.data = tr.data.astype(float)
+
+    st.merge(method=1, fill_value=np.nan)
+    st.trim(ti, tf, pad=True, fill_value=np.nan)
+
+    tr = st[0]
+
+    # filtrage 8-15 Hz sans supprimer les NaN
+    mask = np.isnan(tr.data)
+    tr.data[mask] = 0
+    tr.filter("bandpass", freqmin=8, freqmax=15, corners=4, zerophase=True)
+    tr.data[mask] = np.nan
+
+    # 🔹 Conversion counts → m/s
+    tr.data = tr.data / 2.4390e8
+
+    filtered_traces.append(tr)
+    #ymax = max(ymax, np.nanmax(np.abs(tr.data)))
+
+# =====================
+# Deuxième boucle : plot avec la même échelle Y
+# =====================
+fig, axes = plt.subplots(len(times), 1, figsize=(12, 8), sharex=False)
+
+for i, tr in enumerate(filtered_traces):
+    t = tr.times() / 60.0  # temps en minutes
+    axes[i].plot(t, tr.data, 'k', linewidth=0.8)
+    axes[i].set_ylabel("Amplitude (m/s)")
+    axes[i].set_ylim([-4e-4, 4e-4])
+    
+
+axes[-1].set_xlabel("Time (minutes)")
+plt.tight_layout()
+plt.show()
+
