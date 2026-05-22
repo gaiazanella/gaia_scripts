@@ -3,6 +3,8 @@ from obspy import UTCDateTime
 from obspy.clients.filesystem.sds import Client
 import matplotlib.pyplot as plt
 import numpy as np   # 🔑 nécessaire pour NaN
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 
 # =====================
 # Paramètres généraux
@@ -21,12 +23,12 @@ duration = 4 * 60  # 4 minutes
 # Dates / heures
 # =====================
 times = [
-    UTCDateTime("2022-12-04T15:17:00"),
-    UTCDateTime("2022-10-09T07:21:40"),
     UTCDateTime("2019-07-03T14:44:00"),
     UTCDateTime("2019-08-28T10:16:00"),
-    UTCDateTime("2021-05-19T12:50:00"),
     UTCDateTime("2020-11-16T09:17:00"),
+    UTCDateTime("2021-05-19T12:50:00"),
+    UTCDateTime("2022-10-09T07:21:40"),
+    UTCDateTime("2022-12-04T15:17:00"),
 ]
 
 # =====================
@@ -129,16 +131,19 @@ for ti in times:
 # =====================
 # Deuxième boucle : plot avec la même échelle Y
 # =====================
-fig, axes = plt.subplots(len(times), 1, figsize=(12, 8), sharex=False)
+fig, axes = plt.subplots(len(times), 1, figsize=(12, 8), sharex=True)
 
 for i, tr in enumerate(filtered_traces):
     t = tr.times() / 60.0  # temps en minutes
     axes[i].plot(t, tr.data, 'k', linewidth=0.8)
     axes[i].set_ylabel("Amplitude (m/s)")
-    axes[i].set_ylim([-4e-4, 4e-4])
-    
+    axes[i].set_ylim([-1e-3, 1e-3])
+    axes[i].yaxis.set_major_formatter(ticker.ScalarFormatter(useMathText=True))
+    axes[i].ticklabel_format(axis='y', style='scientific', scilimits=(0,0))    
 
 axes[-1].set_xlabel("Time (minutes)")
+for ax in axes[:-1]:
+    ax.label_outer()
 plt.tight_layout()
 plt.show()
 
