@@ -31,7 +31,7 @@ times = [
 ]
 ti=times[5]
 tf= ti+ (60*4)
-ti=UTCDateTime("2020-06-05T23:55:00")
+ti=UTCDateTime("2020-01-10T12:00:00")
 tf= ti + 60*60
 
 # Récupérer les données pour les deux stations
