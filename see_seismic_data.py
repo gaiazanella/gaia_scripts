@@ -12,7 +12,7 @@ import matplotlib.ticker as ticker
 db = '/mnt/bigmama3'
 client = Client(db)
 
-station = 'STRE'
+station = 'STRA'
 network = 'I*'
 channel = '*HZ'
 location = ""
@@ -81,7 +81,7 @@ import numpy as np
 db = '/mnt/bigmama3'
 client = Client(db)
 
-station = 'STRE'
+station = 'STRA'
 network = 'I*'
 channel = '*HZ'
 location = ""
@@ -115,6 +115,7 @@ for ti in times:
     st.trim(ti, tf, pad=True, fill_value=np.nan)
 
     tr = st[0]
+    print(tr)
 
     # filtrage 8-15 Hz sans supprimer les NaN
     mask = np.isnan(tr.data)
@@ -123,7 +124,9 @@ for ti in times:
     tr.data[mask] = np.nan
 
     # 🔹 Conversion counts → m/s
-    tr.data = tr.data / 2.4390e8
+    #tr.data = tr.data / 2.4390e8
+    conv=3.2e-6/800
+    tr.data = tr.data*conv
 
     filtered_traces.append(tr)
     #ymax = max(ymax, np.nanmax(np.abs(tr.data)))
@@ -137,7 +140,7 @@ for i, tr in enumerate(filtered_traces):
     t = tr.times() / 60.0  # temps en minutes
     axes[i].plot(t, tr.data, 'k', linewidth=0.8)
     axes[i].set_ylabel("Amplitude (m/s)")
-    axes[i].set_ylim([-1e-3, 1e-3])
+    axes[i].set_ylim([-5e-4, 5e-4])
     axes[i].yaxis.set_major_formatter(ticker.ScalarFormatter(useMathText=True))
     axes[i].ticklabel_format(axis='y', style='scientific', scilimits=(0,0))    
 
@@ -147,3 +150,80 @@ for ax in axes[:-1]:
 plt.tight_layout()
 plt.show()
 
+###
+# =====================
+
+raw_traces = []
+filtered_traces = []
+
+for ti in times:
+    tf = ti + duration
+
+    st = client.get_waveforms(
+        network=network,
+        station=station,
+        location=location,
+        channel=channel,
+        starttime=ti,
+        endtime=tf
+    )
+
+    for tr in st:
+        tr.data = tr.data.astype(float)
+
+    st.merge(method=1, fill_value=np.nan)
+    st.trim(ti, tf, pad=True, fill_value=np.nan)
+
+    # trace normale
+    tr_raw = st[0].copy()
+
+    # trace filtrée
+    tr_filt = st[0].copy()
+
+    mask = np.isnan(tr_filt.data)
+    tr_filt.data[mask] = 0
+
+    tr_filt.filter(
+        "bandpass",
+        freqmin=8,
+        freqmax=15,
+        corners=4,
+        zerophase=True
+    )
+
+    tr_filt.data[mask] = np.nan
+
+    # conversion counts -> m/s
+    conv = 3.2e-6 / 800
+    tr_raw.data = tr_raw.data * conv
+    tr_filt.data = tr_filt.data * conv
+
+    raw_traces.append(tr_raw)
+    filtered_traces.append(tr_filt)
+
+
+fig, axes = plt.subplots(len(times), 1, figsize=(12, 8), sharex=True)
+
+for i, (tr_raw, tr_filt) in enumerate(zip(raw_traces, filtered_traces)):
+
+    t = tr_raw.times() / 60.0
+
+    axes[i].plot(t, tr_raw.data, color='0.7', linewidth=0.8, label='Non filtrée')
+    axes[i].plot(t, tr_filt.data, 'k', linewidth=1.0, label='Filtrée 8–15 Hz')
+
+    axes[i].set_ylabel("Amplitude (m/s)")
+    axes[i].set_ylim([-5e-4, 5e-4])
+
+    axes[i].yaxis.set_major_formatter(ticker.ScalarFormatter(useMathText=True))
+    axes[i].ticklabel_format(axis='y', style='scientific', scilimits=(0, 0))
+
+    #if i == 0:
+    #    axes[i].legend(loc='upper right')
+
+axes[-1].set_xlabel("Time (minutes)")
+
+for ax in axes[:-1]:
+    ax.label_outer()
+
+plt.tight_layout()
+plt.show()
