@@ -28,11 +28,15 @@ times = [
     UTCDateTime("2021-05-19T12:50:00"),
     UTCDateTime("2022-10-09T07:21:40"),
     UTCDateTime("2022-12-04T15:17:00"),
+    UTCDateTime("2020-04-15T07:21:00"),
+    UTCDateTime("2020-07-19T02:59:00"),
+    UTCDateTime("2020-11-10T20:03:00"),
+
 ]
-ti=times[5]
+ti=times[8]
 tf= ti+ (60*4)
-ti=UTCDateTime("2020-01-10T12:00:00")
-tf= ti + 60*60
+#ti=UTCDateTime("2020-01-10T12:00:00")
+#tf= ti + 60*60
 
 # Récupérer les données pour les deux stations
 st1 = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[0], starttime=ti, endtime=tf)
@@ -44,7 +48,9 @@ print(st1)
 #st1+=stvlp
 
 #st1.write('/home/gaia/Documents/mseed_terremoti/qf_terremoti/20240801_5_1.mseed')
-#st1.write('/home/dario/Documenti/volume/miniseed_big_ev/20221204_compoz.mseed')
-#st1.write('/home/dario/Documenti/volume/miniseed_big_ev/20221204_compoz_STRA.mseed')
+st1.write('/home/dario/Documenti/volume/miniseed_big_ev/20201110_compoz.mseed')
+#st1.write('/home/dario/Documenti/volume/miniseed_big_ev/20200415_compoz_STRA.mseed')
+#st1.write('/home/dario/Documenti/volume/miniseed_big_ev/20200415_compoz_STRE.mseed')
+#st1.write('/home/dario/Documenti/volume/miniseed_big_ev/20200415_compoz_STRG.mseed')
 #st1.write('/home/dario/Documenti/20221204.mseed')
 st1.plot()

@@ -31,6 +31,7 @@ ti = UTCDateTime("2022-12-04T15:17:00")
 #tf = ti + (60 * 60 * 1) # 1 heure de données
 #tf= ti+ (60*60)*1 # 1h
 tf = ti + (4*60) # 4 min
+#tf = ti + (15*60) # 15 min
 #channel = ['*H*']
 
 #t1 = UTCDateTime("2022-10-09T07:23:10")
