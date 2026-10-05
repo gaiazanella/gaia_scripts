@@ -1,0 +1,108 @@
+Metadata-Version: 2.4
+Name: febus_optics_lib
+Version: 1.2.3
+Summary: A FEBUS Optics package
+Home-page: -
+Author: robin guerry
+Author-email: robin.guerry@febus-optics.com
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENCE.txt
+Requires-Dist: h5py>=3.1
+Requires-Dist: numpy>=1.19.5
+Requires-Dist: scipy>=1.5.4
+Requires-Dist: matplotlib>=3.3.4
+Requires-Dist: psutil>=6.1.1
+Dynamic: author
+Dynamic: author-email
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# FEBUS Optics libraray
+
+This documentation pertains to a Python library named febus_optics_lib. This library is intended to
+integrate a series of functionalities commonly used to manipulate data recoded with our devices.
+The primary objective of febus_optics_lib is to reduce code duplication by providing a set of core
+functionalities. This approach simplifies the maintenance of scripts and programs that utilize these
+functionalities, while also facilitating the creation of new code by standardizing procedures.
+
+## Installation
+
+Use the tar.gz file to install febus_optics_lib.
+
+```bash
+pip install febus_optics_lib-1.2.3.tar.gz
+```
+
+## Usage
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+@author: robin.guerry
+"""
+import numpy as np
+from datetime import datetime, timezone
+from febus_optics_lib.reader import H5ReaderDas
+
+if __name__ == "__main__":
+
+    # creation of the instance and setting of the filename
+    file = "SR_TestFile_2024-09-20_14-36-52_UTC.h5"
+    instance = H5ReaderDas(file)
+
+    # extracting the zones name
+    zone = instance.list_zones[0]
+
+    d1 = 0
+    d2 = 4901
+    t1 = datetime.strptime("2024/Sep/20-14:36:52", "%Y/%b/%d-%H:%M:%S")
+    t1 = t1.replace(tzinfo=timezone.utc).timestamp()
+    t2 = datetime.strptime("2024/Sep/20-14:37:11", "%Y/%b/%d-%H:%M:%S")
+    t2 = t2.replace(tzinfo=timezone.utc).timestamp()
+
+    # extraction of the data block
+    block_results = instance.extract_blocks(
+        from_time=t1, to_time=t2, time_type="timestamp",
+        from_dist=d1, to_dist=d2, dist_type="meter",
+        remove_redundancy=True, offset_compensation=False,
+        zones=zone)
+
+    # visualisation
+    instance.quick_view(
+        block_results,
+        instance.param_dict,
+        instance.data_dict,
+        rotate=False,
+        cmap="viridis",
+        block=True
+    )
+
+    #################################################
+
+    # extraction of the concatenated data
+    concat_results = instance.extract_concat(
+        from_time=t1, to_time=t2, time_type="timestamp",
+        from_dist=d1, to_dist=d2, dist_type="meter", zones=zone
+    )
+    # visualisation
+    instance.quick_view(
+        concat_results,
+        instance.param_dict,
+        instance.data_dict,
+        rotate=True,
+        cmap="viridis",
+        block=True
+    )
+
+```
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)

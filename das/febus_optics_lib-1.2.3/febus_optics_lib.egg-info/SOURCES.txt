@@ -1,0 +1,15 @@
+LICENCE.txt
+README.md
+setup.cfg
+setup.py
+febus_optics_lib/__init__.py
+febus_optics_lib/computation.py
+febus_optics_lib/plugins_das.py
+febus_optics_lib/reader.py
+febus_optics_lib.egg-info/PKG-INFO
+febus_optics_lib.egg-info/SOURCES.txt
+febus_optics_lib.egg-info/dependency_links.txt
+febus_optics_lib.egg-info/requires.txt
+febus_optics_lib.egg-info/top_level.txt
+tests/__init__.py
+tests/tests.py

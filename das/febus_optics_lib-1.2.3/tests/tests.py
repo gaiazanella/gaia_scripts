@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+@author: robin.guerry
+"""
+import numpy as np
+from datetime import datetime, timezone
+from febus_optics_lib.reader import H5ReaderDas
+
+if __name__ == "__main__":
+
+    # creation of the instance and setting of the filename
+    file = "SR_TestFile_2024-09-20_14-36-52_UTC.h5"
+    instance = H5ReaderDas(file)
+
+    # extracting the zones name
+    zone = instance.list_zones[0]
+
+    d1 = 0
+    d2 = 4901
+    t1 = datetime.strptime("2024/Sep/20-14:36:52", "%Y/%b/%d-%H:%M:%S")
+    t1 = t1.replace(tzinfo=timezone.utc).timestamp()
+    t2 = datetime.strptime("2024/Sep/20-14:37:11", "%Y/%b/%d-%H:%M:%S")
+    t2 = t2.replace(tzinfo=timezone.utc).timestamp()
+
+    # extraction of the data block
+    block_results = instance.extract_blocks(
+        from_time=t1, to_time=t2, time_type="timestamp",
+        from_dist=d1, to_dist=d2, dist_type="meter",
+        remove_redundancy=True, offset_compensation=False,
+        zones=zone)
+
+    # visualisation
+    instance.quick_view(
+        block_results,
+        instance.param_dict,
+        instance.data_dict,
+        rotate=False,
+        cmap="viridis",
+        block=True
+    )
+
+    #################################################
+
+    # extraction of the concatenated data
+    concat_results = instance.extract_concat(
+        from_time=t1, to_time=t2, time_type="timestamp",
+        from_dist=d1, to_dist=d2, dist_type="meter", zones=zone
+    )
+    # visualisation
+    instance.quick_view(
+        concat_results,
+        instance.param_dict,
+        instance.data_dict,
+        rotate=True,
+        cmap="viridis",
+        block=True
+    )
+
