@@ -42,11 +42,14 @@ win = 60 # window of 60 seconds, 1 min
 fs=50 # 50 Hz
 samples = win*fs 
 
-t_init=UTCDateTime("2021-01-01T00:00:00")
-t_end=UTCDateTime("2022-01-01T00:00:00")
+#t_init=UTCDateTime("2020-03-01T00:00:00")
+#t_end=UTCDateTime("2020-04-01T00:00:00")
+t_init=UTCDateTime("2020-08-01T00:00:00")
+t_end=UTCDateTime("2020-09-01T00:00:00")
 
 #save_dir = '/home/gaia/Documents/processing_10_sec/2019/rsam_test'
-save_dir = '/home/dario/Documenti/processing_10_sec/2021/rsam_test/'
+#save_dir = '/home/dario/Documenti/processing_10_sec/2021/rsam_test/'
+save_dir = '/home/dario/Documenti/one_script/'
 db = '/mnt/bigmama3'
 stz = ['STR1','STRA','STRC','STRE','STRG']
 net = ['I*', 'I*']
