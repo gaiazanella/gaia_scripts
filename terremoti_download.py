@@ -31,10 +31,14 @@ times = [
     UTCDateTime("2020-04-15T07:21:00"),
     UTCDateTime("2020-07-19T02:59:00"),
     UTCDateTime("2020-11-10T20:03:00"),
+    UTCDateTime("2007-03-15T20:37:14"),
+    UTCDateTime("2020-03-28T15:44:00"),
 
 ]
-ti=times[2]
-tf= ti+ (60*4)
+ti=times[9]
+#tf= ti+ (60*4)
+#tf= ti+ (60*7)
+tf= UTCDateTime("2020-03-29T00:00:00") 
 #ti=UTCDateTime("2020-01-10T12:00:00")
 #tf= ti + 60*60
 
@@ -52,5 +56,6 @@ print(st1)
 #st1.write('/home/dario/Documenti/volume/miniseed_big_ev/20200415_compoz_STRA.mseed')
 #st1.write('/home/dario/Documenti/volume/miniseed_big_ev/20200415_compoz_STRE.mseed')
 #st1.write('/home/dario/Documenti/volume/miniseed_big_ev/20200415_compoz_STRG.mseed')
-#st1.write('/home/dario/Documenti/20221204.mseed')
+#st1.write('/home/dario/Documenti/20070315.mseed')
+st1.write('/home/dario/Documenti/20200328_compoz.mseed')
 st1.plot()

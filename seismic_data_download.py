@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 # Paramètres
 db = '/mnt/bigmama3'
 net = ['I*']
-channel = ['*HZ']
+channel = ['*HZ']#
 #ti = UTCDateTime("2022-10-09T07:00:40")
 #ti = UTCDateTime("2022-12-04T15:00:00")
 #ti = UTCDateTime("2019-07-03T14:00:00")
@@ -25,8 +25,8 @@ channel = ['*HZ']
 #ti = UTCDateTime("2019-08-28T10:16:00")
 #ti = UTCDateTime("2020-11-16T09:17:00")
 #ti = UTCDateTime("2021-05-19T12:50:00")
-#ti = UTCDateTime("2022-10-09T07:21:40")
-ti = UTCDateTime("2022-12-04T15:17:00")
+ti = UTCDateTime("2022-10-09T07:21:40")
+#ti = UTCDateTime("2022-12-04T15:17:00")
 
 #tf = ti + (60 * 60 * 1) # 1 heure de données
 #tf= ti+ (60*60)*1 # 1h
@@ -42,6 +42,11 @@ tf = ti + (4*60) # 4 min
 #t2 = UTCDateTime("2022-12-04T15:18:24") #tf FB
 #t1 = UTCDateTime("2022-12-04T15:18:10")
 #t2 = UTCDateTime("2022-12-04T15:18:20")
+ti_bol = UTCDateTime("2022-10-09T07:22:42")
+ts_fb = UTCDateTime("2022-10-09T07:22:50")
+tf_fb_z500_b1 = UTCDateTime("2022-10-09T07:23:08") #ti FB
+t_z_z200_c2 = UTCDateTime("2022-10-09T07:23:20")
+te_fb_z0_d3 = UTCDateTime("2022-10-09T07:23:30") #tf FB
 
 # Client pour récupérer les données
 client = Client(db)
