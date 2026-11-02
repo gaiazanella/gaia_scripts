@@ -25,8 +25,9 @@ channel = ['*HZ']#
 #ti = UTCDateTime("2019-08-28T10:16:00")
 #ti = UTCDateTime("2020-11-16T09:17:00")
 #ti = UTCDateTime("2021-05-19T12:50:00")
-ti = UTCDateTime("2022-10-09T07:21:40")
+#ti = UTCDateTime("2022-10-09T07:21:40")
 #ti = UTCDateTime("2022-12-04T15:17:00")
+ti = UTCDateTime("2007-03-15T20:37:14")
 
 #tf = ti + (60 * 60 * 1) # 1 heure de données
 #tf= ti+ (60*60)*1 # 1h
