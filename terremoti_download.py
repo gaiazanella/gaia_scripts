@@ -22,7 +22,7 @@ client = Client(db)
 #tf = ti + (60 * 60 * 1) # 1 heure de données
 
 times = [
-    UTCDateTime("2019-07-03T14:44:00"),
+    UTCDateTime("2019-07-03T14:44:00"), #1
     UTCDateTime("2019-08-28T10:16:00"),
     UTCDateTime("2020-11-16T09:17:00"),
     UTCDateTime("2021-05-19T12:50:00"),
@@ -33,10 +33,16 @@ times = [
     UTCDateTime("2020-11-10T20:03:00"),
     UTCDateTime("2007-03-15T20:37:14"),
     UTCDateTime("2020-03-28T17:44:00"),
+    UTCDateTime("2020-02-02T06:00:00"),
+    UTCDateTime("2020-02-03T07:00:00"),
+    UTCDateTime("2020-02-03T04:00:00"),
+    UTCDateTime("2020-05-21T04:00:00"),
+    UTCDateTime("2020-05-23T03:00:00"),
 
 ]
-ti=times[9]
-tf= ti+ (60*4)
+ti=times[15]
+#tf= ti+ (60*4)
+tf= ti+ (60*120)
 #tf= ti+ (60*7)
 #tf= UTCDateTime("2020-03-29T00:00:00") 
 #ti=UTCDateTime("2020-01-10T12:00:00")
