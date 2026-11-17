@@ -27,12 +27,13 @@ channel = ['*HZ']#
 #ti = UTCDateTime("2021-05-19T12:50:00")
 #ti = UTCDateTime("2022-10-09T07:21:40")
 #ti = UTCDateTime("2022-12-04T15:17:00")
-ti = UTCDateTime("2007-03-15T20:37:14")
+#ti = UTCDateTime("2007-03-15T20:37:14")
+ti = UTCDateTime("2024-07-11T12:05:00")
 
-#tf = ti + (60 * 60 * 1) # 1 heure de données
+tf = ti + (60 * 60 * 1) # 1 heure de données
 #tf= ti+ (60*60)*1 # 1h
-tf = ti + (4*60) # 4 min
-#tf = ti + (15*60) # 15 min
+#tf = ti + (4*60) # 4 min
+tf = ti + (15*60) # 15 min
 #channel = ['*H*']
 
 #t1 = UTCDateTime("2022-10-09T07:23:10")
