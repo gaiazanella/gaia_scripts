@@ -22,7 +22,7 @@ client = Client(db)
 #tf = ti + (60 * 60 * 1) # 1 heure de données
 
 times = [
-    UTCDateTime("2019-07-03T14:44:00"), #1
+    UTCDateTime("2019-07-03T14:44:00"), #0
     UTCDateTime("2019-08-28T10:16:00"),
     UTCDateTime("2020-11-16T09:17:00"),
     UTCDateTime("2021-05-19T12:50:00"),
@@ -39,17 +39,19 @@ times = [
     UTCDateTime("2020-05-21T04:00:00"),
     UTCDateTime("2020-05-23T03:00:00"),
     UTCDateTime("2024-07-03T16:40:00"),
-    UTCDateTime("2024-07-04T00:00:00"),
+    UTCDateTime("2024-07-11T00:00:00"),
 
 ]
-ti=times[17]
+ti=times[4]
+print(ti)
 #tf= ti+ (60*4)
 #tf= ti+ (60*120)
 #tf= ti+ (60*7)
 #tf= UTCDateTime("2020-03-29T00:00:00") 
 #ti=UTCDateTime("2020-01-10T12:00:00")
 #tf= ti + 60*30
-tf= UTCDateTime("2024-07-05T00:00:00")
+tf= UTCDateTime("2022-10-09T07:32:00")
+print(tf)
 
 # Récupérer les données pour les deux stations
 st1 = client.get_waveforms(network=net[0], station=stz[0], location="", channel=channel[0], starttime=ti, endtime=tf)
@@ -66,5 +68,5 @@ print(st1)
 #st1.write('/home/dario/Documenti/volume/miniseed_big_ev/20200415_compoz_STRE.mseed')
 #st1.write('/home/dario/Documenti/volume/miniseed_big_ev/20200415_compoz_STRG.mseed')
 #st1.write('/home/dario/Documenti/20070315.mseed')
-st1.write('/home/dario/Documenti/20240704_compoz.mseed')
-#st1.plot()
+st1.write('/home/dario/Documenti/20221009_long_compoz.mseed')
+st1.plot()
